@@ -1,0 +1,40 @@
+#' @name data_med_raw
+#'
+#' @title Example of med.txt output from RPDR.
+#'
+#' @description A med.txt output from RPDR loaded into a data table in R using \emph{data.table::fread()}.
+#'
+#' **NOTE**: Due to potential issues with PHI and PPI, the example datasets can be downloaded from the
+#' Partners Gitlab repository under *parserpdr-sample-data*.
+#'
+#' @docType data
+#'
+#' @usage data_med_raw
+#'
+#' @format data.table
+#'
+#' @return data table, imported from med.txt
+#' \describe{
+#'  \item{EMPI}{numeric, Unique Partners-wide identifier assigned to the patient used to consolidate patient information.}
+#'  \item{EPIC_PMRN}{numeric, Epic medical record number. This value is unique across Epic instances within the Partners network.}
+#'  \item{MRN_Type}{string, Indicates the institution associated with a specific MRN. This can appear as a comma-delimited list if MRNs from multiple Partners Health System institutions are available.}
+#'  \item{MRN}{string, Unique Medical Record Number for the site identified in the 'MRN_Type' field. This can appear as a comma-delimited list if multiple MRNs from Partners hospitals are available.}
+#'  \item{Medication_Date}{string, Completion status of the requested test/transfusion.}
+#'  \item{Medication_Date_Detail}{string, To clarify when patients may have stopped taking a medication, this column provides the statuses of 'Listed' or 'Removed'.
+#'  This is provided on pre-Epic (LMR) medication dates (1997-2017). The 'Listed' value denotes that a medication was on the patient's medication list on the date indicated.
+#'  The 'Removed' value denotes that a medication was removed from a patient's medication list on the date indicated.}
+#'  \item{Medication}{string, Name of the medication. This may be appended with the source system in the case of OnCall and LMR medications.}
+#'  \item{Code_Type}{boolean, Standardized classification system or custom source value used to identify the medication.}
+#'  \item{Code}{string, Medication code associated with the "Code_type" value.}
+#'  \item{Quantity}{string, Number of units of the medication ordered.}
+#'  \item{Provider}{string, Ordering provider for the medication.}
+#'  \item{Clinic}{string, Specific department/location where the medication was ordered or administered.}
+#'  \item{Hospital}{numeric, Facility where the medication was ordered or administered.}
+#'  \item{Inpatient_Outpatient}{string, Identifies whether the medication was ordered with an Inpatient or Outpatient indication.}
+#'  \item{Encounter_number}{number, Unique identifier of the record/visit, displayed in the following format: Source System - Institution Number.}
+#'  \item{Additional_Info}{number, Additional administration information about the medication.}
+#'  }
+#'
+#' @encoding UTF-8
+
+NULL
