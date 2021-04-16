@@ -70,6 +70,8 @@ convert_lab <- function(d, code_results = "lab_result", code_reference = "lab_re
                                       as.numeric(d_res_pretty[w_range]) < as.numeric(v_range_u), "NORMAL", "ABNORMAL")
   d_res_abn_pretty[d_res_pretty == "NEG" | d_res_pretty == "BORD"] <- "NORMAL"
   d_res_abn_pretty[d_res_pretty == "POS"] <- "ABNORMAL"
+  d_res_abn_pretty[d_ref == d_res] <- "NORMAL"
+
   d_res_abn_pretty[is.na(d_res_pretty)] <- NA
 
   d[, c("lab_result_pretty", "lab_result_abn_pretty") := list(d_res_pretty, d_res_abn_pretty)]

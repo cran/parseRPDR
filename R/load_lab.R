@@ -65,7 +65,7 @@ load_lab <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard",
   DATA     <- DATA[, 1:(raw_id-1)]
 
   #Add additional information
-  DATA$time_lab_result  <- as.POSIXct(data_raw$Seq_Date_Time, format = "%m/%d/%Y %H:%M", tz = "est")
+  DATA$time_lab_result  <- as.POSIXct(data_raw$Seq_Date_Time, format = "%m/%d/%Y %H:%M")
   DATA$lab_group        <- pretty_text(data_raw$Group_Id, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA$lab_loinc        <- pretty_text(data_raw$Loinc_Code, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA$lab_testID       <- pretty_text(data_raw$Test_Id, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)

@@ -57,7 +57,7 @@ load_rdt <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard",
   DATA     <- DATA[, 1:(raw_id-1)]
 
   #Add additional information
-  DATA$time_rdt_exam  <- as.POSIXct(data_raw$Date, format = "%m/%d/%Y", tz = "est")
+  DATA$time_rdt_exam  <- as.POSIXct(data_raw$Date, format = "%m/%d/%Y")
   DATA$rdt_mode       <- pretty_text(data_raw$Mode, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA$rdt_group      <- pretty_text(data_raw$Group, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA$rdt_test_code  <- pretty_text(data_raw$Test_Code, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)

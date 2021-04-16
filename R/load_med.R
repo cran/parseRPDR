@@ -61,7 +61,7 @@ load_med <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard",
 
   #Add additional information
   DATA$med_enc_numb    <- pretty_text(data_raw$Encounter_number, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$time_med        <- as.POSIXct(data_raw$Medication_Date, format = "%m/%d/%Y", tz = "est")
+  DATA$time_med        <- as.POSIXct(data_raw$Medication_Date, format = "%m/%d/%Y")
   DATA$time_med_detail <- pretty_text(data_raw$Medication_Date_Detail, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA$med             <- pretty_text(data_raw$Medication, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA$med_code        <- pretty_text(data_raw$Code, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)

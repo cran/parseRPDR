@@ -55,7 +55,7 @@ find_exam_ram <- function(d_from, d_to,
   #Initiate output
   empty <- d_from[FALSE, ]
   empty[, (time_diff_name) := difftime(NULL, NULL, units = time_unit)]
-  empty[, time_to_db := as.POSIXct(NULL, tz = "est")]
+  empty[, time_to_db := as.POSIXct(NULL)]
   if (!is.null(add_column)) {empty[, (add_column):=character()]}
   out <- empty; i = 1
 
@@ -79,12 +79,9 @@ find_exam_ram <- function(d_from, d_to,
         if(dim(Exam_i)[1] != 0) {
 
           #Calculate time differences
-          if(time_unit == "days") {
-            dif_i <- difftime(trunc.POSIXt(Exam_i[, get(d_from_time)], units = "days"),
-                              trunc.POSIXt(d_to[, get(d_to_time)][i], units = "days"), units = "days")
-          } else {
-            dif_i <- difftime(Exam_i[, get(d_from_time)], d_to[, get(d_to_time)][i], units = time_unit)
-          }
+          dif_i <- difftime(trunc.POSIXt(Exam_i[, get(d_from_time)], units = time_unit),
+                            trunc.POSIXt(d_to[, get(d_to_time)][i], units = time_unit), units = time_unit)
+
 
           #Filter if before or after index event
           if(!after) {

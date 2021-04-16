@@ -65,8 +65,6 @@ In case of the *find_exam* function, there is an opportunity to use shared RAM m
 
 *NOTE!!!*
 
-*Large datasets may crash R as they exceed the available memory. In this case consider loading specific data sources separately and filtering out cases to decrease the amount of memory needed.*
-
 *On macOS, data.table may return a warning message similar to: "data.table 1.13.6 using 1 threads (see ?getDTthreads)..." Disregard the warning message as the package does not use functionalities affected by this limitation of macOS.*
 
 # Detailed functionalities of parseRPDR
@@ -186,6 +184,11 @@ all_MGH_mrn <- all_ids_mi2b2(type = "MGH", d_mrn = data_mrn, d_con = data_con)
 
 The *load_all* function is parallelized for efficiency. It allows two different forms of parallelization. Either it is done on the level of different datasources (i.e. mrn, con, dem are loaded parallel) or within the datasources (if multiple files are present per datasource i.e. con_1, con_2 etc.). Using the *many_sources* arguments we can specify which to use. If set to TRUE, then parallelization will be done on the level of different datasources, if FALSE then parallelization is done within the datasources. It should only be set to FALSE if there is more than one txt files per datasource. If the user does not wish to use parallel processing (i.e. small dataset), then setting nThread=1 will promote sequential processing. However, be aware that all functions calls run sequentially within load_all, that is all loading sub-processes are done using 1 thread, so that it does not cause issues with load functions running in parallel.
 
+*NOTE!!!*
+
+*Large datasets may crash R as they exceed the available memory. In this case consider loading specific data sources separately and filtering out cases to decrease the amount of memory needed.*
+
+*RPDR returns large requests in multiple files (in case of patient numbers > 25,000). These are arranged so that a given individuals' data is present in only that given batch. Therefore, in case of large queries, it is advised to process the data sequentially, meaning that doing all your calculations on the given batch (i.e. mrn, lab etc. datasources), for each batch, and then concatenating the results together from each 25,000 patients' data to receive the final database.*
 
 ```{r load_all}
 #Load all Con, Dem and Mrn datasets processing all files within given datasource in parallel
@@ -228,7 +231,7 @@ data_enc_disease <-  convert_enc(d = data_enc, keep = FALSE, codes_to_find = dis
 
 #Parse encounter ICD columns and discard original ones, and create indicator variables for the following diseases and summarize per patient, whether there are any encounters where the given diseases were registered
 diseases <- list(HT = c("I10"), Stroke = c("434.91", "I63.50"))
-data_enc_disease <-  convert_enc(d = data_enc, keep = FALSE, codes_to_find = diseases, nThread = 2, collapse = "ID_MERGE")
+data_enc_disease <-  convert_enc(d = data_enc, keep = FALSE, codes_to_find = diseases, nThread = 2, collapse = "ID_MERGE", time_type = "earliest")
 ```
 
 ### *convert_dia* - Searching for given diagnosis codes

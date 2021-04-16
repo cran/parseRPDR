@@ -13,8 +13,10 @@
 #' @param before boolean, should times before the given time be considered. Defaults to \emph{TRUE}.
 #' @param after boolean, should times after the given time be considered. Defaults to \emph{TRUE}.
 #' @param time integer, the timeframe considered between the exam and the d_to timepoints. Defaults to \emph{1}.
-#' @param time_unit string, the unit of time used. It is passed on to the \emph{units} argument of \emph{difftime}. "secs", "mins", "hours",
-#' "days" and "weeks" are supported.
+#' @param time_unit string, the unit of time used. Time variables are in d_to and d_from are truncated to the supplied time unit.
+#' For example: "2005-09-18 08:15:01 PDT" would be truncated to "2005-09-18 PDT" if \emph{time_unit} is set to days.
+#' Then the time differences is calculated using \emph{difftime} passing the argument to \emph{units}.
+#' The following time units are supported: "secs", "mins", "hours", "days", "months"  and "years" are supported. Defautls to \emph{days}.
 #' @param multiple string, which exams to give back. \emph{closest} gives back the exam closest to the time provided by d_to.
 #' \emph{all} gives back all occurrences within the timeframe. \emph{earliest} the earliest exam within the timeframe.
 #' In case of ties for \emph{closest} or \emph{earliest}, all are returned. Defaults to \emph{closest}.

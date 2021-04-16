@@ -63,7 +63,7 @@ load_dem <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard",
 
   #Add additional information
   DATA$gender <- pretty_text(data_raw$Gender, remove_after = FALSE)
-  DATA$time_date_of_birth <- as.POSIXct(data_raw$Date_of_Birth, format = "%m/%d/%Y", tz = "est")
+  DATA$time_date_of_birth <- as.POSIXct(data_raw$Date_of_Birth, format = "%m/%d/%Y")
   DATA$age <- pretty_text(data_raw$Age, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
 
   DATA$language <- pretty_text(data_raw$Language, remove_white = FALSE)
@@ -76,7 +76,7 @@ load_dem <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard",
   DATA$zip_dem      <- pretty_numbers(data_raw$Zip_code)
 
   DATA$vital_status <- pretty_text(data_raw$Vital_status, remove_after = FALSE, remove_white = FALSE)
-  DATA$time_date_of_death <- as.POSIXct(data_raw$Date_Of_Death, format = "%m/%d/%Y", tz = "est")
+  DATA$time_date_of_death <- as.POSIXct(data_raw$Date_Of_Death, format = "%m/%d/%Y")
 
   DATA <- remove_column(dt = DATA, na = na, identical = identical)
 

@@ -59,7 +59,7 @@ knitr::opts_chunk$set(
 #  
 #  #Parse encounter ICD columns and discard original ones, and create indicator variables for the following diseases and summarize per patient, whether there are any encounters where the given diseases were registered
 #  diseases <- list(HT = c("I10"), Stroke = c("434.91", "I63.50"))
-#  data_enc_disease <-  convert_enc(d = data_enc, keep = FALSE, codes_to_find = diseases, nThread = 2, collapse = "ID_MERGE")
+#  data_enc_disease <-  convert_enc(d = data_enc, keep = FALSE, codes_to_find = diseases, nThread = 2, collapse = "ID_MERGE", time_type = "earliest")
 
 ## ----convert_dia--------------------------------------------------------------
 #  #Search for Hypertension and Stroke ICD codes

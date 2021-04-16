@@ -74,7 +74,7 @@ convert_dia <- function(d, code = "dia_code", code_type = "dia_code_type",  code
         diag_coll
       } else {
         comb[, names(codes_to_find[i]) := any(.SD %in% unlist(codes_to_find[i])), .SDcols = "combined", by=1:nrow(comb)]
-        ID_dt <- unique(comb[, ..collapse]) #Get IDs
+        ID_dt <- unique(comb[, collapse, with = FALSE]) #Get IDs
 
         if(time_type == "earliest") { #Find time
           diag_coll <- comb[, .(var_time = min(get(code_time))), by=c(collapse, names(codes_to_find[i]))]

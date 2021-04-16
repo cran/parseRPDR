@@ -64,7 +64,7 @@ load_rad <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard",
   DATA     <- DATA[, 1:(raw_id-1)]
 
   #Add additional information
-  DATA$time_rad_exam   <- as.POSIXct(data_raw$Report_Date_Time, format = "%m/%d/%Y %I:%M:%S %p", tz = "est")
+  DATA$time_rad_exam       <- as.POSIXct(data_raw$Report_Date_Time, format = "%m/%d/%Y %I:%M:%S %p")
   DATA$rad_rep_num         <- pretty_text(data_raw$Report_Number, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA$rad_rep_desc        <- pretty_text(data_raw$Report_Description, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA$rad_rep_status      <- pretty_text(data_raw$Report_Status, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)

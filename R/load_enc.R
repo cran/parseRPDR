@@ -75,8 +75,8 @@ load_enc <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard",
 
   #Add additional information
   DATA$enc_numb       <- pretty_text(data_raw$Encounter_number, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$time_enc_admit <- as.POSIXct(data_raw$Admit_Date, format = "%m/%d/%Y", tz = "est")
-  DATA$time_enc_disch <- as.POSIXct(data_raw$Discharge_Date, format = "%m/%d/%Y", tz = "est")
+  DATA$time_enc_admit <- as.POSIXct(data_raw$Admit_Date, format = "%m/%d/%Y")
+  DATA$time_enc_disch <- as.POSIXct(data_raw$Discharge_Date, format = "%m/%d/%Y")
   DATA$enc_status     <- pretty_text(data_raw$Encounter_Status, remove_after = FALSE, remove_white = FALSE)
   DATA$enc_hosp       <- pretty_text(data_raw$Hospital, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA$enc_inpatient  <- pretty_text(data_raw$Inpatient_Outpatient, remove_after = FALSE, remove_white = FALSE)

@@ -75,7 +75,7 @@ convert_med <- function(d, code = "med", codes_to_find = NULL, collapse = NULL,
         med_boo
       } else {
         comb <- cbind(comb, med_boo)
-        ID_dt <- unique(comb[, ..collapse]) #Get IDs
+        ID_dt <- unique(comb[, collapse, with = FALSE]) #Get IDs
 
         if(time_type == "earliest") { #Find time
           diag_coll <- comb[, .(var_time = min(get(code_time))), by=c(collapse, names(codes_to_find[i]))]

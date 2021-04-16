@@ -58,7 +58,7 @@ load_dia <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard",
   DATA     <- DATA[, 1:(raw_id-1)]
 
   #Add additional information
-  DATA$time_dia    <- as.POSIXct(data_raw$Date, format = "%m/%d/%Y", tz = "est")
+  DATA$time_dia    <- as.POSIXct(data_raw$Date, format = "%m/%d/%Y")
   DATA$dia_name       <- pretty_text(data_raw$Diagnosis_Name, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA$dia_code       <- pretty_text(data_raw$Code, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA$dia_code_type  <- pretty_text(data_raw$Code_Type, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)

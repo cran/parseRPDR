@@ -89,7 +89,7 @@ convert_enc <- function(d, code = c("enc_diag_admit", "enc_diag_princ", paste0("
           diag_coll
         } else {
           d[, names(codes_to_find[i]) := any(.SD %in% unlist(codes_to_find[i])), .SDcols = colnames(icd), by=1:nrow(d)]
-          ID_dt <- unique(d[, ..collapse]) #Get IDs
+          ID_dt <- unique(d[, collapse, with = FALSE]) #Get IDs
 
           if(time_type == "earliest") { #Find time
             diag_coll <- d[, .(var_time = min(get(code_time))), by=c(collapse, names(codes_to_find[i]))]

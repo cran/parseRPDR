@@ -77,8 +77,8 @@ find_exam_bm <- function(d_from, d_to,
   #Initiate output
   empty <- d_from[FALSE, ]
   empty[, (time_diff_name) := difftime(NULL, NULL, units = time_unit)]
-  empty[, time_to_db := as.POSIXct(NULL, tz = "est")]
-  empty[, (which_ids_from_time):= lapply(.SD, as.POSIXct, tz = "EST"), .SDcols = which_ids_from_time]
+  empty[, time_to_db := as.POSIXct(NULL)]
+  empty[, (which_ids_from_time):= lapply(.SD, as.POSIXct), .SDcols = which_ids_from_time]
   if (!is.null(add_column)) {empty[, (add_column):=character()]}
   out <- empty; i = 1
 
@@ -135,7 +135,7 @@ find_exam_bm <- function(d_from, d_to,
           })
           time_i <- data.table::as.data.table(time_i); colnames(time_i) <- names(factor_la_from_time)
           Exam_i[, (which_ids_from_time):= time_i]
-          Exam_i[, (which_ids_from_time):= lapply(.SD, as.POSIXct, tz = "EST"), .SDcols = which_ids_from_time]
+          Exam_i[, (which_ids_from_time):= lapply(.SD, as.POSIXct), .SDcols = which_ids_from_time]
 
           #Locate ith case for d_to
           d_to_i <- d_to_foreach[i, ]; d_to_i <- data.table::as.data.table(as.list(d_to_i))
@@ -151,15 +151,12 @@ find_exam_bm <- function(d_from, d_to,
           })
           time_i <- data.table::as.data.table(time_i); colnames(time_i) <- names(factor_la_to_time)
           d_to_i[, (which_ids_to_time):= time_i]
-          d_to_i[, (which_ids_to_time):= lapply(.SD, as.POSIXct, tz = "EST"), .SDcols = which_ids_to_time]
+          d_to_i[, (which_ids_to_time):= lapply(.SD, as.POSIXct), .SDcols = which_ids_to_time]
 
           #Calculate time differences
-          if(time_unit == "days") {
-            dif_i <- difftime(trunc.POSIXt(Exam_i[, get(d_from_time)], units = "days"),
-                              trunc.POSIXt(d_to_i[, get(d_to_time)], units = "days"), units = "days")
-          } else {
-            dif_i <- difftime(Exam_i[, get(d_from_time)], d_to_i[, get(d_to_time)], units = time_unit)
-          }
+          dif_i <- difftime(trunc.POSIXt(Exam_i[, get(d_from_time)], units = time_unit),
+                            trunc.POSIXt(d_to_i[, get(d_to_time)], units = time_unit), units = time_unit)
+
 
           #Filter if before or after index event
           if(!after) {

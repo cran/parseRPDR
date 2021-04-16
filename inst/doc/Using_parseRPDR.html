@@ -12,7 +12,7 @@
 
 <meta name="author" content="Márton Kolossváry" />
 
-<meta name="date" content="2021-03-12" />
+<meta name="date" content="2021-04-16" />
 
 <title>Using parseRPDR</title>
 
@@ -141,7 +141,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <h1 class="title toc-ignore">Using parseRPDR</h1>
 <h4 class="author">Márton Kolossváry</h4>
-<h4 class="date">2021-03-12</h4>
+<h4 class="date">2021-04-16</h4>
 
 
 
@@ -185,7 +185,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>All functionalities of <strong>parseRPDR</strong> are parallelized to assist the analysis of large datasets. The user does not need to know anything of what is being done in the background, simply setting the <em>nThread</em> parameter in the function calls sets everything up. In detail, on unix-based systems forking is used, while on windows machines socket clusters are initiated. Please be aware that the optimal number of threads depends on the system running the application. By default nThread is set to 4, but on less powerful machines this might need to be set to lower values, while on more powerful machines even more cores can be initialized. Be aware that parallelization also requires additional memory to run the functions. This also depends on the operating system (generally unix-based system require less) and therefore the optimal number of threads needs to be empirically determined. Setting <em>nThread=1</em> results in sequential analysis, which might be beneficial for small datasets.</p>
 <p>In case of the <em>find_exam</em> function, there is an opportunity to use shared RAM management. In case of large datasets (&gt;1M rows), this may provide more efficient RAM management. However, this also results in slower run times, but on the other hand may allow to run the search process on more threads. The balance needs to be determined empirically for each machine, but as a rule of thumb, if the datasets supplied to <em>find_exam</em> do not exceed 1M rows then shared RAM management is not beneficial.</p>
 <p><em>NOTE!!!</em></p>
-<p><em>Large datasets may crash R as they exceed the available memory. In this case consider loading specific data sources separately and filtering out cases to decrease the amount of memory needed.</em></p>
 <p><em>On macOS, data.table may return a warning message similar to: “data.table 1.13.6 using 1 threads (see ?getDTthreads)…” Disregard the warning message as the package does not use functionalities affected by this limitation of macOS.</em></p>
 </div>
 </div>
@@ -280,6 +279,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3><em>load_all</em> function</h3>
 <p><strong>parseRPDR</strong> provides a convenient function to load all RPDR data using a single line of code. The <em>load_all</em> function can be use for loading different datasources at once and/or to load multiple files of the same datasource, which occurs if our query results in more than 25,000 patients. The function requires a folder path instead of a file path. Also, we can use the <em>which_data</em> argument to specify which datasources we wish to load into the list. Currently “mrn”, “con”, “dem”, “enc”, “rdt”, “lab”, “med”, “dia” and “rad” are supported. In case there are multiple files for a given datasource, then add a “_” and a number to merge the same data sources into a single output in the order of the provided number.</p>
 <p>The <em>load_all</em> function is parallelized for efficiency. It allows two different forms of parallelization. Either it is done on the level of different datasources (i.e. mrn, con, dem are loaded parallel) or within the datasources (if multiple files are present per datasource i.e. con_1, con_2 etc.). Using the <em>many_sources</em> arguments we can specify which to use. If set to TRUE, then parallelization will be done on the level of different datasources, if FALSE then parallelization is done within the datasources. It should only be set to FALSE if there is more than one txt files per datasource. If the user does not wish to use parallel processing (i.e. small dataset), then setting nThread=1 will promote sequential processing. However, be aware that all functions calls run sequentially within load_all, that is all loading sub-processes are done using 1 thread, so that it does not cause issues with load functions running in parallel.</p>
+<p><em>NOTE!!!</em></p>
+<p><em>Large datasets may crash R as they exceed the available memory. In this case consider loading specific data sources separately and filtering out cases to decrease the amount of memory needed.</em></p>
+<p><em>RPDR returns large requests in multiple files (in case of patient numbers &gt; 25,000). These are arranged so that a given individuals’ data is present in only that given batch. Therefore, in case of large queries, it is advised to process the data sequentially, meaning that doing all your calculations on the given batch (i.e. mrn, lab etc. datasources), for each batch, and then concatenating the results together from each 25,000 patients’ data to receive the final database.</em></p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Load all Con, Dem and Mrn datasets processing all files within given datasource in parallel</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load_all</span>(<span class="at">folder =</span> folder_rpdr, <span class="at">which_data =</span> <span class="fu">c</span>(<span class="st">&quot;con&quot;</span>, <span class="st">&quot;dem&quot;</span>, <span class="st">&quot;mrn&quot;</span>), <span class="at">nThread =</span> <span class="dv">2</span>, <span class="at">many_sources =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -317,7 +319,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">#Parse encounter ICD columns and discard original ones, and create indicator variables for the following diseases and summarize per patient, whether there are any encounters where the given diseases were registered</span></span>
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>diseases <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">HT =</span> <span class="fu">c</span>(<span class="st">&quot;I10&quot;</span>), <span class="at">Stroke =</span> <span class="fu">c</span>(<span class="st">&quot;434.91&quot;</span>, <span class="st">&quot;I63.50&quot;</span>))</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>data_enc_disease <span class="ot">&lt;-</span>  <span class="fu">convert_enc</span>(<span class="at">d =</span> data_enc, <span class="at">keep =</span> <span class="cn">FALSE</span>, <span class="at">codes_to_find =</span> diseases, <span class="at">nThread =</span> <span class="dv">2</span>, <span class="at">collapse =</span> <span class="st">&quot;ID_MERGE&quot;</span>)</span></code></pre></div>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>data_enc_disease <span class="ot">&lt;-</span>  <span class="fu">convert_enc</span>(<span class="at">d =</span> data_enc, <span class="at">keep =</span> <span class="cn">FALSE</span>, <span class="at">codes_to_find =</span> diseases, <span class="at">nThread =</span> <span class="dv">2</span>, <span class="at">collapse =</span> <span class="st">&quot;ID_MERGE&quot;</span>, <span class="at">time_type =</span> <span class="st">&quot;earliest&quot;</span>)</span></code></pre></div>
 </div>
 <div id="convert_dia---searching-for-given-diagnosis-codes" class="section level3">
 <h3><em>convert_dia</em> - Searching for given diagnosis codes</h3>
