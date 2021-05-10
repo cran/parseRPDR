@@ -36,7 +36,7 @@ In other cases the lengths are unchanged. Defaults to \emph{standard}.}
 
 \item{identical}{boolean, whether to remove columns with identical values. Defaults to \emph{TRUE}.}
 
-\item{nThread}{integer, number of threds to use by data.table for reading data and parsing ID data.}
+\item{nThread}{integer, number of threads to use by data.table for reading data and parsing ID data.}
 
 \item{mrn_type}{boolean, should data in \emph{MRN_Type} and \emph{MRN} be parsed. Defaults to \emph{FALSE}, as it is not advised to parse these for all data sources as it takes considerable time.}
 

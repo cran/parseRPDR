@@ -42,6 +42,14 @@ knitr::opts_chunk$set(
 #  #Due to fake sample data it is the same as above
 #  all_MGH_mrn <- all_ids_mi2b2(type = "MGH", d_mrn = data_mrn, d_con = data_con)
 
+## ----load_notes---------------------------------------------------------------
+#  #Using defaults
+#  d_hnp <- load_notes(file = "test_Hnp.txt", type = "hnp")
+#  #Use sequential processing
+#  d_hnp <- load_notes(file = "test_Hnp.txt", type = "hnp", nThread = 1)
+#  #Use parallel processing and parse data in MRN_Type and MRN columns and keep all IDs
+#  d_hnp <- load_notes(ile = "test_Hnp.txt", type = "hnp", nThread = 20, mrn_type = TRUE, perc = 1)
+
 ## ----load_all-----------------------------------------------------------------
 #  #Load all Con, Dem and Mrn datasets processing all files within given datasource in parallel
 #  load_all(folder = folder_rpdr, which_data = c("con", "dem", "mrn"), nThread = 2, many_sources = FALSE)
@@ -70,6 +78,11 @@ knitr::opts_chunk$set(
 #  diseases <- list(HT = c("ICD10:I10"), Stroke = c("ICD9:434.91", "ICD9:I63.50"))
 #  data_enc_disease <-  convert_dia(d = data_dia, codes_to_find = diseases, nThread = 2, collapse = "ID_MERGE", time_type = "earliest")
 
+## ----convert_rfv--------------------------------------------------------------
+#  #Parse reason for visit columns and create indicator variables for the following reasons and summarize per patient, whether there are any encounters where the given reasons were registered
+#  reasons <- list(Pain = c("ERFV:160357", "ERFV:140012"), Visit = c("ERFV:501"))
+#  data_rfv_disease <-  convert_rfv(d = data_rfv, keep = FALSE, codes_to_find = reasons, nThread = 2, collapse = "ID_MERGE")
+
 ## ----convert_lab--------------------------------------------------------------
 #  #Convert loaded lab results
 #  data_lab_pretty <- convert_lab(d = data_lab)
@@ -86,9 +99,9 @@ knitr::opts_chunk$set(
 #  #Summarize per patient if they ever had the given medication groups registered
 #  data_med_indic_any <- convert_med(d = data_med, codes_to_find = meds, collapse = "ID_MERGE", nThread = 2, time_type = "earliest")
 
-## ----convert_rad--------------------------------------------------------------
+## ----convert_notes------------------------------------------------------------
 #  #Create columns with specific parts of the radiological report defined by anchors
-#  data_rad_parsed <- convert_rad(d = data_rad, nThread = 2)
+#  data_rad_parsed <- convert_notes(d = data_rad, code = "rad_rep_txt", anchors = c("Exam Code", "Ordering Provider", "HISTORY", "Associated Reports", "Report Below", "REASON", "REPORT", "TECHNIQUE", "COMPARISON", "FINDINGS", "IMPRESSION", "RECOMMENDATION", "SIGNATURES", "report_end"), nThread = 2)
 
 ## ----find_exam----------------------------------------------------------------
 #  #Filter encounters for first emergency visits at one of MGH's ED departments

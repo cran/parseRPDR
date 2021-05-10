@@ -13,7 +13,7 @@
 #' @param perc numeric, a number between 0-1 indicating which parsed ID columns to keep. Data present in \emph{perc x 100\%} of patients are kept.
 #' @param na boolean, whether to remove columns with only NA values. Defaults to \emph{TRUE}.
 #' @param identical boolean, whether to remove columns with identical values. Defaults to \emph{TRUE}.
-#' @param nThread integer, number of threds to use by data.table for reading data.
+#' @param nThread integer, number of threads to use by data.table for reading data.
 #' @param mrn_type boolean, should data in \emph{MRN_Type} and \emph{MRN} be parsed. Defaults to \emph{FALSE}, as it is not advised to parse these for all data sources as it takes considerable time.
 #'
 #' @return data table, with radiological exam information.
@@ -64,7 +64,7 @@ load_rdt <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard",
   DATA$rdt_test_desc  <- pretty_text(data_raw$Test_Description, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA$rdt_accession  <- pretty_text(data_raw$Accession_Number, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA$rdt_provider   <- pretty_text(data_raw$Provider, remove_after = FALSE, remove_white = FALSE)
-  DATA$rdt_clinic     <- pretty_text(data_raw$Clinic, remove_after = FALSE, remove_white = FALSE)
+  DATA$rdt_clinic     <- pretty_text(data_raw$Clinic, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA$rdt_hosp       <- pretty_text(data_raw$Hospital, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA$rdt_inpatient  <- pretty_text(data_raw$Inpatient_Outpatient, remove_after = FALSE, remove_white = FALSE)
 

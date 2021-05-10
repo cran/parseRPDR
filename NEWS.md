@@ -1,6 +1,34 @@
 # Change log
 
-## parseRPDR 0.0.2 - 2021/04/01
+
+## parseRPDR 0.1.0 - 2021/05/09
+
+-   Now support **Rfv** and all note type files:
+    **Car, Dis, End, Hnp, Opn, Pat, Prg, Pul, Rad and Vis**
+    using a single function: **load_notes**. Therefore,
+    previous note related load functions have been removed.
+
+-   Added **convert_rfv** functionality.
+
+-   Now all notes files may be parsed using the
+    **convert_notes** function. Therefore,
+    previous note related convert functions have been removed.
+
+-   For all datasources Clinic and Hospital names are not modified 
+    in any way so they are identical to the ones in RPDR, 
+    only missing values are changed to NA.
+    
+-   In functions parsing notes, exact matches are used for efficiency.
+
+-   Bug-fix: load_dia did not load the encounter number of the record.
+
+-   Bug-fix: parsing of notes has changed as in case of large files
+    it caused memory issues.
+    
+-   Bug-fix: all columns are read as character as large MRNs interpreted
+    as integers may cause problems.
+
+## parseRPDR 0.0.2 - 2021/04/16
 
 -   Upon attaching the package the *future.globals.maxSize* is set to
     100Gb to allow for parallel processing of large datasets on windows
@@ -22,7 +50,7 @@
     using the *difftime* function.
 
 -   Bug-fix: In case lab values were recorded as having “\>” or “\<”
-    signs and the value was equal to the normal range i.e. value:
+    signs and the value was equal to the normal range i.e. value:
     \<0.01, normal range: \<0.01, then these values are considered as
     *NORMAL*.
 

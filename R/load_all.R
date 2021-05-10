@@ -2,11 +2,13 @@
 #' @export
 #'
 #' @description Loads all RPDR text outputs into R and returns a list of data tables processed. Currently supported outputs are:
-#' \emph{Mrn.txt, Con.txt, Dem.txt, Enc.txt, Rdt.txt, Lab.txt, Med.txt, Dia.txt, Rad.txt}. If multiple text files of the same type are available (if the query is larger than 25000 patients),
+#' \emph{Mrn.txt, Con.txt, Dem.txt, Enc.txt, Rdt.txt, Lab.txt, Med.txt, Dia.txt, Rfv.txt, Car.txt, Dis.txt, End.txt, Hnp.txt,
+#' Opn.txt, Pat.txt, Prg.txt, Pul.txt, Rad.txt and Vis.txt}. If multiple text files of the same type are available (if the query is larger than 25000 patients),
 #' then add a \emph{"_"} and a number to merge the same data sources into a single output in the order of the provided number.
 #'
 #' @param folder string, full folder path to RPDR text files.
-#' @param which_data string vector, an array of abbreviation corresponding to the datasources wished to load. Currently supported values and the default is: \emph{c("mrn", "con", "dem", "enc", "rdt","lab", "med", "dia", "rad")}
+#' @param which_data string vector, an array of abbreviation corresponding to the datasources wished to load. Currently supported values and the default is: \emph{c("mrn", "con", "dem", "enc", "rdt", "lab", "med", "dia", "rfv",
+#' "car", "dis", "end", "hnp", "opn", "pat", "prg", "pul", "rad" and "vis")}
 #' @param merge_id string, column name to use to create \emph{ID_MERGE} column used to merge different datasets. Defaults to \emph{EMPI},
 #' as it is the preferred MRN in the RPDR system. In case of mrn dataset, leave at EMPI, as it is automatically converted to: "Enterprise_Master_Patient_Index".
 #' @param sep string, divider between hospital ID and MRN. Defaults to \emph{:}.
@@ -34,12 +36,13 @@
 #' load_all(folder = folder_rpdr, nThread = 2, many_sources = TRUE)
 #' }
 
-load_all <- function(folder, which_data = c("mrn", "con", "dem", "enc", "rdt", "lab", "med", "dia", "rad"),
+load_all <- function(folder, which_data = c("mrn", "con", "dem", "enc", "rdt", "lab", "med", "dia", "rfv", "car", "dis", "end", "hnp", "opn", "pat", "prg", "pul", "rad", "vis"),
                      merge_id = "EMPI", sep = ":", id_length = "standard", perc = 0.6, na = TRUE, identical = TRUE, nThread = 4, many_sources = TRUE) {
 
   .SD=.N=.I=.GRP=.BY=.EACHI=..=..cols=.SDcols=i=j=time_to_db=..which_ids_to=..which_ids_from <- NULL
 
   load_functions <- paste0("load_", which_data)
+  load_functions[grep(paste0(c("car", "dis", "end", "hnp", "opn", "pat", "prg", "pul", "rad", "vis"), collapse = "|"), load_functions)] <- "load_notes" #Change to load_notes if needed
   l_df <- sapply(which_data, function(x) NULL)
 
   files_short <- list.files(folder, full.names = FALSE, pattern = ".txt")
@@ -87,7 +90,7 @@ load_all <- function(folder, which_data = c("mrn", "con", "dem", "enc", "rdt", "
           for(j in alt_lab) {files_type <- c(files_type, grep(paste0(alt_lab, ".*txt"), x = tolower(files_short), value = FALSE))}
         }
 
-        numb <- as.numeric(gsub(".*_(.+).txt", "\\1", files_short[files_type])) #get order of files
+        numb <- suppressWarnings(as.numeric(gsub(".*_(.+).txt", "\\1", files_short[files_type]))) #get order of files
         files_long_type <-files_long[files_type[order(numb)]] #select and order full file paths
 
 
@@ -95,14 +98,26 @@ load_all <- function(folder, which_data = c("mrn", "con", "dem", "enc", "rdt", "
                                    .errorhandling = c("pass"), .verbose=FALSE) %exec_inner%
           {
             if(length(files_long_type) != 0) {
-              func <- grep(type, x = tolower(load_functions), value = TRUE, fixed = TRUE)
-              l_i <- eval(str2expression(paste0(func, "(\"", files_long_type[j], "\", ",
-                                                "merge_id = \"", merge_id, "\", ",
-                                                "sep = \"", sep, "\", ",
-                                                "id_length = \"", id_length, "\", ",
-                                                "perc = ", perc, ", ",
-                                                "nThread = ", 1, ", ",
-                                                "na = FALSE, identical = FALSE)")))
+              if(type %in% c("car", "dis", "end", "hnp", "opn", "pat", "prg", "pul", "rad", "vis")) {
+                func <- "load_notes"
+                l_i <- eval(str2expression(paste0(func, "(\"", files_long_type[j], "\", ",
+                                                  "type = \"", type, "\", ",
+                                                  "merge_id = \"", merge_id, "\", ",
+                                                  "sep = \"", sep, "\", ",
+                                                  "id_length = \"", id_length, "\", ",
+                                                  "perc = ", perc, ", ",
+                                                  "nThread = ", 1, ", ",
+                                                  "na = FALSE, identical = FALSE)")))
+              } else {
+                func <- grep(type, x = tolower(load_functions), value = TRUE, fixed = TRUE)
+                l_i <- eval(str2expression(paste0(func, "(\"", files_long_type[j], "\", ",
+                                                  "merge_id = \"", merge_id, "\", ",
+                                                  "sep = \"", sep, "\", ",
+                                                  "id_length = \"", id_length, "\", ",
+                                                  "perc = ", perc, ", ",
+                                                  "nThread = ", 1, ", ",
+                                                  "na = FALSE, identical = FALSE)")))
+              }
               l_i
             }
           }
@@ -145,7 +160,7 @@ load_all <- function(folder, which_data = c("mrn", "con", "dem", "enc", "rdt", "
           for(j in alt_lab) {files_type <- c(files_type, grep(paste0(alt_lab, ".*txt"), x = tolower(files_short), value = FALSE))}
         }
 
-        numb <- as.numeric(gsub(".*_(.+).txt", "\\1", files_short[files_type])) #get order of files
+        numb <- suppressWarnings(as.numeric(gsub(".*_(.+).txt", "\\1", files_short[files_type]))) #get order of files
         files_long_type <-files_long[files_type[order(numb)]] #select and order full file paths
 
         #Initiate clusters
@@ -166,14 +181,26 @@ load_all <- function(folder, which_data = c("mrn", "con", "dem", "enc", "rdt", "
                                          .errorhandling = c("pass"), .verbose=FALSE) %exec_inner%
           {
             if(length(files_long_type) != 0) {
-              func <- grep(type, x = tolower(load_functions), value = TRUE, fixed = TRUE)
-              l_i <- eval(str2expression(paste0(func, "(\"", files_long_type[j], "\", ",
-                                                "merge_id = \"", merge_id, "\", ",
-                                                "sep = \"", sep, "\", ",
-                                                "id_length = \"", id_length, "\", ",
-                                                "perc = ", perc, ", ",
-                                                "nThread = ", 1, ", ",
-                                                "na = FALSE, identical = FALSE)")))
+              if(type %in% c("car", "dis", "end", "hnp", "opn", "pat", "prg", "pul", "rad", "vis")) {
+                func <- "load_notes"
+                l_i <- eval(str2expression(paste0(func, "(\"", files_long_type[j], "\", ",
+                                                  "type = \"", type, "\", ",
+                                                  "merge_id = \"", merge_id, "\", ",
+                                                  "sep = \"", sep, "\", ",
+                                                  "id_length = \"", id_length, "\", ",
+                                                  "perc = ", perc, ", ",
+                                                  "nThread = ", 1, ", ",
+                                                  "na = FALSE, identical = FALSE)")))
+              } else {
+                func <- grep(type, x = tolower(load_functions), value = TRUE, fixed = TRUE)
+                l_i <- eval(str2expression(paste0(func, "(\"", files_long_type[j], "\", ",
+                                                  "merge_id = \"", merge_id, "\", ",
+                                                  "sep = \"", sep, "\", ",
+                                                  "id_length = \"", id_length, "\", ",
+                                                  "perc = ", perc, ", ",
+                                                  "nThread = ", 1, ", ",
+                                                  "na = FALSE, identical = FALSE)")))
+              }
               l_i
             }
           }
