@@ -28,9 +28,9 @@
 #' @encoding UTF-8
 #' @importFrom data.table :=
 
-load_base <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard", perc = 0.6, na = TRUE, identical = TRUE, nThread = 4, mrn_type = FALSE, src = "mrn") {
+load_base <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard", perc = 0.6, na = TRUE, identical = TRUE, nThread = 4, mrn_type = FALSE, src = "mrn", fill = FALSE, sep_load = "|") {
   message("Loading ", src,  " information into the R environment. Could take considerable time, please be patient!")
-  data_raw <- data.table::fread(file, showProgress = FALSE, colClasses = "character", nThread = nThread)
+  data_raw <- data.table::fread(file, showProgress = FALSE, colClasses = "character", nThread = nThread, fill = fill, sep = sep_load)
   DATA <- data.table::data.table()
   if(src == "mrn" & merge_id == "EMPI") {
     DATA$ID_MERGE <- data_raw[["Enterprise_Master_Patient_Index"]]

@@ -40,7 +40,7 @@ convert_med <- function(d, code = "med", codes_to_find = NULL, collapse = NULL,
   .SD=.N=.I=.GRP=.BY=.EACHI=..=..cols=.SDcols=i=j=time_to_db=..which_ids_to=..which_ids_from=..collapse=. <- NULL
 
   #Initialize multicore
-  if(nThread == 1) {
+  if(nThread == 1 | length(codes_to_find) == 1) {
     `%exec%` <- foreach::`%do%`
   } else {
     if(length(codes_to_find) > 0 & length(codes_to_find) < nThread) {nThread <- length(codes_to_find)}

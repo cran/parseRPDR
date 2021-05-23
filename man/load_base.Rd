@@ -15,7 +15,9 @@ load_base(
   identical = TRUE,
   nThread = 4,
   mrn_type = FALSE,
-  src = "mrn"
+  src = "mrn",
+  fill = FALSE,
+  sep_load = "|"
 )
 }
 \arguments{

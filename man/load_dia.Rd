@@ -18,7 +18,7 @@ load_dia(
 )
 }
 \arguments{
-\item{file}{string, full file path to Rad.txt.}
+\item{file}{string, full file path to Dia.txt.}
 
 \item{merge_id}{string, column name to use to create \emph{ID_MERGE} column used to merge different datasets. Defaults to \emph{EPIC_PMRN},
 as it is the preferred MRN in the RPDR system.}
@@ -56,7 +56,7 @@ data table, with diagnoses information.
  \item{dia_flag}{string, Qualifier for the diagnosis, if any, corresponds to Diagnosis_flag in RPDR.}
  \item{dia_enc_num}{string, Unique identifier of the record/visit. This values includes the source system, hospital, and a unique identifier within the source system, corresponds to Encounter_number in RPDR.}
  \item{dia_provider}{string, Provider of record for the encounter where the diagnosis was entered, corresponds to Provider in RPDR. Punctuation marks are removed.}
- \item{dia_clinic}{string, Specific department/location where the patient encounter took place, corresponds to Clinic in RPDR. Punctuation marks are removed.}
+ \item{dia_clinic}{string, Specific department/location where the patient encounter took place, corresponds to Clinic in RPDR.}
  \item{dia_hosp}{string, Facility where the encounter occurred, corresponds to Hospital in RPDR.}
  \item{dia_inpatient}{string, Identifies whether the diagnosis was noted during an inpatient or outpatient encounter, Punctuation marks are removed.}
  }

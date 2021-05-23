@@ -7,8 +7,8 @@
 \usage{
 load_all(
   folder,
-  which_data = c("mrn", "con", "dem", "enc", "rdt", "lab", "med", "dia", "rfv", "car",
-    "dis", "end", "hnp", "opn", "pat", "prg", "pul", "rad", "vis"),
+  which_data = c("mrn", "con", "dem", "enc", "rdt", "lab", "med", "dia", "rfv", "prc",
+    "car", "dis", "end", "hnp", "opn", "pat", "prg", "pul", "rad", "vis"),
   merge_id = "EMPI",
   sep = ":",
   id_length = "standard",
@@ -22,7 +22,7 @@ load_all(
 \arguments{
 \item{folder}{string, full folder path to RPDR text files.}
 
-\item{which_data}{string vector, an array of abbreviation corresponding to the datasources wished to load. Currently supported values and the default is: \emph{c("mrn", "con", "dem", "enc", "rdt", "lab", "med", "dia", "rfv",
+\item{which_data}{string vector, an array of abbreviation corresponding to the datasources wished to load. Currently supported values and the default is: \emph{c("mrn", "con", "dem", "enc", "rdt", "lab", "med", "dia", "rfv", "prc",
 "car", "dis", "end", "hnp", "opn", "pat", "prg", "pul", "rad" and "vis")}}
 
 \item{merge_id}{string, column name to use to create \emph{ID_MERGE} column used to merge different datasets. Defaults to \emph{EMPI},
@@ -52,7 +52,7 @@ list of parsed data tables containing the information.
 }
 \description{
 Loads all RPDR text outputs into R and returns a list of data tables processed. Currently supported outputs are:
-\emph{Mrn.txt, Con.txt, Dem.txt, Enc.txt, Rdt.txt, Lab.txt, Med.txt, Dia.txt, Rfv.txt, Car.txt, Dis.txt, End.txt, Hnp.txt,
+\emph{Mrn.txt, Con.txt, Dem.txt, Enc.txt, Rdt.txt, Lab.txt, Med.txt, Dia.txt, Rfv.txt, Prc.txt, Car.txt, Dis.txt, End.txt, Hnp.txt,
 Opn.txt, Pat.txt, Prg.txt, Pul.txt, Rad.txt and Vis.txt}. If multiple text files of the same type are available (if the query is larger than 25000 patients),
 then add a \emph{"_"} and a number to merge the same data sources into a single output in the order of the provided number.
 }

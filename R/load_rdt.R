@@ -31,7 +31,7 @@
 #'  \item{rdt_test_desc}{string, Full name of the exam/study performed, corresponds to Test_Description in RPDR.}
 #'  \item{rdt_accession}{string, Identifier assigned to the report or procedure for Radiology tracking purposes, corresponds to Accession_Number in RPDR.}
 #'  \item{rdt_provider}{string, Ordering or authorizing provider for the study, corresponds to Provider in RPDR. Punctuation marks are removed.}
-#'  \item{rdt_clinic}{string, Specific department/location where the procedure was ordered or performed, corresponds to Clinic in RPDR. Punctuation marks are removed.}
+#'  \item{rdt_clinic}{string, Specific department/location where the procedure was ordered or performed, corresponds to Clinic in RPDR.}
 #'  \item{rdt_hosp}{string, Facility where the order was entered, corresponds to Hospital in RPDR.}
 #'  \item{rdt_inpatient}{string, Classifies the type of encounter where the procedure was performed, corresponds to Inpatient_Outpatient in RPDR. Punctuation marks are removed.}
 #'  }

@@ -76,12 +76,17 @@ knitr::opts_chunk$set(
 #  
 #  #Search for Hypertension and Stroke ICD codes and summarize per patient providing earliest time
 #  diseases <- list(HT = c("ICD10:I10"), Stroke = c("ICD9:434.91", "ICD9:I63.50"))
-#  data_enc_disease <-  convert_dia(d = data_dia, codes_to_find = diseases, nThread = 2, collapse = "ID_MERGE", time_type = "earliest")
+#  data_dia_disease <-  convert_dia(d = data_dia, codes_to_find = diseases, nThread = 2, collapse = "ID_MERGE", time_type = "earliest")
 
 ## ----convert_rfv--------------------------------------------------------------
 #  #Parse reason for visit columns and create indicator variables for the following reasons and summarize per patient, whether there are any encounters where the given reasons were registered
 #  reasons <- list(Pain = c("ERFV:160357", "ERFV:140012"), Visit = c("ERFV:501"))
 #  data_rfv_disease <-  convert_rfv(d = data_rfv, keep = FALSE, codes_to_find = reasons, nThread = 2, collapse = "ID_MERGE")
+
+## ----convert_prc--------------------------------------------------------------
+#  #Parse procedure columns and create indicator variables for the following procedures and summarize per patient, whether there are any procedures registered
+#  procedures <- list(Anesthesia = c("CTP:00410", "CPT:00104"))
+#  data_prc_procedures <- convert_prc(d = data_prc, codes_to_find = procedures, nThread = 2, collapse = "ID_MERGE", time_type = "earliest")
 
 ## ----convert_lab--------------------------------------------------------------
 #  #Convert loaded lab results

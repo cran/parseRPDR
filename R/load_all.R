@@ -2,12 +2,12 @@
 #' @export
 #'
 #' @description Loads all RPDR text outputs into R and returns a list of data tables processed. Currently supported outputs are:
-#' \emph{Mrn.txt, Con.txt, Dem.txt, Enc.txt, Rdt.txt, Lab.txt, Med.txt, Dia.txt, Rfv.txt, Car.txt, Dis.txt, End.txt, Hnp.txt,
+#' \emph{Mrn.txt, Con.txt, Dem.txt, Enc.txt, Rdt.txt, Lab.txt, Med.txt, Dia.txt, Rfv.txt, Prc.txt, Car.txt, Dis.txt, End.txt, Hnp.txt,
 #' Opn.txt, Pat.txt, Prg.txt, Pul.txt, Rad.txt and Vis.txt}. If multiple text files of the same type are available (if the query is larger than 25000 patients),
 #' then add a \emph{"_"} and a number to merge the same data sources into a single output in the order of the provided number.
 #'
 #' @param folder string, full folder path to RPDR text files.
-#' @param which_data string vector, an array of abbreviation corresponding to the datasources wished to load. Currently supported values and the default is: \emph{c("mrn", "con", "dem", "enc", "rdt", "lab", "med", "dia", "rfv",
+#' @param which_data string vector, an array of abbreviation corresponding to the datasources wished to load. Currently supported values and the default is: \emph{c("mrn", "con", "dem", "enc", "rdt", "lab", "med", "dia", "rfv", "prc",
 #' "car", "dis", "end", "hnp", "opn", "pat", "prg", "pul", "rad" and "vis")}
 #' @param merge_id string, column name to use to create \emph{ID_MERGE} column used to merge different datasets. Defaults to \emph{EMPI},
 #' as it is the preferred MRN in the RPDR system. In case of mrn dataset, leave at EMPI, as it is automatically converted to: "Enterprise_Master_Patient_Index".
@@ -36,7 +36,7 @@
 #' load_all(folder = folder_rpdr, nThread = 2, many_sources = TRUE)
 #' }
 
-load_all <- function(folder, which_data = c("mrn", "con", "dem", "enc", "rdt", "lab", "med", "dia", "rfv", "car", "dis", "end", "hnp", "opn", "pat", "prg", "pul", "rad", "vis"),
+load_all <- function(folder, which_data = c("mrn", "con", "dem", "enc", "rdt", "lab", "med", "dia", "rfv", "prc", "car", "dis", "end", "hnp", "opn", "pat", "prg", "pul", "rad", "vis"),
                      merge_id = "EMPI", sep = ":", id_length = "standard", perc = 0.6, na = TRUE, identical = TRUE, nThread = 4, many_sources = TRUE) {
 
   .SD=.N=.I=.GRP=.BY=.EACHI=..=..cols=.SDcols=i=j=time_to_db=..which_ids_to=..which_ids_from <- NULL
@@ -86,6 +86,12 @@ load_all <- function(folder, which_data = c("mrn", "con", "dem", "enc", "rdt", "
         #If med data then consider alternative file names
         if(type == "med" & length(files_type) == 0) {
           alt_lab <- c("mee")
+          files_type <- NULL
+          for(j in alt_lab) {files_type <- c(files_type, grep(paste0(alt_lab, ".*txt"), x = tolower(files_short), value = FALSE))}
+        }
+        #If prc data then consider alternative file names
+        if(type == "prc" & length(files_type) == 0) {
+          alt_lab <- c("pec")
           files_type <- NULL
           for(j in alt_lab) {files_type <- c(files_type, grep(paste0(alt_lab, ".*txt"), x = tolower(files_short), value = FALSE))}
         }
@@ -156,6 +162,11 @@ load_all <- function(folder, which_data = c("mrn", "con", "dem", "enc", "rdt", "
         #If med data then consider alternative file names
         if(type == "med" & length(files_type) == 0) {
           alt_lab <- c("mee")
+          files_type <- NULL
+          for(j in alt_lab) {files_type <- c(files_type, grep(paste0(alt_lab, ".*txt"), x = tolower(files_short), value = FALSE))}
+        }
+        if(type == "prc" & length(files_type) == 0) {
+          alt_lab <- c("pec")
           files_type <- NULL
           for(j in alt_lab) {files_type <- c(files_type, grep(paste0(alt_lab, ".*txt"), x = tolower(files_short), value = FALSE))}
         }

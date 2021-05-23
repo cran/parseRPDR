@@ -1,5 +1,17 @@
 # Change log
 
+## parseRPDR 0.1.1 - 2021/05/23
+
+-   Now support **Prc** datasource.
+
+-   Now support processing of **Prc** datasource
+    using **convert_prc** function.
+
+-   Corrected documentation where needed.
+
+-   Optimized sequential execution by not creating a
+    socket when only 1 iteration is needed in convert
+    functions.
 
 ## parseRPDR 0.1.0 - 2021/05/09
 

@@ -30,14 +30,13 @@
 #' codes_to_find = reasons, nThread = 2, collapse = "ID_MERGE")
 #' }
 
-convert_rfv <- function(d, code = "rfv_concept_id",
-                        codes_to_find = NULL,
+convert_rfv <- function(d, code = "rfv_concept_id", codes_to_find = NULL,
                         collapse = NULL, code_time = "time_rfv_start", time_type = "earliest", nThread = 4) {
 
   .SD=.N=.I=.GRP=.BY=.EACHI=..=..code=.SDcols=i=j=time_to_db=..which_ids_to=..which_ids_from=..collapse=. <- NULL
 
   #Initialize multicore
-  if(nThread == 1) {
+  if(nThread == 1 | length(codes_to_find) == 1) {
     `%exec%` <- foreach::`%do%`
   } else {
     if(length(codes_to_find) > 0 & length(codes_to_find) < nThread) {nThread <- length(codes_to_find)}

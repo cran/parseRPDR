@@ -52,12 +52,12 @@ data table, with encounter information.
  \item{time_enc_admit}{POSIXct, Date when the patient was admitted or entered the facility, corresponds to Admit_Date in RPDR. Converted to POSIXct format.}
  \item{time_enc_disch}{POSIXct, Date when the patient was discharged or left the facility, corresponds to Discharge_Date in RPDR. Converted to POSIXct format.}
  \item{enc_status}{string, Billing account-related notes about the encounter. This will not be populated for all encounters, corresponds to Encounter_Status in RPDR. Punctuation marks are removed.}
- \item{enc_hosp}{string, Facility where the encounter occurred, corresponds to Hospital in RPDR. Punctuation marks and white spaces are removed.}
+ \item{enc_hosp}{string, Facility where the encounter occurred, corresponds to Hospital in RPDR.}
  \item{enc_inpatient}{string, Classifies the type of encounter as either Inpatient or Outpatient. ED visits are currently classified under the 'Outpatient' label, corresponds to Inpatient_or_Outpatient in RPDR. Punctuation marks are removed.}
  \item{enc_service}{string, Hospital service line assigned to the encounter, corresponds to Service_Line in RPDR. Punctuation marks are removed.}
  \item{enc_attending}{string, The attending provider associated with the encounter. For Epic professional billing, this is the billing provider, corresponds to Attending_MD in RPDR. Punctuation marks are removed.}
  \item{enc_length}{numeric, Length of stay for the encounter, corresponds to LOS_days in RPDR.}
- \item{enc_clinic}{string, Specific department/location where the encounter occured, corresponds to Clinic_Name in RPDR. Punctuation marks are removed.}
+ \item{enc_clinic}{string, Specific department/location where the encounter occured, corresponds to Clinic_Name in RPDR.}
  \item{enc_admit_src}{string, Location where the patient was admitted when entering the hospital/clinic, corresponds to Admit_Source in RPDR. Punctuation marks are removed.}
  \item{enc_pat_type}{string, Provides information regarding the specific patient classifications and status of the patient visit. This field is only populated for McLean Hospital encounters, corresponds to Patient_Type in RPDR. Punctuation marks are removed.}
  \item{enc_ref_disp}{string, Location where the patient has been directed for treatment or follow-up by a staff member. This field is only populated for McLean Hospital encounters, corresponds to Referrer_Discipline in RPDR. Punctuation marks are removed.}

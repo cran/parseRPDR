@@ -47,7 +47,7 @@ convert_enc <- function(d, code = c("enc_diag_admit", "enc_diag_princ", paste0("
   .SD=.N=.I=.GRP=.BY=.EACHI=..=..code=.SDcols=i=j=time_to_db=..which_ids_to=..which_ids_from=..collapse=. <- NULL
 
   #Initialize multicore
-  if(nThread == 1) {
+  if(nThread == 1 | length(codes_to_find) == 1) {
     `%exec%` <- foreach::`%do%`
   } else {
     if(length(codes_to_find) > 0 & length(codes_to_find) < nThread) {nThread <- length(codes_to_find)}

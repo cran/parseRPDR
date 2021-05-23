@@ -72,7 +72,7 @@ load_notes <- function(file, type, merge_id = "EMPI", sep = ":", id_length = "st
   record <- gsub("[\r\n]", " ", record) #remove carriage returns and new lines
   message("Removing multuiple spaces")
   record <- gsub("^ *|(?<= ) | *$", "", record, perl = TRUE) #remove multiple spaces
-  message("Creating propoer representation of records")
+  message("Creating proper representation of records")
   record <- gsub(pattern = "[report_end]", replacement = "[report_end]\r\n", x = record,  fixed = TRUE) #add new line to all other rows
 
   message("Converting texts to data.table compatible format")

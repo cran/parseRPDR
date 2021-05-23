@@ -58,7 +58,7 @@ data table, with medication order information.
  \item{med_code_type}{string, Standardized classification system or custom source value used to identify the medication, corresponds to Code_Type in RPDR.}
  \item{med_quant}{string, Number of units of the medication ordered, corresponds to Quantity in RPDR.}
  \item{med_prov}{string, Ordering provider for the medication, corresponds to Provider in RPDR. Punctuation marks are removed.}
- \item{med_clinic}{string, Specific department/location where the medication was ordered or administered, corresponds to Clinic in RPDR. Punctuation marks are removed.}
+ \item{med_clinic}{string, Specific department/location where the medication was ordered or administered, corresponds to Clinic in RPDR.}
  \item{med_hosp}{string, Facility where the medication was ordered or administered, corresponds to Hospital in RPDR.}
  \item{med_inpatient}{string, Identifies whether the medication was ordered with an Inpatient or Outpatient indication, corresponds to Inpatient_Outpatient in RPDR. Punctuation marks are removed.}
  \item{med_add_info}{string, Additional administration information about the medication, corresponds to Additional_Info in RPDR.}

@@ -54,7 +54,7 @@ data_dia_parse <- convert_dia(d = data_dia, codes_to_find = diseases, nThread = 
 
 #Search for Hypertension and Stroke ICD codes and summarize per patient providing earliest time
 diseases <- list(HT = c("ICD10:I10"), Stroke = c("ICD9:434.91", "ICD9:I63.50"))
-data_enc_disease <-  convert_dia(d = data_dia, codes_to_find = diseases,
+data_dia_disease <-  convert_dia(d = data_dia, codes_to_find = diseases,
 nThread = 2, collapse = "ID_MERGE", time_type = "earliest")
 }
 }

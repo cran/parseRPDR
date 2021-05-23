@@ -28,7 +28,7 @@
 #'  \item{time_rfv_end}{POSIXct, End date of the encounter, corresponds to End_Date in RPDR. Converted to POSIXct format.}
 #'  \item{rfv_provider}{string, Primary provider for the encounter, corresponds to Provider in RPDR. Punctuation marks are removed.}
 #'  \item{rfv_hosp}{string, Facility where the encounter occurred, corresponds to Hospital in RPDR.}
-#'  \item{rfv_clinic}{string, Specific department/location where the patient encounter took place, corresponds to Clinic in RPDR. Punctuation marks are removed.}
+#'  \item{rfv_clinic}{string, Specific department/location where the patient encounter took place, corresponds to Clinic in RPDR.}
 #'  \item{rfv_chief_complaint}{string, Description of the chief complaint/reason for visit, corresponds to Chief_Complaint in RPDR.}
 #'  \item{rfv_concept_id}{string, Epic identifier for the chief complaint/reason for visit, corresponds to Concept_id in RPDR.}
 #'  \item{rfv_comment}{string, Free-text comments regarding the chief complain/reason for visit, corresponds to Comments in RPDR.}
