@@ -2,14 +2,14 @@ Package: parseRPDR
 Type: Package
 Title: Parse and Manipulate Research Patient Data Registry ('RPDR')
         Text Queries
-Version: 0.1.1
-Date: 2021-05-23
+Version: 0.1.2
+Date: 2021-06-01
 Authors@R: person("Marton", "Kolossvary", role = c("aut", "cre"), email = "mkolossvary@mgh.harvard.edu")
 Maintainer: Marton Kolossvary <mkolossvary@mgh.harvard.edu>
 Description: Functions to load Research Patient Data Registry ('RPDR') text queries from Partners Healthcare institutions into R.
              The package also provides helper functions to manipulate data and execute common procedures
              such as finding the closest radiological exams considering a given timepoint. 'parseRPDR' currently supports
-             txt sources: "mrn", "con", "dem", "enc", "rdt", "lab", "med", "dia", "rfv", "prc",
+             txt sources: "mrn", "con", "dem", "enc", "rdt", "lab", "med", "dia", "rfv", "prc", "phy", "lno",
              "car", "dis", "end", "hnp", "opn", "pat", "prg", "pul", "rad" and "vis".
              All functionalities are parallelized for fast and efficient analyses.
 License: AGPL (>= 3)
@@ -20,10 +20,10 @@ Imports: data.table (>= 1.13.2), stringr (>= 1.4.0), readr (>= 1.4.0),
 LazyData: TRUE
 RoxygenNote: 7.1.1
 NeedsCompilation: no
-Suggests: knitr, rmarkdown
-VignetteBuilder: knitr
+Suggests: testthat (>= 3.0.0), knitr, rmarkdown
 Encoding: UTF-8
-Packaged: 2021-05-23 08:29:21 UTC; mjk2
+Config/testthat/edition: 3
+Packaged: 2021-06-05 17:54:46 UTC; mjk2
 Author: Marton Kolossvary [aut, cre]
 Repository: CRAN
-Date/Publication: 2021-05-23 23:50:02 UTC
+Date/Publication: 2021-06-06 06:50:02 UTC

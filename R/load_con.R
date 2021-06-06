@@ -82,7 +82,6 @@ load_con <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard",
   DATA$name_first     <- pretty_text(data_raw$First_Name, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA$name_middle    <- pretty_text(data_raw$Middle_Name, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA$name_previous  <- pretty_text(data_raw$Previous_Name, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-
   DATA$SSN          <- pretty_text(data_raw$SSN, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA$VIP          <- pretty_text(data_raw$VIP, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA$address1     <- pretty_text(data_raw$Address1, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
@@ -91,15 +90,12 @@ load_con <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard",
   DATA$state        <- pretty_text(data_raw$State, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA$country_con  <- pretty_text(data_raw$Country, remove_after = FALSE, remove_white = FALSE)
   DATA$zip_con      <- pretty_numbers(data_raw$Zip)
-
   DATA$direct_contact_consent <- pretty_text(data_raw$Direct_Contact_Consent, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA$phone_home <- pretty_numbers(data_raw$Home_Phone, length_final = 10, remove_from_back = NULL)
   DATA$phone_day  <- pretty_numbers(data_raw$Day_Phone, length_final = 10, remove_from_back = NULL)
-
   DATA$insurance1 <- pretty_text(data_raw$Insurance_1, remove_after = FALSE, remove_white = FALSE)
   DATA$insurance2 <- pretty_text(data_raw$Insurance_2, remove_after = FALSE, remove_white = FALSE)
   DATA$insurance3 <- pretty_text(data_raw$Insurance_3, remove_after = FALSE, remove_white = FALSE)
-
   DATA$primary_care_physician <- pretty_text(data_raw$Primary_Care_Physician, remove_after = FALSE, remove_white = FALSE)
   DATA$primary_care_physician_resident <- pretty_text(data_raw$Resident_Primary_Care_Physician, remove_after = FALSE, remove_white = FALSE)
 

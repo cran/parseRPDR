@@ -36,7 +36,7 @@
 #' load_all(folder = folder_rpdr, nThread = 2, many_sources = TRUE)
 #' }
 
-load_all <- function(folder, which_data = c("mrn", "con", "dem", "enc", "rdt", "lab", "med", "dia", "rfv", "prc", "car", "dis", "end", "hnp", "opn", "pat", "prg", "pul", "rad", "vis"),
+load_all <- function(folder, which_data = c("mrn", "con", "dem", "enc", "rdt", "lab", "med", "dia", "rfv", "prc", "lno", "car", "dis", "end", "hnp", "opn", "pat", "prg", "pul", "rad", "vis"),
                      merge_id = "EMPI", sep = ":", id_length = "standard", perc = 0.6, na = TRUE, identical = TRUE, nThread = 4, many_sources = TRUE) {
 
   .SD=.N=.I=.GRP=.BY=.EACHI=..=..cols=.SDcols=i=j=time_to_db=..which_ids_to=..which_ids_from <- NULL
@@ -80,6 +80,12 @@ load_all <- function(folder, which_data = c("mrn", "con", "dem", "enc", "rdt", "
         #If enc data then consider alternative file names
         if(type == "enc" & length(files_type) == 0) {
           alt_lab <- c("exc")
+          files_type <- NULL
+          for(j in alt_lab) {files_type <- c(files_type, grep(paste0(alt_lab, ".*txt"), x = tolower(files_short), value = FALSE))}
+        }
+        #If dia data then consider alternative file names
+        if(type == "dia" & length(files_type) == 0) {
+          alt_lab <- c("dea")
           files_type <- NULL
           for(j in alt_lab) {files_type <- c(files_type, grep(paste0(alt_lab, ".*txt"), x = tolower(files_short), value = FALSE))}
         }
@@ -156,6 +162,12 @@ load_all <- function(folder, which_data = c("mrn", "con", "dem", "enc", "rdt", "
         #If enc data then consider alternative file names
         if(type == "enc" & length(files_type) == 0) {
           alt_lab <- c("exc")
+          files_type <- NULL
+          for(j in alt_lab) {files_type <- c(files_type, grep(paste0(alt_lab, ".*txt"), x = tolower(files_short), value = FALSE))}
+        }
+        #If dia data then consider alternative file names
+        if(type == "dia" & length(files_type) == 0) {
+          alt_lab <- c("dea")
           files_type <- NULL
           for(j in alt_lab) {files_type <- c(files_type, grep(paste0(alt_lab, ".*txt"), x = tolower(files_short), value = FALSE))}
         }

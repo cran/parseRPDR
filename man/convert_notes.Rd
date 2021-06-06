@@ -8,7 +8,7 @@
 convert_notes(d, code = NULL, anchors = NULL, nThread = 4)
 }
 \arguments{
-\item{d}{data.table, database containing notes loaded using the \emph{load_abc} function.}
+\item{d}{data.table, database containing notes loaded using the \emph{load_notes} function.}
 
 \item{code}{string vector, column name containing the results, which should be \emph{"abc_rep_txt"}, where \emph{abc} stands for the three letter abbreviation of the given type of note.}
 
@@ -21,7 +21,7 @@ On windows machines sockets are used, while on other operating systems fork para
 data.table, with new columns corresponding to elements in \emph{anchors}.
 }
 \description{
-Analyzes notes loaded using \emph{load_notes}. Extracts information from the free text present in \emph{abc_rep_txt},
+Analyzes notes loaded using \emph{load_notes} or \emph{load_lno}. Extracts information from the free text present in \emph{abc_rep_txt},
 where \emph{abc} stands for the three letter abbreviation of the given type of note.
 An array of string is provided using the \emph{anchors} argument. The function will return as many columns as there are anchor points.
 Each column will contain the text between the given anchor point and the next following anchor point.
@@ -39,6 +39,7 @@ Here are provided potential anchor points for the given types of notes:
 \item{Pulmonary: }{c("The Pulmonary document", "Name:", "Unit #:", "Date:", "Location:", "Smoking Status:", "Pack Years:", "SPIROMETRY:", "LUNG VOLUMES:", "DIFFUSION:", "PLETHYSMOGRAPHY:" "Pulmonary Function Test Interpretation", "Spirometry", "report_end")}
 \item{Radiology: }{c("Exam Code", "Ordering Provider", "HISTORY", "Associated Reports", "Report Below", "REASON", "REPORT",  "TECHNIQUE", "COMPARISON", "FINDINGS", "IMPRESSION", "RECOMMENDATION", "SIGNATURES", "report_end")}
 \item{Visit: }{c("***This text report", "Reason for Visit", "Reason for Visit", "Vital Signs", "Chief Complaint", "History", "Overview", "Medications", "Relevant Orders", "Level of Service", "report_end"}
+\item{LMR: }{c("Subject", "Patient Name:", "Reason for visit", "report_end"}
 }
 
 However, these may be modified and extended to include sections of interest, i.e. if a given score is reported standardly, then adding this phrase (i.e. "CAD-RADS")

@@ -53,19 +53,19 @@ data table, with laboratory exam information.
  \item{lab_loinc}{string, Standardized LOINC code for the laboratory test, corresponds to Loinc_Code in RPDR.}
  \item{lab_testID}{string, Internal identifier for the test used by the source system, corresponds to Test_ID in RPDR.}
  \item{lab_descript}{string, Name of the lab test, corresponds to Test_Description in RPDR.}
- \item{lab_result}{string, Result value for the test, corresponds to Result in RPDR. Punctuation marks and white spaces are removed.}
- \item{lab_result_txt}{string, Additional information included with the result. This can include instructions for interpretation or comments from the laboratory, corresponds to Result_Text in RPDR. Punctuation marks and white spaces are removed.}
- \item{lab_result_abn}{string, Flag for identifying if values are outside of normal ranges or represent a significant deviation from previous values, corresponds to Abnormal_Flag in RPDR. Punctuation marks and white spaces are removed.}
- \item{lab_result_unit}{string, Units associated with the result value, corresponds to Reference_Unit in RPDR. Punctuation marks and white spaces are removed.}
- \item{lab_result_range}{string, Normal or therapeutic range for this value, corresponds to Reference_Range in RPDR. Punctuation marks and white spaces are removed.}
- \item{lab_result_toxic}{string, Reference range of values defined as being toxic to the patient, corresponds to Toxic_Range in RPDR. Punctuation marks and white spaces are removed.}
- \item{lab_spec}{string, Type of specimen collected to perform the test, corresponds to Specimen_Type in RPDR. Punctuation marks and white spaces are removed.}
- \item{lab_spec_txt}{string, Free-text information about the specimen, its collection or its integrity, corresponds to Specimen_Text in RPDR. Punctuation marks and white spaces are removed.}
- \item{lab_correction}{string, Free-text information about any changes made to the results, corresponds to Correction_Flag in RPDR. Punctuation marks and white spaces are removed.}
- \item{lab_status}{string, Flag which indicates whether the procedure is pending or complete, corresponds to Test_Status in RPDR. Punctuation marks and white spaces are removed.}
+ \item{lab_result}{string, Result value for the test, corresponds to Result in RPDR.}
+ \item{lab_result_txt}{string, Additional information included with the result. This can include instructions for interpretation or comments from the laboratory, corresponds to Result_Text in RPDR.}
+ \item{lab_result_abn}{string, Flag for identifying if values are outside of normal ranges or represent a significant deviation from previous values, corresponds to Abnormal_Flag in RPDR.}
+ \item{lab_result_unit}{string, Units associated with the result value, corresponds to Reference_Unit in RPDR.}
+ \item{lab_result_range}{string, Normal or therapeutic range for this value, corresponds to Reference_Range in RPDR.}
+ \item{lab_result_toxic}{string, Reference range of values defined as being toxic to the patient, corresponds to Toxic_Range in RPDR.}
+ \item{lab_spec}{string, Type of specimen collected to perform the test, corresponds to Specimen_Type in RPDR.}
+ \item{lab_spec_txt}{string, Free-text information about the specimen, its collection or its integrity, corresponds to Specimen_Text in RPDR.}
+ \item{lab_correction}{string, Free-text information about any changes made to the results, corresponds to Correction_Flag in RPDR.}
+ \item{lab_status}{string, Flag which indicates whether the procedure is pending or complete, corresponds to Test_Status in RPDR.}
  \item{lab_ord_pys}{string, Name of the ordering physician, corresponds to Ordering_Doc in RPDR. Punctuation marks are removed.}
  \item{lab_accession}{string, Internal tracking number assigned to the specimen for identification in the lab, corresponds to Accession in RPDR.}
- \item{lab_source}{string, Database source, either CDR (Clinical Data Repository) or RPDR (internal RPDR database), corresponds to Source in RPDR. Punctuation marks and white spaces are removed.}
+ \item{lab_source}{string, Database source, either CDR (Clinical Data Repository) or RPDR (internal RPDR database), corresponds to Source in RPDR.}
  }
 }
 \description{

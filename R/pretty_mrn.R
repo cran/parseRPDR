@@ -60,7 +60,7 @@ pretty_mrn <- function(v, prefix = "MGH", sep = ":", id_length = "standard", nTh
     {
       v_i <- v_split[[i]]
 
-      #Create vectors fo same length
+      #Create vectors of same length
       if(length(prefix) == 1) {
         prefix <- rep(prefix, length(v_i))
       }

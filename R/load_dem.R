@@ -62,20 +62,17 @@ load_dem <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard",
   DATA     <- DATA[, 1:(raw_id-1)]
 
   #Add additional information
-  DATA$gender <- pretty_text(data_raw$Gender, remove_after = FALSE)
+  DATA$gender             <- pretty_text(data_raw$Gender, remove_after = FALSE)
   DATA$time_date_of_birth <- as.POSIXct(data_raw$Date_of_Birth, format = "%m/%d/%Y")
-  DATA$age <- pretty_text(data_raw$Age, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-
+  DATA$age                <- pretty_text(data_raw$Age, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA$language <- pretty_text(data_raw$Language, remove_white = FALSE)
   DATA$race     <- pretty_text(data_raw$Race, remove_white = FALSE)
   DATA$marital  <- pretty_text(data_raw$Marital_status, remove_white = FALSE)
   DATA$religion <- pretty_text(data_raw$Religion, remove_white = FALSE)
   DATA$veteran  <- pretty_text(data_raw$Is_a_veteran, remove_white = FALSE)
-
   DATA$country_dem  <- pretty_text(data_raw$Country, remove_white = FALSE)
   DATA$zip_dem      <- pretty_numbers(data_raw$Zip_code)
-
-  DATA$vital_status <- pretty_text(data_raw$Vital_status, remove_after = FALSE, remove_white = FALSE)
+  DATA$vital_status       <- pretty_text(data_raw$Vital_status, remove_after = FALSE, remove_white = FALSE)
   DATA$time_date_of_death <- as.POSIXct(data_raw$Date_Of_Death, format = "%m/%d/%Y")
 
   DATA <- remove_column(dt = DATA, na = na, identical = identical)

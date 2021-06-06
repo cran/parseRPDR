@@ -83,6 +83,6 @@ d_hnp <- load_notes(file = "test_Hnp.txt", type = "hnp")
 d_hnp <- load_notes(file = "test_Hnp.txt", type = "hnp", nThread = 1)
 
 #Use parallel processing and parse data in MRN_Type and MRN columns and keep all IDs
-d_hnp <- load_notes(ile = "test_Hnp.txt", type = "hnp", nThread = 20, mrn_type = TRUE, perc = 1)
+d_hnp <- load_notes(file = "test_Hnp.txt", type = "hnp", nThread = 20, mrn_type = TRUE, perc = 1)
 }
 }

@@ -60,7 +60,6 @@ load_med <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard",
   DATA     <- DATA[, 1:(raw_id-1)]
 
   #Add additional information
-  DATA$med_enc_numb    <- pretty_text(data_raw$Encounter_number, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA$time_med        <- as.POSIXct(data_raw$Medication_Date, format = "%m/%d/%Y")
   DATA$time_med_detail <- pretty_text(data_raw$Medication_Date_Detail, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA$med             <- pretty_text(data_raw$Medication, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
@@ -72,6 +71,7 @@ load_med <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard",
   DATA$med_hosp        <- pretty_text(data_raw$Hospital, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA$med_inpatient   <- pretty_text(data_raw$Inpatient_Outpatient, remove_after = FALSE, remove_white = FALSE)
   DATA$med_add_info    <- pretty_text(data_raw$Additional_Info, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
+  DATA$med_enc_numb    <- pretty_text(data_raw$Encounter_number, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
 
   DATA <- remove_column(dt = DATA, na = na, identical = identical)
 

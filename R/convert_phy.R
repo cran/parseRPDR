@@ -1,42 +1,42 @@
-#' @title Searches diagnosis columns for given diseases.
+#' @title Searches health history data for given codes
 #' @export
 #'
-#' @description Analyzes diagnosis data loaded using \emph{load_dia}. Searches diagnosis columns for a specified set of diseases.
+#' @description Analyzes health history data loaded using \emph{load_phy}. Searches health history columns for a specified set of codes.
 #' By default, the data.table is returned with new columns corresponding to boolean values, whether given group of diagnoses are present in the given diagnosis.
 #' If \emph{collapse} is given, then the information is aggregated based-on the \emph{collapse} column and the earliest of latest time of the given diagnosis is provided.
 #'
 #'
-#' @param d data.table, database containing diagnosis information data loaded using the \emph{load_dia} function.
-#' @param code string, column name of the diagnosis code column. Defaults to \emph{dia_code}.
-#' @param code_type string, column name of the code_type column. Defaults to \emph{dia_code_type}.
-#' @param codes_to_find list, a list of string arrays corresponding to sets of code types and codes separated by \emph{:}, i.e.: "ICD9:250.00".
-#' The function searches for the given disease code type and code pair and adds new boolean columns with the name of each list element.
-#' These columns are indicators whether any of the disease code type and code pair occurs in the set of codes.
+#' @param d data.table, database containing health history information data loaded using the \emph{load_phy} function.
+#' @param code string, column name of the diagnosis code column. Defaults to \emph{phy_code}.
+#' @param code_type string, column name of the code_type column. Defaults to \emph{phy_code_type}.
+#' @param codes_to_find list, a list of string arrays corresponding to sets of code types and codes separated by \emph{:}, i.e.: "LMR:3688".
+#' The function searches for the given health history code type and code pair and adds new boolean columns with the name of each list element.
+#' These columns are indicators whether any of the health history code type and code pair occurs in the set of codes.
 #' @param collapse string, a column name on which to collapse the data.table.
-#' Used in case we wish to assess whether given disease codes are present within all the same instances of \emph{collapse}. See vignette for details.
-#' @param code_time string, column name of the time column. Defaults to \emph{time_dia}. Used in case collapse is present to provide the earliest or latest instance of diagnosing the given disease.
-#' @param time_type string, if multiple diagnoses are present within the same case of \emph{collapse}, which timepoint to return. Supported are: "earliest" or "latest". Defaults to \emph{earliest}.
+#' Used in case we wish to assess whether given health history codes are present within all the same instances of \emph{collapse}. See vignette for details.
+#' @param code_time string, column name of the time column. Defaults to \emph{time_phy}. Used in case collapse is present to provide the earliest or latest instance of health history information.
+#' @param time_type string, if multiple health histories are present within the same case of \emph{collapse}, which timepoint to return. Supported are: "earliest" or "latest". Defaults to \emph{earliest}.
 #' @param nThread integer, number of threads to use by \emph{dopar} for parallelization. If it is set to 1, then no parallel backends are created and the function is executed sequentially.
 #' On windows machines sockets are used, while on other operating systems fork parallelization is used.
 #'
-#' @return data.table, with indicator columns whether the any of the given diagnoses are reported.
+#' @return data.table, with indicator columns whether the any of the given health histories are reported.
 #' If \emph{collapse} is present, then only unique ID and the summary columns are returned.
 #'
 #' @encoding UTF-8
 #'
 #' @examples \dontrun{
-#' #Search for Hypertension and Stroke ICD codes
-#' diseases <- list(HT = c("ICD10:I10"), Stroke = c("ICD9:434.91", "ICD9:I63.50"))
-#' data_dia_parse <- convert_dia(d = data_dia, codes_to_find = diseases, nThread = 2)
+#' #Search for Height and Weight codes
+#' anthropometrics <- list(Weight = c("LMR:3688", "EPIC:WGT"), Height = c("LMR:3771", "EPIC:HGT"))
+#' data_phy_parse <- convert_phy(d = data_phy, codes_to_find = anthropometrics, nThread = 2)
 #'
-#' #Search for Hypertension and Stroke ICD codes and summarize per patient providing earliest time
-#' diseases <- list(HT = c("ICD10:I10"), Stroke = c("ICD9:434.91", "ICD9:I63.50"))
-#' data_dia_disease <-  convert_dia(d = data_dia, codes_to_find = diseases, nThread = 2,
+#' #Search for for Height and Weight codes and summarize per patient providing earliest time
+#' anthropometrics <- list(Weight = c("LMR:3688", "EPIC:WGT"), Height = c("LMR:3771", "EPIC:HGT"))
+#' data_phy_parse <- convert_phy(d = data_phy, codes_to_find = anthropometrics, nThread = 2,
 #' collapse = "ID_MERGE", time_type = "earliest")
 #' }
 
-convert_dia <- function(d, code = "dia_code", code_type = "dia_code_type",  codes_to_find = NULL,
-                        collapse = NULL, code_time = "time_dia", time_type = "earliest", nThread = 4) {
+convert_phy <- function(d, code = "phy_code", code_type = "phy_code_type",  codes_to_find = NULL,
+                        collapse = NULL, code_time = "time_phy", time_type = "earliest", nThread = 4) {
 
   .SD=.N=.I=.GRP=.BY=.EACHI=..=..cols=.SDcols=i=j=time_to_db=..which_ids_to=..which_ids_from=combined=..collapse=. <- NULL
 
@@ -60,7 +60,7 @@ convert_dia <- function(d, code = "dia_code", code_type = "dia_code_type",  code
   comb[ , combined := do.call(paste, c(.SD, sep = ":")), .SDcols = c(code_type, code)]
 
   #Find diagnoses if requested
-  message(paste0("Finding diagnoses within specified columns."))
+  message(paste0("Finding health history within specified columns."))
 
   #Find diagnoses per row
   result <- foreach::foreach(i = 1:length(codes_to_find), .combine="cbind",

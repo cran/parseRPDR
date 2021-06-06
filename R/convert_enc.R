@@ -100,7 +100,7 @@ convert_enc <- function(d, code = c("enc_diag_admit", "enc_diag_princ", paste0("
           diag_coll <- data.table::merge.data.table(ID_dt, diag_coll, by = collapse, all.x = TRUE, all.y = FALSE) #Merge with IDs to get db
           diag_coll[[names(codes_to_find[i])]][is.na(diag_coll[[names(codes_to_find[i])]])] <- FALSE
 
-          data.table::setnames(diag_coll, "var_time", paste0(names(codes_to_find[i]), "_time"))
+          data.table::setnames(diag_coll, "var_time", paste0("time_", names(codes_to_find[i])))
           diag_coll
         }
       }

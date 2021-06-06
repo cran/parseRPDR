@@ -55,7 +55,7 @@
 #' d_hnp <- load_notes(file = "test_Hnp.txt", type = "hnp", nThread = 1)
 #'
 #' #Use parallel processing and parse data in MRN_Type and MRN columns and keep all IDs
-#' d_hnp <- load_notes(ile = "test_Hnp.txt", type = "hnp", nThread = 20, mrn_type = TRUE, perc = 1)
+#' d_hnp <- load_notes(file = "test_Hnp.txt", type = "hnp", nThread = 20, mrn_type = TRUE, perc = 1)
 #' }
 
 load_notes <- function(file, type, merge_id = "EMPI", sep = ":", id_length = "standard", perc = 0.6, na = TRUE, identical = TRUE, nThread = 4, mrn_type = FALSE) {
@@ -92,7 +92,7 @@ load_notes <- function(file, type, merge_id = "EMPI", sep = ":", id_length = "st
   message("Creating data.table")
   #Supply modified text to load_base function and continue as other load functions
   DATA <- lapply(texts, function(x){
-    suppressMessages(load_base(file = x, merge_id = merge_id, sep = sep, id_length = id_length, perc = perc, na = na, identical = identical, nThread = nThread, mrn_type = mrn_type, src = type))
+    suppressMessages(load_base(file = x, merge_id = merge_id, sep = sep, id_length = id_length, perc = perc, na = na, identical = identical, nThread = 1, mrn_type = mrn_type, src = type))
   })
   rm(list = c("texts"))
   DATA <- data.table::rbindlist(DATA)
@@ -101,8 +101,8 @@ load_notes <- function(file, type, merge_id = "EMPI", sep = ":", id_length = "st
   DATA     <- DATA[, 1:(raw_id-1)]
 
   #Add additional information
-  DATA[[paste0(type, "_rep_num")]]     <- pretty_text(data_raw$Report_Number, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA[[paste0("time_", type)]]        <- as.POSIXct(data_raw$Report_Date_Time, format = "%m/%d/%Y %I:%M:%S %p")
+  DATA[[paste0(type, "_rep_num")]]     <- pretty_text(data_raw$Report_Number, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA[[paste0(type, "_rep_desc")]]    <- pretty_text(data_raw$Report_Description, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA[[paste0(type, "_rep_status")]]  <- pretty_text(data_raw$Report_Status, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA[[paste0(type, "_rep_type")]]    <- pretty_text(data_raw$Report_Type, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)

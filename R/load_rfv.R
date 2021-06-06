@@ -56,15 +56,15 @@ load_rfv <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard",
   DATA     <- DATA[, 1:(raw_id-1)]
 
   #Add additional information
-  DATA$time_rfv_start    <- as.POSIXct(data_raw$Start_date, format = "%m/%d/%Y %I:%M:%S %p")
-  DATA$time_rfv_end      <- as.POSIXct(data_raw$End_date, format = "%m/%d/%Y %I:%M:%S %p")
-  DATA$rfv_provider   <- pretty_text(data_raw$Provider, remove_after = FALSE, remove_white = FALSE)
-  DATA$rfv_hosp       <- pretty_text(data_raw$Hospital, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$rfv_clinic     <- pretty_text(data_raw$Clinic, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
+  DATA$time_rfv_start       <- as.POSIXct(data_raw$Start_date, format = "%m/%d/%Y %I:%M:%S %p")
+  DATA$time_rfv_end         <- as.POSIXct(data_raw$End_date, format = "%m/%d/%Y %I:%M:%S %p")
+  DATA$rfv_provider         <- pretty_text(data_raw$Provider, remove_after = FALSE, remove_white = FALSE)
+  DATA$rfv_hosp             <- pretty_text(data_raw$Hospital, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
+  DATA$rfv_clinic           <- pretty_text(data_raw$Clinic, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA$rfv_chief_complaint  <- pretty_text(data_raw$Chief_complaint, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$rfv_concept_id  <- pretty_text(data_raw$Concept_id, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$rfv_comment     <- pretty_text(data_raw$Comments, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$rfv_enc_num     <- pretty_text(data_raw$Encounter_number, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
+  DATA$rfv_concept_id       <- pretty_text(data_raw$Concept_id, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
+  DATA$rfv_comment          <- pretty_text(data_raw$Comments, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
+  DATA$rfv_enc_num          <- pretty_text(data_raw$Encounter_number, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
 
   DATA <- remove_column(dt = DATA, na = na, identical = identical)
 

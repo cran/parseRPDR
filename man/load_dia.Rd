@@ -58,7 +58,7 @@ data table, with diagnoses information.
  \item{dia_provider}{string, Provider of record for the encounter where the diagnosis was entered, corresponds to Provider in RPDR. Punctuation marks are removed.}
  \item{dia_clinic}{string, Specific department/location where the patient encounter took place, corresponds to Clinic in RPDR.}
  \item{dia_hosp}{string, Facility where the encounter occurred, corresponds to Hospital in RPDR.}
- \item{dia_inpatient}{string, Identifies whether the diagnosis was noted during an inpatient or outpatient encounter, Punctuation marks are removed.}
+ \item{dia_inpatient}{string, Identifies whether the diagnosis was noted during an inpatient or outpatient encounter, corresponds to Inpatient_Outpatient in RPDR. Punctuation marks removed.}
  }
 }
 \description{

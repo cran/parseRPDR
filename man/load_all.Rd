@@ -8,7 +8,7 @@
 load_all(
   folder,
   which_data = c("mrn", "con", "dem", "enc", "rdt", "lab", "med", "dia", "rfv", "prc",
-    "car", "dis", "end", "hnp", "opn", "pat", "prg", "pul", "rad", "vis"),
+    "lno", "car", "dis", "end", "hnp", "opn", "pat", "prg", "pul", "rad", "vis"),
   merge_id = "EMPI",
   sep = ":",
   id_length = "standard",

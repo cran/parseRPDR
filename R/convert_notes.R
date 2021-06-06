@@ -1,7 +1,7 @@
 #' @title Extracts information from notes free text.
 #' @export
 #'
-#' @description Analyzes notes loaded using \emph{load_notes}. Extracts information from the free text present in \emph{abc_rep_txt},
+#' @description Analyzes notes loaded using \emph{load_notes} or \emph{load_lno}. Extracts information from the free text present in \emph{abc_rep_txt},
 #' where \emph{abc} stands for the three letter abbreviation of the given type of note.
 #' An array of string is provided using the \emph{anchors} argument. The function will return as many columns as there are anchor points.
 #' Each column will contain the text between the given anchor point and the next following anchor point.
@@ -19,13 +19,14 @@
 #' \item{Pulmonary: }{c("The Pulmonary document", "Name:", "Unit #:", "Date:", "Location:", "Smoking Status:", "Pack Years:", "SPIROMETRY:", "LUNG VOLUMES:", "DIFFUSION:", "PLETHYSMOGRAPHY:" "Pulmonary Function Test Interpretation", "Spirometry", "report_end")}
 #' \item{Radiology: }{c("Exam Code", "Ordering Provider", "HISTORY", "Associated Reports", "Report Below", "REASON", "REPORT",  "TECHNIQUE", "COMPARISON", "FINDINGS", "IMPRESSION", "RECOMMENDATION", "SIGNATURES", "report_end")}
 #' \item{Visit: }{c("***This text report", "Reason for Visit", "Reason for Visit", "Vital Signs", "Chief Complaint", "History", "Overview", "Medications", "Relevant Orders", "Level of Service", "report_end"}
+#' \item{LMR: }{c("Subject", "Patient Name:", "Reason for visit", "report_end"}
 #' }
 #'
 #' However, these may be modified and extended to include sections of interest, i.e. if a given score is reported standardly, then adding this phrase (i.e. "CAD-RADS")
 #' would create a column where the text following this statement is returned. After this the resulting columns can be easily cleaned up if needed.
 #' Be aware to always include \emph{"report_end"} in the anchors array, to provide the function of the last occurring statement in the report.
 #'
-#' @param d data.table, database containing notes loaded using the \emph{load_abc} function.
+#' @param d data.table, database containing notes loaded using the \emph{load_notes} function.
 #' @param code string vector, column name containing the results, which should be \emph{"abc_rep_txt"}, where \emph{abc} stands for the three letter abbreviation of the given type of note.
 #' @param anchors string array, elements to search for in the text report.
 #' @param nThread integer, number of threads to use by \emph{dopar} for parallelization. If it is set to 1, then no parallel backends are created and the function is executed sequentially.
@@ -96,7 +97,7 @@ convert_notes <- function(d, code = NULL, anchors = NULL, nThread = 4) {
   cols <- anchors[-length(anchors)]
   cols <- tolower(cols)
   cols <- gsub("[[:blank:]]", "_", cols)
-  cols <- paste0("rad_rep_", cols)
+  cols <- paste0(strsplit(code, "_")[[1]][1], "_rep_", cols)
   colnames(result) <- cols
 
   result <- cbind(d, result)

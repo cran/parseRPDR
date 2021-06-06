@@ -1,5 +1,40 @@
 # Change log
 
+## parseRPDR 0.1.2 - 2021/06/01
+
+-   Now support **Lno** and **Phy** datasource.
+
+-   Now support processing of **Phy** datasource
+    using **convert_phy** function. **Lno** can 
+    be processed using the **convert_notes**
+    function.
+    
+-   Updated README, and removed vignette.
+
+-   Encounter numbers and accession numbers
+    have been moved to the end of
+    the data.table to make accessing them easier
+    using indexes.
+    
+-   Inconsistencies in naming have been updated. 
+    Rdt and Lab tables time variable is simply:
+    time_lab or time_rdt.
+    Encounter data table's encounter number is now
+    enc_enc_numb.
+    Time is now always in from in the naming, even
+    for convert functions.
+
+-   Bug fix: **load_notes** now names the new columns, 
+    based-on the type of note.
+    
+-   Bug fix: corrected **load_prc** in case there
+    were carriage returns present in the name field.
+    
+-   Bug fix: added **load_all** compatibility with 
+    Dia datasource if date constraints are used.
+
+-   Corrected documentation where needed.
+
 ## parseRPDR 0.1.1 - 2021/05/23
 
 -   Now support **Prc** datasource.

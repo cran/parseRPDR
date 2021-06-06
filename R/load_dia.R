@@ -34,7 +34,7 @@
 #'  \item{dia_provider}{string, Provider of record for the encounter where the diagnosis was entered, corresponds to Provider in RPDR. Punctuation marks are removed.}
 #'  \item{dia_clinic}{string, Specific department/location where the patient encounter took place, corresponds to Clinic in RPDR.}
 #'  \item{dia_hosp}{string, Facility where the encounter occurred, corresponds to Hospital in RPDR.}
-#'  \item{dia_inpatient}{string, Identifies whether the diagnosis was noted during an inpatient or outpatient encounter, Punctuation marks are removed.}
+#'  \item{dia_inpatient}{string, Identifies whether the diagnosis was noted during an inpatient or outpatient encounter, corresponds to Inpatient_Outpatient in RPDR. Punctuation marks removed.}
 #'  }
 #'
 #' @encoding UTF-8
@@ -63,11 +63,11 @@ load_dia <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard",
   DATA$dia_code       <- pretty_text(data_raw$Code, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA$dia_code_type  <- pretty_text(data_raw$Code_Type, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA$dia_flag       <- pretty_text(data_raw$Diagnosis_Flag, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$dia_enc_num    <- pretty_text(data_raw$Encounter_number, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA$dia_provider   <- pretty_text(data_raw$Provider, remove_after = FALSE, remove_white = FALSE)
   DATA$dia_clinic     <- pretty_text(data_raw$Clinic, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA$dia_hosp       <- pretty_text(data_raw$Hospital, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA$dia_inpatient  <- pretty_text(data_raw$Inpatient_Outpatient, remove_after = FALSE, remove_white = FALSE)
+  DATA$dia_enc_num    <- pretty_text(data_raw$Encounter_number, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
 
   DATA <- remove_column(dt = DATA, na = na, identical = identical)
 

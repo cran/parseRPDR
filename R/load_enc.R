@@ -74,7 +74,6 @@ load_enc <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard",
   DATA     <- DATA[, 1:(raw_id-1)]
 
   #Add additional information
-  DATA$enc_numb       <- pretty_text(data_raw$Encounter_number, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA$time_enc_admit <- as.POSIXct(data_raw$Admit_Date, format = "%m/%d/%Y")
   DATA$time_enc_disch <- as.POSIXct(data_raw$Discharge_Date, format = "%m/%d/%Y")
   DATA$enc_status     <- pretty_text(data_raw$Encounter_Status, remove_after = FALSE, remove_white = FALSE)
@@ -103,6 +102,7 @@ load_enc <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard",
   DATA$enc_diag_9     <- pretty_text(data_raw$Diagnosis_9, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA$enc_diag_10    <- pretty_text(data_raw$Diagnosis_10, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA$enc_diag_group <- pretty_text(data_raw$DRG, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
+  DATA$enc_enc_numb   <- pretty_text(data_raw$Encounter_number, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
 
   DATA <- remove_column(dt = DATA, na = na, identical = identical)
 

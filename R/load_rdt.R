@@ -57,16 +57,16 @@ load_rdt <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard",
   DATA     <- DATA[, 1:(raw_id-1)]
 
   #Add additional information
-  DATA$time_rdt_exam  <- as.POSIXct(data_raw$Date, format = "%m/%d/%Y")
+  DATA$time_rdt       <- as.POSIXct(data_raw$Date, format = "%m/%d/%Y")
   DATA$rdt_mode       <- pretty_text(data_raw$Mode, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA$rdt_group      <- pretty_text(data_raw$Group, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA$rdt_test_code  <- pretty_text(data_raw$Test_Code, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA$rdt_test_desc  <- pretty_text(data_raw$Test_Description, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$rdt_accession  <- pretty_text(data_raw$Accession_Number, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA$rdt_provider   <- pretty_text(data_raw$Provider, remove_after = FALSE, remove_white = FALSE)
   DATA$rdt_clinic     <- pretty_text(data_raw$Clinic, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA$rdt_hosp       <- pretty_text(data_raw$Hospital, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA$rdt_inpatient  <- pretty_text(data_raw$Inpatient_Outpatient, remove_after = FALSE, remove_white = FALSE)
+  DATA$rdt_accession  <- pretty_text(data_raw$Accession_Number, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
 
   DATA <- remove_column(dt = DATA, na = na, identical = identical)
 

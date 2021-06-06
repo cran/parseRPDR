@@ -52,23 +52,27 @@
 
 load_prc <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard", perc = 0.6, na = TRUE, identical = TRUE, nThread = 4, mrn_type = FALSE) {
 
+  message(paste("Checking procedure file to be compatible with data.table. Could take considerable time, please be patient!"))
   message("Loading data")
   header <- readr::read_lines(file = file, skip = 0, skip_empty_rows = T, n_max = 1)
   record <- readr::read_lines(file = file, skip = 1, skip_empty_rows = T)
   message("Removing unnecessary carriage returns")
   n_carr <- stringr::str_count(record, stringr::coll("|", ignore_case = TRUE))
   which_n <- n_carr != 14
+
   record_bad <- record[which_n] #Bad records
   record     <- record[!which_n] #Good records
-  n_carr_bad <-  n_carr[which_n] #Bad number of characters
-  until      <- cumsum(n_carr_bad) %% 14 == 0 #Find where are the end of lines and merge based-on that
-  n_times    <- which(until)
-  n_times_2  <- suppressWarnings(c(n_times[1], n_times[-1] - n_times))
-  if(length(n_times) > 1) {n_times_2  <- n_times_2[-length(n_times_2)]}
-  factor_lev <- unlist(mapply(rep, 1:sum(until), n_times_2))
-  record_bad <- tapply(record_bad, factor_lev, FUN= paste, collapse=' ')
+  if(length(record_bad) != 0) {
+    n_carr_bad <- n_carr[which_n] #Bad number of characters
+    until      <- cumsum(n_carr_bad) %% 14 == 0 #Find where are the end of lines and merge based-on that
+    n_times    <- which(until)
+    n_times_2  <- suppressWarnings(c(n_times[1], n_times[-1] - n_times))
+    if(length(n_times) > 1) {n_times_2  <- n_times_2[-length(n_times_2)]}
+    factor_lev <- unlist(mapply(rep, 1:sum(until), n_times_2))
+    record_bad <- tapply(record_bad, factor_lev, FUN= paste, collapse=' ')
+  }
   record <- c(record, record_bad)
-  rm(list = c("n_carr", "which_n", "n_carr_bad", "until", "n_times", "n_times_2", "factor_lev", "record_bad"))
+  suppressWarnings(rm(list = c("n_carr", "which_n", "n_carr_bad", "until", "n_times", "n_times_2", "factor_lev", "record_bad")))
 
   message("Converting texts to data.table compatible format")
   has_end <- 1:length(record)
@@ -87,7 +91,7 @@ load_prc <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard",
   message("Creating data.table")
   #Supply modified text to load_base function and continue as other load functions
   DATA <- lapply(texts, function(x){
-    suppressMessages(load_base(file = x, merge_id = merge_id, sep = sep, id_length = id_length, perc = perc, na = na, identical = identical, nThread = nThread, mrn_type = mrn_type, src = "prc"))
+    suppressMessages(load_base(file = x, merge_id = merge_id, sep = sep, id_length = id_length, perc = perc, na = na, identical = identical, nThread = 1, mrn_type = mrn_type, src = "prc"))
   })
   rm(list = c("texts"))
   DATA <- data.table::rbindlist(DATA)
@@ -97,7 +101,7 @@ load_prc <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard",
   DATA     <- DATA[, 1:(raw_id-1)]
 
   #Add additional information
-  DATA$time_prc    <- as.POSIXct(data_raw$Date, format = "%m/%d/%Y")
+  DATA$time_prc       <- as.POSIXct(data_raw$Date, format = "%m/%d/%Y")
   DATA$prc_name       <- pretty_text(data_raw$Procedure_Name, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA$prc_code       <- pretty_text(data_raw$Code, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA$prc_code_type  <- pretty_text(data_raw$Code_Type, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
