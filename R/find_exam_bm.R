@@ -83,9 +83,13 @@ find_exam_bm <- function(d_from, d_to,
   out <- empty; i = 1
 
   #Create iterator
-  groups <- cut(1:dim(d_to)[1], breaks = nThread, labels = 1:nThread)
-  ids    <- 1:dim(d_to)[1]
-  blocks <- split(ids, groups)
+  if(nThread == 1 | dim(d_to)[1]<100) {
+    blocks <- list(1:dim(d_to)[1])
+  } else {
+    groups <- cut(1:dim(d_to)[1], breaks = nThread, labels = 1:nThread)
+    ids    <- 1:dim(d_to)[1]
+    blocks <- split(ids, groups)
+  }
 
 
 

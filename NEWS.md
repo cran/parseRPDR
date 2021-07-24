@@ -1,5 +1,20 @@
 # Change log
 
+## parseRPDR 0.2.0 - 2021/07/24
+
+-   Added **create_img_db** function which parses
+    DICOM header information from radiological image
+    series to create a database with meta-data. 
+    
+-   Added **lab_result_abn_flag_pretty** column to
+    **convert_lab** which marks abnormality based-on
+    the Abnormal_Flag column in RPDR in lab.txt.
+    
+-   Bug-fix: problems with **find_exam** when
+    data.table is small and when sequential execution
+    is requested is fixed.
+
+
 ## parseRPDR 0.1.2 - 2021/06/01
 
 -   Now support **Lno** and **Phy** datasource.

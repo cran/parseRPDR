@@ -97,6 +97,15 @@ datasource. Brief description of these can be found below:
     provides the text in additional columns for all types of notes:
     *car, dis, end, hnp, opn, pat, prg, pul, rad, vis and lno*.
 
+Furthermore, **parseRPDR** provides the *create\_img\_db* function which
+creates a database from the headers of the DICOM images present in the
+provided folder. Be aware that the function requires
+[python](https://www.python.org) and
+[pydicom](https://pydicom.github.io) to be installed! The function
+cycles through all folders present in the provided path and recursively
+goes through them, every subfolder, and extracts the DICOM header
+information from the files.
+
 Besides these functions, there are ones that are not connected to
 specific datasources and provide other commonly used functionalities.
 Brief description of these can be found below:
@@ -107,8 +116,8 @@ Brief description of these can be found below:
     format according to different institutional requirements.
 -   **all\_ids\_mi2b2**: Provides a list of all MGH or BWH IDs that the
     patients had at any time of their visits to Partners hospitals. This
-    is needed for radiological image downloads using mi2b2 as described
-    later in the text.
+    may be used for radiological image downloads using mi2b2 as
+    described later in the text.
 -   **find\_exam**: Find all, earliest or closest examination (i.e. lab)
     to a given timepoint.
 
@@ -214,19 +223,19 @@ been retrieved.*
 
 As stated above, hospital provided IDs may change over time. While using
 EMPIs as IDs to merge different data sources solves this issue, in case
-of radiological images the supplied mi2b2 only works with MGH or BHW
+of radiological images the supplied mi2b2 may only work with MGH or BHW
 IDs, therefore a complete list of all MRNs the patients had at any time
-is needed.
+may be needed.
 
 *NOTE!!!*
 
-*Since mi2b2 only works with MGH and BWH IDs, if a predefined set of
+*Since mi2b2 may only work with MGH and BWH IDs, if a predefined set of
 MRNs are used to request data from RPDR (not the query tool), then it is
 advised to parse out all IDs present in con and mrn datasources using
 all\_ids\_mi2b2 function of parseRPDR as specified under load\_con
-function in the document. This is needed as the mi2b2 workbench only
-works for requested MRNs, therefore if the MGH MRN changes for a given
-patient, and we wish to access an image that was saved using the
+function in the document. This may be needed as the mi2b2 workbench may
+only work for requested MRNs, therefore if the MGH MRN changes for a
+given patient, and we wish to access an image that was saved using the
 previous MRN, then the most recent MRN won’t grant us access to that
 image. Therefore, in case we work with a predefined set of MRNs, then
 after requesting data for all datasources that we need, the user should
@@ -323,7 +332,7 @@ one for one datasource, as all datasources contain the same information
 in these columns.
 
 ``` r
-#Print raw data containing columns which are proccessed using the load_con function
+#Print raw data containing columns which are processed using the load_con function
 data_con_raw[, c("MRN_Type", "MRN", "Patient_ID_List")]
 
 #Print processed ID data
@@ -334,14 +343,14 @@ data_con[, grep("ID_.*", colnames(data_con), value = TRUE)]
 
 *As mentioned previously, if a predefined set of MRNs are used to
 acquire data and radiological images are also required, then a full set
-of MGH or BWH IDs are needed to cover all possible IDs that the patients
-had during their encounters at Partners hospitals. For this the IDs
-should be gathered from all sources and combined into one list that can
-be used to request the mi2b2 workbench. For this we can use the
-all\_ids\_mi2b2 function. It requires the parsed con and mrn data.tables
-to provide a complete list of MRNs that the patients had during their
-visits to Partners hospitals. This list can then be used as a new data
-query for radiological images.*
+of MGH or BWH IDs may be needed to cover all possible IDs that the
+patients had during their encounters at Partners hospitals. For this the
+IDs should be gathered from all sources and combined into one list that
+can be used to request the mi2b2 workbench if it is not requested using
+EMPIs. For this we can use the all\_ids\_mi2b2 function. It requires the
+parsed con and mrn data.tables to provide a complete list of MRNs that
+the patients had during their visits to Partners hospitals. This list
+can then be used as a new data query for radiological images.*
 
 ``` r
 #Initially requested IDs
@@ -497,7 +506,7 @@ data_enc_disease <-  convert_enc(d = data_enc, keep = FALSE, codes_to_find = dis
 
 ### *convert\_dia* - Searching for given diagnosis codes
 
-Similar to convert\_enc, the *conert\_dia* function is used to search
+Similar to convert\_enc, the *convert\_dia* function is used to search
 for given diagnosis groups withing the diagnosis data.table. The
 difference is that the diagnoses do not need to be parsed as they are
 stored separately. Also, since not only ICD codes are present, the code
@@ -518,7 +527,7 @@ data_dia_disease <-  convert_dia(d = data_dia, codes_to_find = diseases, nThread
 
 ### *convert\_rfv* - Searching for given reason for visit codes
 
-Similar to convert\_enc, the *conert\_rfv* function is used to search
+Similar to convert\_enc, the *convert\_rfv* function is used to search
 for given reason for visit groups withing the reason for visit
 data.table. The difference is that the diagnoses do not need to be
 parsed as they are stored separately.
@@ -533,7 +542,7 @@ data_rfv_disease <-  convert_rfv(d = data_rfv, keep = FALSE, codes_to_find = rea
 
 ### *convert\_prc* - Searching for given procedures
 
-Similar to convert\_enc, the *conert\_prc* function is used to search
+Similar to convert\_enc, the *convert\_prc* function is used to search
 for given procedures within the procedures data.table. The difference is
 that the procedures do not need to be parsed as they are stored
 separately.
@@ -548,7 +557,7 @@ data_prc_procedures <- convert_prc(d = data_prc, codes_to_find = procedures, nTh
 
 ### *convert\_phy* - Searching for given health hisotry codes
 
-Similar to convert\_enc, the *conert\_phy* function is used to search
+Similar to convert\_enc, the *convert\_phy* function is used to search
 for given health history codes withing the health history data.table.
 The difference is that the health history do not need to be parsed as
 they are stored separately.
@@ -574,8 +583,13 @@ qualitative results are converted to standard outputs of POS: positive,
 NEG: negative and BORD: borderline. These converted values are returned
 in a new column called: *lab\_result\_pretty*. The function also returns
 a column *lab\_result\_abn\_pretty* which uses the normal range values
-to determine whether the value is normal or abnormal. Borderline values
-are considered as normal.
+to determine whether the value is normal or abnormal. Please be aware
+that there can be very different representations of values, and in some
+cases this will result in misclassification of values. Therefore a new
+column: *lab\_result\_abn\_flag\_pretty* is added, which gives back
+ABNORMAL if there is any character in *Abnormal\_Flag* column in RPDR
+(*lab\_result\_abn* using load\_lab). Borderline values are considered
+as normal.
 
 ``` r
 #Convert loaded lab results
@@ -798,6 +812,46 @@ data_enc_ED_30d_summ <- convert_enc(d = data_enc_ED_30d, code = enc_cols,
 data_enc_ED_ALL <- data.table::merge.data.table(x = data_enc_ED, y = data_enc_ED_30d_summ,
                                                 by = "ID_MERGE_time", all.x = TRUE, all.y = FALSE)
 ```
+
+### *create\_img\_db* - Creating a DICOM header database
+
+In many cases, additional information regarding the radiological
+examinations is needed that is not stored in the rdt file, for example:
+the exact time when the image was taken, not just the date. For this we
+need to extract meta-data from the radiological images which can be done
+using the *create\_img\_db*. Please be aware that the function requires
+[python](https://www.python.org) and
+[pydicom](https://pydicom.github.io) to be installed! The function
+creates a database of DICOM headers present in a folder structure. Each
+series should be in its own folder, but they can be in a nested folder
+structure. Files where there are also folder present next to them at the
+same level will not be parsed. That is the folder structure needs to
+comply with the DICOM standard. The function cycles through all folders
+present in the provided path and recursively goes through them, every
+subfolder, and extracts the DICOM header information from the files
+using the
+[dcmread](https://pydicom.github.io/pydicom/dev/reference/generated/pydicom.filereader.dcmread.html)
+function of the [pydicom](https://pydicom.github.io) package. The
+extension of the files can be provided by the *ext* argument, as DICOM
+files may have different extensions then that of .dcm. Also, using the
+*all* boolean argument, you can specify whether the function provides
+output for each file, or only for the first file, which is beneficial if
+you are analyzing multi-slice series, as all instances have almost all
+the same header information. Furthermore, using the *keywords* argument
+you can manually specify which DICOM keywords you wish to extract. These
+need to be a valid keyword specified in the [DICOM
+standard](http://dicom.nema.org/medical/dicom/current/output/chtml/part06/chapter_6.html).
+
+``` r
+#Create a database with DICOM header information
+all_dicom_headers <- create_img_db(path = "/Users/Test/Data/DICOM/")
+#Create a database with DICOM header information with additional file extensions
+all_dicom_headers <- create_img_db(path = "/Users/Test/Data/DICOM/", ext = c("dcm", "DICOM"))
+#Create a database with DICOM header information for only IDs and accession numbers
+all_dicom_headers <- create_img_db(path = "/Users/Test/Data/DICOM/", keywords = c("PatientID", "AccessionNumber"))
+```
+
+## Words of caution
 
 Be aware that RPDR is a clinical research database that utilizes
 information present in the hospital information systems, therefore there
