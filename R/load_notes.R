@@ -78,7 +78,10 @@ load_notes <- function(file, type, merge_id = "EMPI", sep = ":", id_length = "st
   message("Converting texts to data.table compatible format")
   has_end <- which(grepl(pattern = "[report_end]", x = record,  fixed = TRUE))
   batch <- ifelse(length(has_end)<100, length(has_end), 100)
-  which_rows <- split(has_end, sort(has_end%%batch)) #split into 100 tables to overcome memory issues
+
+  split_IDs  <- split(1:length(has_end), 1:batch)
+  split_IDs  <- lapply(1:length(split_IDs), function(x) {rep(x, length(split_IDs[[x]]))})
+  which_rows <- suppressWarnings(split(has_end, unlist(split_IDs))) #split into batch number of tables to overcome memory issues
 
   texts <- lapply(1:batch, function(x) {
     if(x == 1) {
@@ -87,7 +90,7 @@ load_notes <- function(file, type, merge_id = "EMPI", sep = ":", id_length = "st
       out <- paste(header, paste(record[(max(which_rows[[x-1]])+1):max(which_rows[[x]])], collapse = " "), sep = "\r\n")
     }
   })
-  rm(list = c("header", "record", "has_end", "which_rows", "batch"))
+  rm(list = c("header", "record", "has_end", "which_rows", "batch", "split_IDs"))
 
   message("Creating data.table")
   #Supply modified text to load_base function and continue as other load functions
@@ -109,6 +112,6 @@ load_notes <- function(file, type, merge_id = "EMPI", sep = ":", id_length = "st
   if(type != "prg") {DATA[[paste0(type, "_rep_txt")]] <- data_raw$Report_Text
   }
 
-  DATA <- remove_column(dt = DATA, na = na, identical = identical)
+  if(dim(DATA)[1] != 1) {DATA <- remove_column(dt = DATA, na = na, identical = identical)}
   return(DATA)
 }

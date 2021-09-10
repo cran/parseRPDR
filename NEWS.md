@@ -1,5 +1,14 @@
 # Change log
 
+## parseRPDR 0.2.1 - 2021/09/10
+
+-   Bug-fix: load_notes error where inappropriate
+    partitioning of the file caused read errors.
+    
+-   Bug-fix: if data only contains 1 row, and 
+    identical column value removal is requested,
+    the data.table is now returned.
+
 ## parseRPDR 0.2.0 - 2021/07/24
 
 -   Added **create_img_db** function which parses

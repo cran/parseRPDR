@@ -75,7 +75,6 @@ load_mrn <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard",
 
   DATA$ID_mrn_STATUS <- pretty_text(data_raw$Status, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
 
-  DATA <- remove_column(dt = DATA, na = na, identical = identical)
-
+  if(dim(DATA)[1] != 1) {DATA <- remove_column(dt = DATA, na = na, identical = identical)}
   return(DATA)
 }

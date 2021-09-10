@@ -98,6 +98,6 @@ load_lno <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard",
   DATA$lno_subject <- pretty_text(data_raw$Subject, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA$lno_rep_txt <- data_raw$Comments
 
-  DATA <- remove_column(dt = DATA, na = na, identical = identical)
+  if(dim(DATA)[1] != 1) {DATA <- remove_column(dt = DATA, na = na, identical = identical)}
   return(DATA)
 }

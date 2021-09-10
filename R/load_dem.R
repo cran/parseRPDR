@@ -75,7 +75,6 @@ load_dem <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard",
   DATA$vital_status       <- pretty_text(data_raw$Vital_status, remove_after = FALSE, remove_white = FALSE)
   DATA$time_date_of_death <- as.POSIXct(data_raw$Date_Of_Death, format = "%m/%d/%Y")
 
-  DATA <- remove_column(dt = DATA, na = na, identical = identical)
-
+  if(dim(DATA)[1] != 1) {DATA <- remove_column(dt = DATA, na = na, identical = identical)}
   return(DATA)
 }

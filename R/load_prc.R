@@ -113,7 +113,6 @@ load_prc <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard",
   DATA$prc_inpatient  <- pretty_text(data_raw$Inpatient_Outpatient, remove_after = FALSE, remove_white = FALSE)
   DATA$prc_enc_num    <- pretty_text(data_raw$Encounter_number, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
 
-  DATA <- remove_column(dt = DATA, na = na, identical = identical)
-
+  if(dim(DATA)[1] != 1) {DATA <- remove_column(dt = DATA, na = na, identical = identical)}
   return(DATA)
 }

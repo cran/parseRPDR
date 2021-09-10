@@ -99,8 +99,7 @@ load_con <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard",
   DATA$primary_care_physician <- pretty_text(data_raw$Primary_Care_Physician, remove_after = FALSE, remove_white = FALSE)
   DATA$primary_care_physician_resident <- pretty_text(data_raw$Resident_Primary_Care_Physician, remove_after = FALSE, remove_white = FALSE)
 
-  DATA <- remove_column(dt = DATA, na = na, identical = identical)
-
+  if(dim(DATA)[1] != 1) {DATA <- remove_column(dt = DATA, na = na, identical = identical)}
   return(DATA)
 }
 

@@ -68,7 +68,6 @@ load_rdt <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard",
   DATA$rdt_inpatient  <- pretty_text(data_raw$Inpatient_Outpatient, remove_after = FALSE, remove_white = FALSE)
   DATA$rdt_accession  <- pretty_text(data_raw$Accession_Number, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
 
-  DATA <- remove_column(dt = DATA, na = na, identical = identical)
-
+  if(dim(DATA)[1] != 1) {DATA <- remove_column(dt = DATA, na = na, identical = identical)}
   return(DATA)
 }
