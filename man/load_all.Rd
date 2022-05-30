@@ -9,6 +9,7 @@ load_all(
   folder,
   which_data = c("mrn", "con", "dem", "enc", "rdt", "lab", "med", "dia", "rfv", "prc",
     "lno", "car", "dis", "end", "hnp", "opn", "pat", "prg", "pul", "rad", "vis"),
+  old_dem = FALSE,
   merge_id = "EMPI",
   sep = ":",
   id_length = "standard",
@@ -24,6 +25,8 @@ load_all(
 
 \item{which_data}{string vector, an array of abbreviation corresponding to the datasources wished to load. Currently supported values and the default is: \emph{c("mrn", "con", "dem", "enc", "rdt", "lab", "med", "dia", "rfv", "prc",
 "car", "dis", "end", "hnp", "opn", "pat", "prg", "pul", "rad" and "vis")}}
+
+\item{old_dem}{boolean, should old \emph{load_dem} function be used for loading demographic data. Defaults to \emph{TRUE}, should be set to \emph{FALSE} for Dem.txt datasets prior to 2022.}
 
 \item{merge_id}{string, column name to use to create \emph{ID_MERGE} column used to merge different datasets. Defaults to \emph{EMPI},
 as it is the preferred MRN in the RPDR system. In case of mrn dataset, leave at EMPI, as it is automatically converted to: "Enterprise_Master_Patient_Index".}

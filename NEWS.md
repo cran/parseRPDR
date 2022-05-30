@@ -1,5 +1,21 @@
 # Change log
 
+## parseRPDR 0.2.2 - 2022/05/30
+
+-   Added **load_dem_old** which is the 
+    **load_dem** function from previous versions of the
+    software. **load_dem** now supports demographics
+    tables following changes done in the beginning of 
+    2022. Please use appropriate 
+    load_dem or load_dem_old function to load
+    demographics data.
+
+-   Added **old_dem** boolean argument to **load_all** 
+    function which defaults to FALSE. If set TRUE, then
+    **load_dem_old** function is used which corresponds
+    to the **load_dem** function from previous versions
+    of the software.
+
 ## parseRPDR 0.2.1 - 2021/09/10
 
 -   Bug-fix: load_notes error where inappropriate

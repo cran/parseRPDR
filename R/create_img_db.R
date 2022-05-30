@@ -14,7 +14,7 @@
 #' the function provides output for each file, or only for the first file, which is beneficial if you are analyzing multi-slice series,
 #' as all instances have almost all the same header information. Furthermore, using the \emph{keywords} argument you can manually specify
 #' which DICOM keywords you wish to extract. These need to be a valid keyword specified in the
-#' \href{http://dicom.nema.org/medical/dicom/current/output/chtml/part06/chapter_6.html}{DICOM standard}.
+#' \href{https://dicom.nema.org/medical/dicom/current/output/chtml/part06/chapter_6.html}{DICOM standard}.
 #'
 #' @param path string vector, full folder path to folder that contains the images.
 #' @param ext string array, possible file extensions to parse.

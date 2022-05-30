@@ -1,7 +1,8 @@
-#' @title Loads demographic information into R for new demographic tables following changes in the beginning of 2022.
+#' @title Loads demographic information into R for demographics tables before 2022.
 #' @export
 #'
-#' @description Loads patient demographic  and vital status information into the R environment. Since version 0.2.2 of the software this function supports the new demographics table data definitions.
+#' @description Loads patient demographic  and vital status information into the R environment. Since version 0.2.2 of the software, this function supports the old demographics table data definitions
+#' and is identical to the \emph{load_dem} function of previous versions of the software.
 #'
 #' @param file string, full file path to Dem.txt.
 #' @param merge_id string, column name to use to create \emph{ID_MERGE} column used to merge different datasets. Defaults to \emph{EPIC_PMRN},
@@ -24,17 +25,11 @@
 #'  \item{ID_dem_PMRN}{string, Epic medical record number. This value is unique across Epic instances within the Partners network.
 #'  from \emph{dem} datasource, corresponds to EPIC_PMRN in RPDR. Data is formatted using pretty_mrn().}
 #'  \item{ID_dem_loc}{string, if mrn_type == TRUE, then the data in \emph{MRN_Type} and \emph{MRN} are parsed into IDs corresponding to locations \emph{(loc)}. Data is formatted using pretty_mrn().}
-#'  \item{gender_legal_sex}{string, Patient's legal sex, corresponds to Gender_Legal_Sex in RPDR. Punctuation marks and white spaces are removed.}
-#'  \item{sex_at_birth}{string, Patient’s sex at time of birth, corresponds to Sex_at_Birth in RPDR. Punctuation marks and white spaces are removed.}
-#'  \item{gender_identity}{string, Patient's personal conception of their gender, corresponds to Gender_Identity in RPDR. Punctuation marks and white spaces are removed.}
-#'  \item{time_date_of_birth}{POSIXct, Patient's date of birth, corresponds to Date_of_Birth. Converted to POSIXct format.}
+#'  \item{gender}{string, Patient's legal sex, corresponds to Gender in RPDR. Punctuation marks and white spaces are removed.}
+#'  \item{time_date_of_birth}{POSIXct, Patient's date of birth, corresponds to Date_of_Birth in RPDR. Converted to POSIXct format.}
 #'  \item{age}{string, Patient's current age (or age at death), corresponds to Age in RPDR.}
 #'  \item{language}{string, Patient's preferred spoken language, corresponds to Language in RPDR. Punctuation marks and white spaces are removed.}
-#'  \item{language_group}{string, Patient's preferred language: English or Non-English, corresponds to Language_Group in RPDR. Punctuation marks and white spaces are removed.}
-#'  \item{race_1}{string, Patient's primary race, corresponds to Race1 in RPDR. Punctuation marks and white spaces are removed.}
-#'  \item{race_2}{string, Patient's primary race if more than one race, corresponds to Race2 in RPDR. Punctuation marks and white spaces are removed.}
-#'  \item{race_group}{string, Patient's Race Group as determined by Race1 and Race2, corresponds to Race_Group in RPDR. Punctuation marks and white spaces are removed.}
-#'  \item{ethnic_group}{string, Patient's Ethnicity: Hispanic or Non Hispanic, corresponds to Ethnic_Group in RPDR. Punctuation marks and white spaces are removed.}
+#'  \item{race}{string, Patient's primary race, corresponds to Race in RPDR. Punctuation marks and white spaces are removed.}
 #'  \item{marital}{string, Patient's current marital status, corresponds to Marital_Status in RPDR. Punctuation marks and white spaces are removed.}
 #'  \item{religion}{string, Patient-identified religious preference, corresponds to Religion in RPDR. Punctuation marks and white spaces are removed.}
 #'  \item{veteran}{string, Patient's current military veteran status, corresponds to Is_a_veteran in RPDR. Punctuation marks and white spaces are removed.}
@@ -51,16 +46,16 @@
 #'
 #' @examples \dontrun{
 #' #Using defaults
-#' d_dem <- load_dem(file = "test_Dem.txt")
+#' d_dem <- load_dem_old(file = "test_Dem.txt")
 #'
 #' #Use sequential processing
-#' d_dem <- load_dem(file = "test_Dem.txt", nThread = 1)
+#' d_dem <- load_dem_old(file = "test_Dem.txt", nThread = 1)
 #'
 #' #Use parallel processing and parse data in MRN_Type and MRN columns and keep all IDs
-#' d_dem <- load_dem(file = "test_Dem.txt", nThread = 20, mrn_type = TRUE, perc = 1)
+#' d_dem <- load_dem_old(file = "test_Dem.txt", nThread = 20, mrn_type = TRUE, perc = 1)
 #' }
 
-load_dem <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard", perc = 0.6, na = TRUE, identical = TRUE, nThread = 4, mrn_type = FALSE) {
+load_dem_old <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard", perc = 0.6, na = TRUE, identical = TRUE, nThread = 4, mrn_type = FALSE) {
 
   DATA <- load_base(file = file, merge_id = merge_id, sep = sep, id_length = id_length, perc = perc, na = na, identical = identical, nThread = nThread, mrn_type = mrn_type, src = "dem")
   raw_id <- which(colnames(DATA) == "EMPI" | colnames(DATA) == "IncomingId")[1]
@@ -68,17 +63,11 @@ load_dem <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard",
   DATA     <- DATA[, 1:(raw_id-1)]
 
   #Add additional information
-  DATA$gender_legal_sex   <- pretty_text(data_raw$Gender_Legal_Sex, remove_after = FALSE)
-  DATA$sex_at_birth       <- pretty_text(data_raw$Sex_At_Birth, remove_after = FALSE)
-  DATA$gender_identity    <- pretty_text(data_raw$Gender_Identity, remove_after = FALSE)
+  DATA$gender             <- pretty_text(data_raw$Gender, remove_after = FALSE)
   DATA$time_date_of_birth <- as.POSIXct(data_raw$Date_of_Birth, format = "%m/%d/%Y")
   DATA$age                <- pretty_text(data_raw$Age, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$language       <- pretty_text(data_raw$Language, remove_white = FALSE)
-  DATA$language_group <- pretty_text(data_raw$Language_group, remove_white = FALSE)
-  DATA$race_1     <- pretty_text(data_raw$Race1, remove_white = FALSE)
-  DATA$race_2     <- pretty_text(data_raw$Race2, remove_white = FALSE)
-  DATA$race_group <- pretty_text(data_raw$Race_Group, remove_white = FALSE)
-  DATA$ethnic_group <- pretty_text(data_raw$Ethnic_Group, remove_white = FALSE)
+  DATA$language <- pretty_text(data_raw$Language, remove_white = FALSE)
+  DATA$race     <- pretty_text(data_raw$Race, remove_white = FALSE)
   DATA$marital  <- pretty_text(data_raw$Marital_status, remove_white = FALSE)
   DATA$religion <- pretty_text(data_raw$Religion, remove_white = FALSE)
   DATA$veteran  <- pretty_text(data_raw$Is_a_veteran, remove_white = FALSE)

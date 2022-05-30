@@ -9,6 +9,7 @@
 #' @param folder string, full folder path to RPDR text files.
 #' @param which_data string vector, an array of abbreviation corresponding to the datasources wished to load. Currently supported values and the default is: \emph{c("mrn", "con", "dem", "enc", "rdt", "lab", "med", "dia", "rfv", "prc",
 #' "car", "dis", "end", "hnp", "opn", "pat", "prg", "pul", "rad" and "vis")}
+#' @param old_dem boolean, should old \emph{load_dem} function be used for loading demographic data. Defaults to \emph{TRUE}, should be set to \emph{FALSE} for Dem.txt datasets prior to 2022.
 #' @param merge_id string, column name to use to create \emph{ID_MERGE} column used to merge different datasets. Defaults to \emph{EMPI},
 #' as it is the preferred MRN in the RPDR system. In case of mrn dataset, leave at EMPI, as it is automatically converted to: "Enterprise_Master_Patient_Index".
 #' @param sep string, divider between hospital ID and MRN. Defaults to \emph{:}.
@@ -36,7 +37,7 @@
 #' load_all(folder = folder_rpdr, nThread = 2, many_sources = TRUE)
 #' }
 
-load_all <- function(folder, which_data = c("mrn", "con", "dem", "enc", "rdt", "lab", "med", "dia", "rfv", "prc", "lno", "car", "dis", "end", "hnp", "opn", "pat", "prg", "pul", "rad", "vis"),
+load_all <- function(folder, which_data = c("mrn", "con", "dem", "enc", "rdt", "lab", "med", "dia", "rfv", "prc", "lno", "car", "dis", "end", "hnp", "opn", "pat", "prg", "pul", "rad", "vis"), old_dem = FALSE,
                      merge_id = "EMPI", sep = ":", id_length = "standard", perc = 0.6, na = TRUE, identical = TRUE, nThread = 4, many_sources = TRUE) {
 
   .SD=.N=.I=.GRP=.BY=.EACHI=..=..cols=.SDcols=i=j=time_to_db=..which_ids_to=..which_ids_from <- NULL
@@ -122,6 +123,7 @@ load_all <- function(folder, which_data = c("mrn", "con", "dem", "enc", "rdt", "
                                                   "na = FALSE, identical = FALSE)")))
               } else {
                 func <- grep(type, x = tolower(load_functions), value = TRUE, fixed = TRUE)
+                if(old_dem & type == "dem") {func <- "load_dem_old"}
                 l_i <- eval(str2expression(paste0(func, "(\"", files_long_type[j], "\", ",
                                                   "merge_id = \"", merge_id, "\", ",
                                                   "sep = \"", sep, "\", ",
@@ -216,6 +218,7 @@ load_all <- function(folder, which_data = c("mrn", "con", "dem", "enc", "rdt", "
                                                   "na = FALSE, identical = FALSE)")))
               } else {
                 func <- grep(type, x = tolower(load_functions), value = TRUE, fixed = TRUE)
+                if(old_dem & type == "dem") {func <- "load_dem_old"}
                 l_i <- eval(str2expression(paste0(func, "(\"", files_long_type[j], "\", ",
                                                   "merge_id = \"", merge_id, "\", ",
                                                   "sep = \"", sep, "\", ",
