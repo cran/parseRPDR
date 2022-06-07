@@ -7,7 +7,7 @@
 \usage{
 create_img_db(
   path,
-  ext = "dcm",
+  ext = c(".dcm", ".dicom", ".ima"),
   all = TRUE,
   keywords = c("StudyDate", "StudyTime", "SeriesDate", "SeriesTime", "AcquisitionDate",
     "AcquisitionTime", "ConversionType", "Manufacturer", "InstitutionName",
@@ -31,7 +31,10 @@ create_img_db(
 \arguments{
 \item{path}{string vector, full folder path to folder that contains the images.}
 
-\item{ext}{string array, possible file extensions to parse.}
+\item{ext}{string array, possible file extensions to parse. It is advised to add \emph{.} before the extensions as the given character patterns
+may be present elsewhere in the file names. Furthermore, if DICOM files without an extension should also be parsed, then add \emph{""} to the
+extensions as then the script will try to read all files without an extension. Also, the file names and the extensions are converted to lower case
+before matching to avoid mismatches due to capitals.}
 
 \item{all}{boolean, whether all files in a series should be parsed, or only the first one.}
 
@@ -75,7 +78,7 @@ which DICOM keywords you wish to extract. These need to be a valid keyword speci
 \dontrun{
 #Create a database with DICOM header information
 all_dicom_headers <- create_img_db(path = "/Users/Test/Data/DICOM/")
-all_dicom_headers <- create_img_db(path = "/Users/Test/Data/DICOM/", ext = c("dcm", "DICOM"))
+all_dicom_headers <- create_img_db(path = "/Users/Test/Data/DICOM/", ext = c(".dcm", ".DICOM"))
 #Create a database with DICOM header information for only IDs and accession numbers
 all_dicom_headers <- create_img_db(path = "/Users/Test/Data/DICOM/",
 keywords = c("PatientID", "AccessionNumber"))

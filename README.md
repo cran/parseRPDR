@@ -839,20 +839,23 @@ using the
 [dcmread](https://pydicom.github.io/pydicom/dev/reference/generated/pydicom.filereader.dcmread.html)
 function of the [pydicom](https://pydicom.github.io) package. The
 extension of the files can be provided by the *ext* argument, as DICOM
-files may have different extensions then that of .dcm. Also, using the
-*all* boolean argument, you can specify whether the function provides
-output for each file, or only for the first file, which is beneficial if
-you are analyzing multi-slice series, as all instances have almost all
-the same header information. Furthermore, using the *keywords* argument
-you can manually specify which DICOM keywords you wish to extract. These
-need to be a valid keyword specified in the [DICOM
+files may have different extensions then that of .dcm. These are
+converted to lower case before matching. Furthermore, it is advised to
+add *.* before the extensions as the given character patterns may be
+present elsewhere in the file names. Also, using the *all* boolean
+argument, you can specify whether the function provides output for each
+file, or only for the first file, which is beneficial if you are
+analyzing multi-slice series, as all instances have almost all the same
+header information. Furthermore, using the *keywords* argument you can
+manually specify which DICOM keywords you wish to extract. These need to
+be a valid keyword specified in the [DICOM
 standard](https://dicom.nema.org/medical/dicom/current/output/chtml/part06/chapter_6.html).
 
 ``` r
 #Create a database with DICOM header information
 all_dicom_headers <- create_img_db(path = "/Users/Test/Data/DICOM/")
 #Create a database with DICOM header information with additional file extensions
-all_dicom_headers <- create_img_db(path = "/Users/Test/Data/DICOM/", ext = c("dcm", "DICOM"))
+all_dicom_headers <- create_img_db(path = "/Users/Test/Data/DICOM/", ext = c(".dcm", ".DICOM"))
 #Create a database with DICOM header information for only IDs and accession numbers
 all_dicom_headers <- create_img_db(path = "/Users/Test/Data/DICOM/", keywords = c("PatientID", "AccessionNumber"))
 ```

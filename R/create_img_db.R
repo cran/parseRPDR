@@ -17,7 +17,10 @@
 #' \href{https://dicom.nema.org/medical/dicom/current/output/chtml/part06/chapter_6.html}{DICOM standard}.
 #'
 #' @param path string vector, full folder path to folder that contains the images.
-#' @param ext string array, possible file extensions to parse.
+#' @param ext string array, possible file extensions to parse. It is advised to add \emph{.} before the extensions as the given character patterns
+#' may be present elsewhere in the file names. Furthermore, if DICOM files without an extension should also be parsed, then add \emph{""} to the
+#' extensions as then the script will try to read all files without an extension. Also, the file names and the extensions are converted to lower case
+#' before matching to avoid mismatches due to capitals.
 #' @param all  boolean, whether all files in a series should be parsed, or only the first one.
 #' @param keywords string array, of valid DICOM keywords.
 #' @param nThread integer, number of threads to use for parsing data.
@@ -41,13 +44,13 @@
 #' #Create a database with DICOM header information
 #' all_dicom_headers <- create_img_db(path = "/Users/Test/Data/DICOM/")
 #  #Create a database with DICOM header information with additional file extensions
-#' all_dicom_headers <- create_img_db(path = "/Users/Test/Data/DICOM/", ext = c("dcm", "DICOM"))
+#' all_dicom_headers <- create_img_db(path = "/Users/Test/Data/DICOM/", ext = c(".dcm", ".DICOM"))
 #' #Create a database with DICOM header information for only IDs and accession numbers
 #' all_dicom_headers <- create_img_db(path = "/Users/Test/Data/DICOM/",
 #' keywords = c("PatientID", "AccessionNumber"))
 #' }
 
-create_img_db <- function(path, ext = "dcm", all = TRUE, keywords = c("StudyDate", "StudyTime", "SeriesDate", "SeriesTime", "AcquisitionDate", "AcquisitionTime",
+create_img_db <- function(path, ext = c(".dcm", ".dicom", ".ima"), all = TRUE, keywords = c("StudyDate", "StudyTime", "SeriesDate", "SeriesTime", "AcquisitionDate", "AcquisitionTime",
                                                                       "ConversionType", "Manufacturer", "InstitutionName", "InstitutionalDepartmentName",
                                                                       "ReferringPhysicianName", "Modality", "ManufacturerModelName",
                                                                       "StudyDescription", "SeriesDescription", "StudyComments", "ProtocolName", "RequestedProcedureID", "ViewPosition",

@@ -17,7 +17,8 @@ load_all(
   na = TRUE,
   identical = TRUE,
   nThread = 4,
-  many_sources = TRUE
+  many_sources = TRUE,
+  load_report = TRUE
 )
 }
 \arguments{
@@ -49,6 +50,8 @@ In other cases the lengths are unchanged. Defaults to \emph{standard}.}
 If there are many datasources, then it is advised to set this TRUE, as then each different datasource will be processed in parallel.
 However, if there are only a few datasources selected to load, but many files per datasource (result of large queries), then it may be faster to parallelize within each datasource and therefore should be set to \emph{FALSE}.
 If there are only a few sources each with one file then set to TRUE.}
+
+\item{load_report}{boolean, should the report text be returned for notes.}
 }
 \value{
 list of parsed data tables containing the information.

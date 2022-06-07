@@ -10,7 +10,10 @@ dcm_db(path, ext, all, keywords, nThread, pydicom)
 \arguments{
 \item{path}{string vector, full folder path to folder that contains the images.}
 
-\item{ext}{string array, possible file extensions to parse.}
+\item{ext}{string array, possible file extensions to parse. It is advised to add \emph{.} before the extensions as the given character patterns
+may be present elsewhere in the file names. Furthermore, if DICOM files without an extension should also be parsed, then add \emph{""} to the
+extensions as then the script will try to read all files without an extension. Also, the file names and the extensions are converted to lower case
+before matching to avoid mismatches due to capitals.}
 
 \item{all}{boolean, whether all files in a series should be parsed, or only the first one.}
 
@@ -18,7 +21,7 @@ dcm_db(path, ext, all, keywords, nThread, pydicom)
 
 \item{nThread}{integer, number of threads to use for parsing data.}
 
-\item{pydicom}{package, pydicom package initiated from parent enviroment.}
+\item{pydicom}{package, pydicom package initiated from parent environment.}
 }
 \value{
 data.table, with  DICOM header information. This is then used by \emph{create_img_db} which formats the output.

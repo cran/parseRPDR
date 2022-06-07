@@ -28,6 +28,7 @@
 #' @param identical boolean, whether to remove columns with identical values. Defaults to \emph{TRUE}.
 #' @param nThread integer, number of threads to use to load data.
 #' @param mrn_type boolean, should data in \emph{MRN_Type} and \emph{MRN} be parsed. Defaults to \emph{FALSE}, as it is not advised to parse these for all data sources as it takes considerable time.
+#' @param load_report boolean, should the report text be returned in the data table. Defaults to \emph{TRUE}. However, be aware that some notes may take up more memory than available on the machine.
 #'
 #' @return data table, with notes information. \emph{abc} stands for the three letter abbreviation of the given type of note.
 #' \describe{
@@ -42,7 +43,7 @@
 #'  \item{abc_rep_desc}{string, Type of report or procedure documented in the report, corresponds to Report_Description in RPDR.}
 #'  \item{abc_rep_status}{string, Completion status of the note/report, corresponds to Report_Status in RPDR.}
 #'  \item{abc_rep_type}{string, See specification in RPDR data dictionary, corresponds to Report_Type in RPDR.}
-#'  \item{abc_rep_txt}{string, Full narrative text contained in the note/report, corresponds to Report_Text in RPDR. Not provided for progress notes.}
+#'  \item{abc_rep_txt}{string, Full narrative text contained in the note/report, corresponds to Report_Text in RPDR. Only provided if \emph{load_report} is TRUE.}
 #'  }
 #'
 #' @encoding UTF-8
@@ -58,7 +59,7 @@
 #' d_hnp <- load_notes(file = "test_Hnp.txt", type = "hnp", nThread = 20, mrn_type = TRUE, perc = 1)
 #' }
 
-load_notes <- function(file, type, merge_id = "EMPI", sep = ":", id_length = "standard", perc = 0.6, na = TRUE, identical = TRUE, nThread = 4, mrn_type = FALSE) {
+load_notes <- function(file, type, merge_id = "EMPI", sep = ":", id_length = "standard", perc = 0.6, na = TRUE, identical = TRUE, nThread = 4, mrn_type = FALSE, load_report = TRUE) {
 
   supp <- c("car", "dis", "end", "hnp", "opn", "pat", "prg", "pul", "rad", "vis")
   if(!(type %in% supp)) {stop("type argument must be one of: ", paste0(supp, collapse = ", "))}
@@ -79,7 +80,7 @@ load_notes <- function(file, type, merge_id = "EMPI", sep = ":", id_length = "st
   has_end <- which(grepl(pattern = "[report_end]", x = record,  fixed = TRUE))
   batch <- ifelse(length(has_end)<100, length(has_end), 100)
 
-  split_IDs  <- split(1:length(has_end), 1:batch)
+  split_IDs  <- suppressWarnings(split(1:length(has_end), 1:batch))
   split_IDs  <- lapply(1:length(split_IDs), function(x) {rep(x, length(split_IDs[[x]]))})
   which_rows <- suppressWarnings(split(has_end, unlist(split_IDs))) #split into batch number of tables to overcome memory issues
 
@@ -109,7 +110,7 @@ load_notes <- function(file, type, merge_id = "EMPI", sep = ":", id_length = "st
   DATA[[paste0(type, "_rep_desc")]]    <- pretty_text(data_raw$Report_Description, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA[[paste0(type, "_rep_status")]]  <- pretty_text(data_raw$Report_Status, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA[[paste0(type, "_rep_type")]]    <- pretty_text(data_raw$Report_Type, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  if(type != "prg") {DATA[[paste0(type, "_rep_txt")]] <- data_raw$Report_Text
+  if(load_report) {DATA[[paste0(type, "_rep_txt")]] <- data_raw$Report_Text
   }
 
   if(dim(DATA)[1] != 1) {DATA <- remove_column(dt = DATA, na = na, identical = identical)}

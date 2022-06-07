@@ -2,8 +2,8 @@ Package: parseRPDR
 Type: Package
 Title: Parse and Manipulate Research Patient Data Registry ('RPDR')
         Text Queries
-Version: 0.2.2
-Date: 2022-05-29
+Version: 0.2.3
+Date: 2022-06-07
 Authors@R: person("Marton", "Kolossvary", role = c("aut", "cre"), email = "mkolossvary@mgh.harvard.edu")
 Maintainer: Marton Kolossvary <mkolossvary@mgh.harvard.edu>
 Description: Functions to load Research Patient Data Registry ('RPDR') text queries from Partners Healthcare institutions into R.
@@ -23,7 +23,7 @@ NeedsCompilation: no
 Suggests: testthat (>= 3.0.0), knitr, rmarkdown
 Encoding: UTF-8
 Config/testthat/edition: 3
-Packaged: 2022-05-30 06:21:10 UTC; mjk2
+Packaged: 2022-06-07 12:22:28 UTC; mjk2
 Author: Marton Kolossvary [aut, cre]
 Repository: CRAN
-Date/Publication: 2022-05-30 06:40:06 UTC
+Date/Publication: 2022-06-07 12:50:04 UTC

@@ -17,11 +17,14 @@
 #' \href{https://dicom.nema.org/medical/dicom/current/output/chtml/part06/chapter_6.html}{DICOM standard}.
 #'
 #' @param path string vector, full folder path to folder that contains the images.
-#' @param ext string array, possible file extensions to parse.
+#' @param ext string array, possible file extensions to parse. It is advised to add \emph{.} before the extensions as the given character patterns
+#' may be present elsewhere in the file names. Furthermore, if DICOM files without an extension should also be parsed, then add \emph{""} to the
+#' extensions as then the script will try to read all files without an extension. Also, the file names and the extensions are converted to lower case
+#' before matching to avoid mismatches due to capitals.
 #' @param all  boolean, whether all files in a series should be parsed, or only the first one.
 #' @param keywords string array, of valid DICOM keywords.
 #' @param nThread integer, number of threads to use for parsing data.
-#' @param pydicom package, pydicom package initiated from parent enviroment.
+#' @param pydicom package, pydicom package initiated from parent environment.
 #'
 #' @return data.table, with  DICOM header information. This is then used by \emph{create_img_db} which formats the output.
 #'
@@ -29,12 +32,27 @@
 
 
 dcm_db <- function(path, ext, all, keywords, nThread, pydicom) {
+
+  # Format for regexp
+  for(i in 1:length(ext)) {
+    ext[i] = paste0(ext[i], "$") #Add from end character
+    if(substr(ext[i], 1, 1) == ".") {ext[i] <- paste0("\\", ext[i])} #Add escape characters in case of "." at beginning
+  }
+
   folders <- list.dirs(path, recursive=FALSE, full.names=FALSE)
-  if (length(folders)==0) {
-    file_used  <- list.files(path, full.names = TRUE)
-    file_used  <- file_used[grep(paste0(ext, collapse = "|"), file_used)]
+  if (length(folders)==0) { #Find files
     file_short <- list.files(path, full.names = FALSE)
-    file_short <- file_short[grep(paste0(ext, collapse = "|"), file_short)]
+    file_used  <- list.files(path, full.names = TRUE)
+
+    if("" %in% ext) {
+      ok <- intersect(grep(paste0(tolower(ext), collapse = "|"), tolower(file_short)), grep("\\.", tolower(file_short), invert = TRUE))
+    } else {
+      ok <- grep(paste0(tolower(ext), collapse = "|"), tolower(file_short))
+    }
+
+    file_short <- file_short[ok]
+    file_used  <- file_used[ok]
+
     if(!all) {file_used <- file_used[1]; file_short <- file_short[1]}
     if(all(is.na(file_used))) {
       out <- data.table::as.data.table(path)
@@ -75,6 +93,5 @@ dcm_db <- function(path, ext, all, keywords, nThread, pydicom) {
       dcm_db(path = x, ext = ext, all = all, keywords = keywords, nThread = nThread, pydicom = pydicom)
     }, mc.cores = nThread)
     data.table::rbindlist(sublist, fill = TRUE) #create dt
-    }
   }
-
+}

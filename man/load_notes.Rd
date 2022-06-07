@@ -15,7 +15,8 @@ load_notes(
   na = TRUE,
   identical = TRUE,
   nThread = 4,
-  mrn_type = FALSE
+  mrn_type = FALSE,
+  load_report = TRUE
 )
 }
 \arguments{
@@ -41,6 +42,8 @@ In other cases the lengths are unchanged. Defaults to \emph{standard}.}
 \item{nThread}{integer, number of threads to use to load data.}
 
 \item{mrn_type}{boolean, should data in \emph{MRN_Type} and \emph{MRN} be parsed. Defaults to \emph{FALSE}, as it is not advised to parse these for all data sources as it takes considerable time.}
+
+\item{load_report}{boolean, should the report text be returned in the data table. Defaults to \emph{TRUE}. However, be aware that some notes may take up more memory than available on the machine.}
 }
 \value{
 data table, with notes information. \emph{abc} stands for the three letter abbreviation of the given type of note.
@@ -56,7 +59,7 @@ data table, with notes information. \emph{abc} stands for the three letter abbre
  \item{abc_rep_desc}{string, Type of report or procedure documented in the report, corresponds to Report_Description in RPDR.}
  \item{abc_rep_status}{string, Completion status of the note/report, corresponds to Report_Status in RPDR.}
  \item{abc_rep_type}{string, See specification in RPDR data dictionary, corresponds to Report_Type in RPDR.}
- \item{abc_rep_txt}{string, Full narrative text contained in the note/report, corresponds to Report_Text in RPDR. Not provided for progress notes.}
+ \item{abc_rep_txt}{string, Full narrative text contained in the note/report, corresponds to Report_Text in RPDR. Only provided if \emph{load_report} is TRUE.}
  }
 }
 \description{

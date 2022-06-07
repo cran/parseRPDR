@@ -22,7 +22,7 @@
 #' \item{LMR: }{c("Subject", "Patient Name:", "Reason for visit", "report_end"}
 #' }
 #'
-#' However, these may be modified and extended to include sections of interest, i.e. if a given score is reported standardly, then adding this phrase (i.e. "CAD-RADS")
+#' However, these may be modified and extended to include sections of interest, i.e. if a given score is reported in a standard fashion, then adding this phrase (i.e. "CAD-RADS")
 #' would create a column where the text following this statement is returned. After this the resulting columns can be easily cleaned up if needed.
 #' Be aware to always include \emph{"report_end"} in the anchors array, to provide the function of the last occurring statement in the report.
 #'

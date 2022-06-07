@@ -1,5 +1,25 @@
 # Change log
 
+## parseRPDR 0.2.3 - 2022/06/07
+
+-   Bug-fix: file names and extensions are now
+    converted to lower case for **create_img_db**
+    to avoid mismatches due to capitals. Furthermore,
+    the default extensions are now: ".dcm", ".dicom"
+    and ".ima" to avoid matches withing other parts
+    of the file name string.
+    
+-   Bug-fix: in **create_img_db** now **""** is
+    supported for identification of DICOM files
+    without any extension.
+    
+-   Added **load_report** attribute to **load_notes**
+    to specify whether the report text should be
+    returned or not. Also, this attribute now affects
+    whether **load_all** loads report text in case 
+    of notes.
+
+
 ## parseRPDR 0.2.2 - 2022/05/30
 
 -   Added **load_dem_old** which is the 
