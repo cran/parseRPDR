@@ -12,7 +12,7 @@ convert_med(
   collapse = NULL,
   code_time = "time_med",
   time_type = "earliest",
-  nThread = 4
+  nThread = parallel::detectCores() - 1
 )
 }
 \arguments{

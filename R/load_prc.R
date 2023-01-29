@@ -50,7 +50,7 @@
 #' d_prc <- load_prc(file = "test_Prc.txt", nThread = 20, mrn_type = TRUE, perc = 1)
 #' }
 
-load_prc <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard", perc = 0.6, na = TRUE, identical = TRUE, nThread = 4, mrn_type = FALSE) {
+load_prc <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard", perc = 0.6, na = TRUE, identical = TRUE, nThread = parallel::detectCores()-1, mrn_type = FALSE) {
 
   message(paste("Checking procedure file to be compatible with data.table. Could take considerable time, please be patient!"))
   message("Loading data")

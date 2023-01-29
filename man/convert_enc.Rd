@@ -13,7 +13,7 @@ convert_enc(
   collapse = NULL,
   code_time = "time_enc_admit",
   time_type = "earliest",
-  nThread = 4
+  nThread = parallel::detectCores() - 1
 )
 }
 \arguments{

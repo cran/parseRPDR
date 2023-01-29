@@ -12,7 +12,7 @@ convert_rfv(
   collapse = NULL,
   code_time = "time_rfv_start",
   time_type = "earliest",
-  nThread = 4
+  nThread = parallel::detectCores() - 1
 )
 }
 \arguments{

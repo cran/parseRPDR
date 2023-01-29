@@ -19,7 +19,7 @@
 #' @encoding UTF-8
 #' @importFrom data.table :=
 
-parse_ids <- function(str, num = NULL, sep = ":", id_length = "standard", perc = 0.6, nThread = 4) {
+parse_ids <- function(str, num = NULL, sep = ":", id_length = "standard", perc = 0.6, nThread = parallel::detectCores()-1) {
 
   .SD=.N=.I=.GRP=.BY=.EACHI=..=..cols=.SDcols=i=j=time_to_db=..which_ids_to=..which_ids_from <- NULL
 

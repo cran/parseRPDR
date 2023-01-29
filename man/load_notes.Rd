@@ -14,9 +14,10 @@ load_notes(
   perc = 0.6,
   na = TRUE,
   identical = TRUE,
-  nThread = 4,
+  nThread = parallel::detectCores() - 1,
   mrn_type = FALSE,
-  load_report = TRUE
+  load_report = TRUE,
+  format_orig = FALSE
 )
 }
 \arguments{
@@ -44,6 +45,8 @@ In other cases the lengths are unchanged. Defaults to \emph{standard}.}
 \item{mrn_type}{boolean, should data in \emph{MRN_Type} and \emph{MRN} be parsed. Defaults to \emph{FALSE}, as it is not advised to parse these for all data sources as it takes considerable time.}
 
 \item{load_report}{boolean, should the report text be returned in the data table. Defaults to \emph{TRUE}. However, be aware that some notes may take up more memory than available on the machine.}
+
+\item{format_orig}{boolean, should report be returned in its original formatting or should white spaces used for formatting be removed. Defaults to \emph{FALSE}.}
 }
 \value{
 data table, with notes information. \emph{abc} stands for the three letter abbreviation of the given type of note.
@@ -83,7 +86,7 @@ Loads documents information into the R environment, which are:
 d_hnp <- load_notes(file = "test_Hnp.txt", type = "hnp")
 
 #Use sequential processing
-d_hnp <- load_notes(file = "test_Hnp.txt", type = "hnp", nThread = 1)
+d_hnp <- load_notes(file = "test_Hnp.txt", type = "hnp", nThread = 1, format_orig = TRUE)
 
 #Use parallel processing and parse data in MRN_Type and MRN columns and keep all IDs
 d_hnp <- load_notes(file = "test_Hnp.txt", type = "hnp", nThread = 20, mrn_type = TRUE, perc = 1)

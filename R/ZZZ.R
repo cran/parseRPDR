@@ -12,5 +12,11 @@
 _/
 
                                 by: M\U00E1rton Kolossv\U00E1ry, MD PhD
+
+Please cite:
+Kolossv\U00E1ry M et al.
+Deep Learning Analysis of Chest Radiographs to Triage Patients with Acute Chest Pain Syndrome.
+Radiology. 2023;306(2):e221926.
+DOI: 10.1148/radiol.221926
 ")
 }

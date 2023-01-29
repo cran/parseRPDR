@@ -61,16 +61,6 @@ The functions also do minimal data cleaning to help later analyses:
     documentation in detail).
 -   Unknown values are converted to NA.
 
-Due to potential issues with PHI and PPI, the example datasets can be
-downloaded from the Partners Gitlab repository at Partners under
-*parserpdr-sample-data*. For each supported datasource a raw version and
-a parsed version is provided. The raw data provided by RPDR is called:
-*data_abc_raw*, where *abc* is the three letter abbreviation of the
-given datasource. Results of the load functions on these example
-datasets are also provided in the form of: *data_abc*, where *abc* is
-the three letter abbreviation of the given datasource, to show exactly
-what modifications the software does on the inputs.
-
 Besides providing an interface to import text outputs from RPDR into the
 R environment, **parseRPDR** also provides functions to do common tasks.
 Similar to the load functions, the package contains another family of
@@ -129,14 +119,13 @@ parameter in the function calls sets everything up. In detail, on
 unix-based systems forking is used, while on windows machines socket
 clusters are initiated. Please be aware that the optimal number of
 threads depends on the system running the application. By default
-nThread is set to 4, but on less powerful machines this might need to be
-set to lower values, while on more powerful machines even more cores can
-be initialized. Be aware that parallelization also requires additional
-memory to run the functions. This also depends on the operating system
-(generally unix-based system require less) and therefore the optimal
-number of threads needs to be empirically determined. Setting
-*nThread=1* results in sequential analysis, which might be beneficial
-for small datasets.
+nThread is set to parallel::detectCores()-1, which means that all except
+one of the threads on the given machine will be used. Be aware that
+parallelization also requires additional memory to run the functions.
+This also depends on the operating system (generally unix-based system
+require less) and therefore the optimal number of threads needs to be
+empirically determined. Setting *nThread=1* results in sequential
+analysis, which might be beneficial for small datasets.
 
 In case of the *find_exam* function, there is an opportunity to use
 shared RAM management. In case of large datasets (>1M rows), this may
@@ -366,7 +355,11 @@ There are several types of different note files provided by RPDR: *car,
 dis, end, hnp, opn, pat, prg, pul, rad and vis*. For these the
 *load_notes* function provides a single interface to load these files.
 Simply the type of note must be provided and a standard output is
-provided for each type of note.
+provided for each type of note. The report text is return if
+*load_report* is TRUE, which is the default. By default all formatting
+is removed from the text to save space and make later manipulations
+easier. However, setting the *format_orig* to *TRUE* returns the
+original text in its original format.
 
 ``` r
 #Using defaults
@@ -374,7 +367,7 @@ d_hnp <- load_notes(file = "test_Hnp.txt", type = "hnp")
 #Use sequential processing
 d_hnp <- load_notes(file = "test_Hnp.txt", type = "hnp", nThread = 1)
 #Use parallel processing and parse data in MRN_Type and MRN columns and keep all IDs
-d_hnp <- load_notes(file = "test_Hnp.txt", type = "hnp", nThread = 20, mrn_type = TRUE, perc = 1)
+d_hnp <- load_notes(file = "test_Hnp.txt", type = "hnp", nThread = 20, mrn_type = TRUE, perc = 1, load_report = TRUE, format_orig = TRUE)
 ```
 
 ### *load_all* function
@@ -433,7 +426,7 @@ together from each 25,000 patients’ data to receive the final database.*
 load_all(folder = folder_rpdr, which_data = c("con", "dem", "mrn"), nThread = 2, many_sources = FALSE)
 
 #Load all supported file types parallelizing on the level of datasources
-load_all(folder = folder_rpdr, nThread = 2, many_sources = TRUE)
+load_all(folder = folder_rpdr, nThread = 2, many_sources = TRUE, load_report = TRUE, format_orig = TRUE)
 ```
 
 ## Manipulating data using parseRPDR

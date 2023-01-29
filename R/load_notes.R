@@ -29,6 +29,7 @@
 #' @param nThread integer, number of threads to use to load data.
 #' @param mrn_type boolean, should data in \emph{MRN_Type} and \emph{MRN} be parsed. Defaults to \emph{FALSE}, as it is not advised to parse these for all data sources as it takes considerable time.
 #' @param load_report boolean, should the report text be returned in the data table. Defaults to \emph{TRUE}. However, be aware that some notes may take up more memory than available on the machine.
+#' @param format_orig boolean, should report be returned in its original formatting or should white spaces used for formatting be removed. Defaults to \emph{FALSE}.
 #'
 #' @return data table, with notes information. \emph{abc} stands for the three letter abbreviation of the given type of note.
 #' \describe{
@@ -53,13 +54,13 @@
 #' d_hnp <- load_notes(file = "test_Hnp.txt", type = "hnp")
 #'
 #' #Use sequential processing
-#' d_hnp <- load_notes(file = "test_Hnp.txt", type = "hnp", nThread = 1)
+#' d_hnp <- load_notes(file = "test_Hnp.txt", type = "hnp", nThread = 1, format_orig = TRUE)
 #'
 #' #Use parallel processing and parse data in MRN_Type and MRN columns and keep all IDs
 #' d_hnp <- load_notes(file = "test_Hnp.txt", type = "hnp", nThread = 20, mrn_type = TRUE, perc = 1)
 #' }
 
-load_notes <- function(file, type, merge_id = "EMPI", sep = ":", id_length = "standard", perc = 0.6, na = TRUE, identical = TRUE, nThread = 4, mrn_type = FALSE, load_report = TRUE) {
+load_notes <- function(file, type, merge_id = "EMPI", sep = ":", id_length = "standard", perc = 0.6, na = TRUE, identical = TRUE, nThread = parallel::detectCores()-1, mrn_type = FALSE, load_report = TRUE, format_orig = FALSE) {
 
   supp <- c("car", "dis", "end", "hnp", "opn", "pat", "prg", "pul", "rad", "vis")
   if(!(type %in% supp)) {stop("type argument must be one of: ", paste0(supp, collapse = ", "))}
@@ -69,10 +70,13 @@ load_notes <- function(file, type, merge_id = "EMPI", sep = ":", id_length = "st
   message("Loading data")
   header <- readr::read_lines(file = file, skip = 0, skip_empty_rows = T, n_max = 1)
   record <- readr::read_lines(file = file, skip = 1, skip_empty_rows = T)
-  message("Removing unnecessary carriage returns")
-  record <- gsub("[\r\n]", " ", record) #remove carriage returns and new lines
-  message("Removing multuiple spaces")
-  record <- gsub("^ *|(?<= ) | *$", "", record, perl = TRUE) #remove multiple spaces
+  if(!format_orig) {
+    message("Removing unnecessary carriage returns")
+    record <- gsub("[\r\n]", " ", record) #remove carriage returns and new lines
+    message("Removing multuiple spaces")
+    record <- gsub("^ *|(?<= ) | *$", "", record, perl = TRUE) #remove multiple spaces
+  }
+
   message("Creating proper representation of records")
   record <- gsub(pattern = "[report_end]", replacement = "[report_end]\r\n", x = record,  fixed = TRUE) #add new line to all other rows
 
@@ -86,9 +90,17 @@ load_notes <- function(file, type, merge_id = "EMPI", sep = ":", id_length = "st
 
   texts <- lapply(1:batch, function(x) {
     if(x == 1) {
-      out <- paste(header, paste(record[1:max(which_rows[[x]])], collapse = " "), sep = "\r\n")
+      if(format_orig) {
+        out <- paste(header, paste(record[1:max(which_rows[[x]])], collapse = "~~~~~"), sep = "\r\n")
+      } else {
+        out <- paste(header, paste(record[1:max(which_rows[[x]])], collapse = " "), sep = "\r\n")
+      }
     } else {
-      out <- paste(header, paste(record[(max(which_rows[[x-1]])+1):max(which_rows[[x]])], collapse = " "), sep = "\r\n")
+      if(format_orig) {
+        out <- paste(header, paste(record[(max(which_rows[[x-1]])+1):max(which_rows[[x]])], collapse = "~~~~~"), sep = "\r\n")
+      } else {
+        out <- paste(header, paste(record[(max(which_rows[[x-1]])+1):max(which_rows[[x]])], collapse = " "), sep = "\r\n")
+      }
     }
   })
   rm(list = c("header", "record", "has_end", "which_rows", "batch", "split_IDs"))
@@ -110,7 +122,12 @@ load_notes <- function(file, type, merge_id = "EMPI", sep = ":", id_length = "st
   DATA[[paste0(type, "_rep_desc")]]    <- pretty_text(data_raw$Report_Description, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA[[paste0(type, "_rep_status")]]  <- pretty_text(data_raw$Report_Status, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
   DATA[[paste0(type, "_rep_type")]]    <- pretty_text(data_raw$Report_Type, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  if(load_report) {DATA[[paste0(type, "_rep_txt")]] <- data_raw$Report_Text
+  if(load_report) {
+    DATA[[paste0(type, "_rep_txt")]] <- data_raw$Report_Text
+    if(format_orig) {
+      DATA[[paste0(type, "_rep_txt")]] <- gsub(pattern = "~~~~~", replacement = "\r\n",
+                                               x = DATA[[paste0(type, "_rep_txt")]], fixed = TRUE)
+    }
   }
 
   if(dim(DATA)[1] != 1) {DATA <- remove_column(dt = DATA, na = na, identical = identical)}

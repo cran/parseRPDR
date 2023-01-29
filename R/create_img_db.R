@@ -62,9 +62,9 @@ create_img_db <- function(path, ext = c(".dcm", ".dicom", ".ima"), all = TRUE, k
                                                                       "RescaleIntercept", "RescaleSlope", "WindowCenter", "WindowWidth", "BitsAllocated", "BitsStored", "PhotometricInterpretation",
                                                                       "KVP", "ExposureTime", "XRayTubeCurrent", "ExposureInuAs", "ImageAndFluoroscopyAreaDoseProduct",
                                                                       "FilterType", "ConvolutionKernel", "CTDIvol", "ReconstructionFieldOfView"),
-                          nThread = 4, na = TRUE, identical = TRUE) {
+                          nThread = parallel::detectCores()-1, na = TRUE, identical = TRUE) {
 
-  pydicom <- reticulate::import("pydicom")
+  pydicom <- reticulate::import("pydicom", delay_load = TRUE)
   img_db  <- dcm_db(path = path, ext = ext, all = all, keywords = keywords, nThread = nThread, pydicom = pydicom)
 
   #Create pretty columns and convert values

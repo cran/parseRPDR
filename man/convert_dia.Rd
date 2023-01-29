@@ -13,7 +13,7 @@ convert_dia(
   collapse = NULL,
   code_time = "time_dia",
   time_type = "earliest",
-  nThread = 4
+  nThread = parallel::detectCores() - 1
 )
 }
 \arguments{

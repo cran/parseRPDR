@@ -11,7 +11,7 @@ parse_ids(
   sep = ":",
   id_length = "standard",
   perc = 0.6,
-  nThread = 4
+  nThread = parallel::detectCores() - 1
 )
 }
 \arguments{

@@ -31,7 +31,7 @@
 #' }
 
 convert_rfv <- function(d, code = "rfv_concept_id", codes_to_find = NULL,
-                        collapse = NULL, code_time = "time_rfv_start", time_type = "earliest", nThread = 4) {
+                        collapse = NULL, code_time = "time_rfv_start", time_type = "earliest", nThread = parallel::detectCores()-1) {
 
   .SD=.N=.I=.GRP=.BY=.EACHI=..=..code=.SDcols=i=j=time_to_db=..which_ids_to=..which_ids_from=..collapse=. <- NULL
 

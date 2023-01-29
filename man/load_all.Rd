@@ -16,9 +16,10 @@ load_all(
   perc = 0.6,
   na = TRUE,
   identical = TRUE,
-  nThread = 4,
+  nThread = parallel::detectCores() - 1,
   many_sources = TRUE,
-  load_report = TRUE
+  load_report = TRUE,
+  format_orig = FALSE
 )
 }
 \arguments{
@@ -52,6 +53,8 @@ However, if there are only a few datasources selected to load, but many files pe
 If there are only a few sources each with one file then set to TRUE.}
 
 \item{load_report}{boolean, should the report text be returned for notes.}
+
+\item{format_orig}{boolean, should report be returned in its original formatting or should white spaces used for formatting be removed. Defaults to \emph{FALSE}.}
 }
 \value{
 list of parsed data tables containing the information.
@@ -69,6 +72,7 @@ load_all(folder = folder_rpdr, which_data = c("con", "dem", "mrn"),
 nThread = 2, many_sources = FALSE)
 
 #Load all supported file types parallelizing on the level of datasources
-load_all(folder = folder_rpdr, nThread = 2, many_sources = TRUE)
+load_all(folder = folder_rpdr, nThread = 2, many_sources = TRUE,
+format_orig = TRUE)
 }
 }

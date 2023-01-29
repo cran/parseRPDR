@@ -52,7 +52,7 @@
 #' d_med <- load_med(file = "test_Med.txt", nThread = 20, mrn_type = TRUE, perc = 1)
 #' }
 
-load_med <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard", perc = 0.6, na = TRUE, identical = TRUE, nThread = 4, mrn_type = FALSE) {
+load_med <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard", perc = 0.6, na = TRUE, identical = TRUE, nThread = parallel::detectCores()-1, mrn_type = FALSE) {
 
   DATA <- load_base(file = file, merge_id = merge_id, sep = sep, id_length = id_length, perc = perc, na = na, identical = identical, nThread = nThread, mrn_type = mrn_type, src = "med")
   raw_id <- which(colnames(DATA) == "EMPI" | colnames(DATA) == "IncomingId")[1]

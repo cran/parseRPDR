@@ -35,7 +35,7 @@
 #' }
 
 convert_med <- function(d, code = "med", codes_to_find = NULL, collapse = NULL,
-                        code_time = "time_med", time_type = "earliest", nThread = 4) {
+                        code_time = "time_med", time_type = "earliest", nThread = parallel::detectCores()-1) {
 
   .SD=.N=.I=.GRP=.BY=.EACHI=..=..cols=.SDcols=i=j=time_to_db=..which_ids_to=..which_ids_from=..collapse=. <- NULL
 

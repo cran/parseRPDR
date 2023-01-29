@@ -28,7 +28,7 @@
 #' @encoding UTF-8
 #' @importFrom data.table :=
 
-load_base <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard", perc = 0.6, na = TRUE, identical = TRUE, nThread = 4, mrn_type = FALSE, src = "mrn", fill = FALSE, sep_load = "|") {
+load_base <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard", perc = 0.6, na = TRUE, identical = TRUE, nThread = parallel::detectCores()-1, mrn_type = FALSE, src = "mrn", fill = FALSE, sep_load = "|") {
   message("Loading ", src,  " information into the R environment. Could take considerable time, please be patient!")
   data_raw <- data.table::fread(file, showProgress = FALSE, colClasses = "character", nThread = nThread, fill = fill, sep = sep_load)
   DATA <- data.table::data.table()

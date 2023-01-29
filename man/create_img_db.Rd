@@ -23,7 +23,7 @@ create_img_db(
     "BitsStored", "PhotometricInterpretation", "KVP", "ExposureTime", "XRayTubeCurrent",
     "ExposureInuAs", "ImageAndFluoroscopyAreaDoseProduct", "FilterType",     
     "ConvolutionKernel", "CTDIvol", "ReconstructionFieldOfView"),
-  nThread = 4,
+  nThread = parallel::detectCores() - 1,
   na = TRUE,
   identical = TRUE
 )

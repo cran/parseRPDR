@@ -78,7 +78,7 @@ find_exam <- function(d_from, d_to,
                       d_from_ID = "ID_MERGE", d_to_ID = "ID_MERGE",
                       d_from_time = "time_rad_exam", d_to_time = "time_enc_admit",
                       time_diff_name = "timediff_exam_to_db", before = TRUE, after = TRUE, time = 1, time_unit = "days",
-                      multiple = "closest", add_column = NULL, keep_data = FALSE, nThread = 4, shared_RAM = FALSE) {
+                      multiple = "closest", add_column = NULL, keep_data = FALSE, nThread = parallel::detectCores()-1, shared_RAM = FALSE) {
 
   if(nThread > 1 & shared_RAM) {
     out <- find_exam_bm(d_from = d_from, d_to = d_to,

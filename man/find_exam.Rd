@@ -20,7 +20,7 @@ find_exam(
   multiple = "closest",
   add_column = NULL,
   keep_data = FALSE,
-  nThread = 4,
+  nThread = parallel::detectCores() - 1,
   shared_RAM = FALSE
 )
 }

@@ -35,7 +35,7 @@ find_exam_bm <- function(d_from, d_to,
                          d_from_ID = "ID_MERGE", d_to_ID = "ID_MERGE",
                          d_from_time = "time_rad_exam", d_to_time = "time_enc_admit",
                          time_diff_name = "timediff_exam_to_db", before = TRUE, after = TRUE, time = 1, time_unit = "days",
-                         multiple = "closest", add_column = NULL, keep_data = FALSE, nThread = 4) {
+                         multiple = "closest", add_column = NULL, keep_data = FALSE, nThread = parallel::detectCores()-1) {
 
   .SD=.N=.I=.GRP=.BY=.EACHI=..=..cols=.SDcols=i=j=time_to_db=..which_ids_to=..which_ids_from=..collapse <- NULL
 

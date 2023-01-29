@@ -42,7 +42,7 @@
 
 convert_enc <- function(d, code = c("enc_diag_admit", "enc_diag_princ", paste0("enc_diag_", 1:10)),
                         keep = FALSE, codes_to_find = NULL,
-                        collapse = NULL, code_time = "time_enc_admit", time_type = "earliest", nThread = 4) {
+                        collapse = NULL, code_time = "time_enc_admit", time_type = "earliest", nThread = parallel::detectCores()-1) {
 
   .SD=.N=.I=.GRP=.BY=.EACHI=..=..code=.SDcols=i=j=time_to_db=..which_ids_to=..which_ids_from=..collapse=. <- NULL
 

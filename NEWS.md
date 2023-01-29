@@ -1,5 +1,26 @@
 # Change log
 
+## parseRPDR 0.2.4 - 2023/01/29
+
+-   Removed all example datafiles.
+
+-   **nThreads** for every function is now
+    parallel::detectCores()-1 by default.
+    
+-   **reticulate** and **bigmemory** packages have been
+    moved to Suggests. Importing of pydicom is
+    now delay_load = TRUE. It allows users to
+    specify a desired location for Python before
+    interacting with your package.
+
+-   **load_notes** now has an additional argument.
+    If **format_orig** is set to TRUE, then the returned
+    report maintains the original formatting, as
+    opposed to FALSE, when all white spaces used for
+    formatting are removed.
+    
+
+
 ## parseRPDR 0.2.3 - 2022/06/07
 
 -   Bug-fix: file names and extensions are now

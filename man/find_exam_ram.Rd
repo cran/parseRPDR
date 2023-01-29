@@ -20,7 +20,7 @@ find_exam_ram(
   multiple = "closest",
   add_column = NULL,
   keep_data = FALSE,
-  nThread = 4
+  nThread = parallel::detectCores() - 1
 )
 }
 \arguments{

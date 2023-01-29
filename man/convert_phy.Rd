@@ -13,7 +13,7 @@ convert_phy(
   collapse = NULL,
   code_time = "time_phy",
   time_type = "earliest",
-  nThread = 4
+  nThread = parallel::detectCores() - 1
 )
 }
 \arguments{

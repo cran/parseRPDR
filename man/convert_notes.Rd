@@ -5,7 +5,12 @@
 \alias{convert_notes}
 \title{Extracts information from notes free text.}
 \usage{
-convert_notes(d, code = NULL, anchors = NULL, nThread = 4)
+convert_notes(
+  d,
+  code = NULL,
+  anchors = NULL,
+  nThread = parallel::detectCores() - 1
+)
 }
 \arguments{
 \item{d}{data.table, database containing notes loaded using the \emph{load_notes} function.}

@@ -13,7 +13,7 @@ load_med(
   perc = 0.6,
   na = TRUE,
   identical = TRUE,
-  nThread = 4,
+  nThread = parallel::detectCores() - 1,
   mrn_type = FALSE
 )
 }

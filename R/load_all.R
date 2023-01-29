@@ -25,6 +25,7 @@
 #' However, if there are only a few datasources selected to load, but many files per datasource (result of large queries), then it may be faster to parallelize within each datasource and therefore should be set to \emph{FALSE}.
 #' If there are only a few sources each with one file then set to TRUE.
 #' @param load_report boolean, should the report text be returned for notes.
+#' @param format_orig boolean, should report be returned in its original formatting or should white spaces used for formatting be removed. Defaults to \emph{FALSE}.
 #'
 #' @return list of parsed data tables containing the information.
 #'
@@ -35,11 +36,12 @@
 #' nThread = 2, many_sources = FALSE)
 #'
 #' #Load all supported file types parallelizing on the level of datasources
-#' load_all(folder = folder_rpdr, nThread = 2, many_sources = TRUE)
+#' load_all(folder = folder_rpdr, nThread = 2, many_sources = TRUE,
+#' format_orig = TRUE)
 #' }
 
 load_all <- function(folder, which_data = c("mrn", "con", "dem", "enc", "rdt", "lab", "med", "dia", "rfv", "prc", "lno", "car", "dis", "end", "hnp", "opn", "pat", "prg", "pul", "rad", "vis"), old_dem = FALSE,
-                     merge_id = "EMPI", sep = ":", id_length = "standard", perc = 0.6, na = TRUE, identical = TRUE, nThread = 4, many_sources = TRUE, load_report = TRUE) {
+                     merge_id = "EMPI", sep = ":", id_length = "standard", perc = 0.6, na = TRUE, identical = TRUE, nThread = parallel::detectCores()-1, many_sources = TRUE, load_report = TRUE, format_orig = FALSE) {
 
   .SD=.N=.I=.GRP=.BY=.EACHI=..=..cols=.SDcols=i=j=time_to_db=..which_ids_to=..which_ids_from <- NULL
 
@@ -122,6 +124,7 @@ load_all <- function(folder, which_data = c("mrn", "con", "dem", "enc", "rdt", "
                                                   "perc = ", perc, ", ",
                                                   "nThread = ", 1, ", ",
                                                   "load_report = \"", load_report, "\", ",
+                                                  "format_orig = \"", format_orig, "\", ",
                                                   "na = FALSE, identical = FALSE)")))
               } else {
                 func <- grep(type, x = tolower(load_functions), value = TRUE, fixed = TRUE)
@@ -218,6 +221,7 @@ load_all <- function(folder, which_data = c("mrn", "con", "dem", "enc", "rdt", "
                                                   "perc = ", perc, ", ",
                                                   "nThread = ", 1, ", ",
                                                   "load_report = \"", load_report, "\", ",
+                                                  "format_orig = \"", format_orig, "\", ",
                                                   "na = FALSE, identical = FALSE)")))
               } else {
                 func <- grep(type, x = tolower(load_functions), value = TRUE, fixed = TRUE)

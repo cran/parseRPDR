@@ -44,7 +44,7 @@
 #' "IMPRESSION", "RECOMMENDATION", "SIGNATURES", "report_end"), nThread = 2)
 #' }
 
-convert_notes <- function(d, code = NULL, anchors = NULL, nThread = 4) {
+convert_notes <- function(d, code = NULL, anchors = NULL, nThread = parallel::detectCores()-1) {
   .SD=.N=.I=.GRP=.BY=.EACHI=..=..cols=.SDcols=i=j=time_to_db=..which_ids_to=..which_ids_from=..collapse <- NULL
 
   message(paste0("Extracting information from notes free text."))

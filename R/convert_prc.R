@@ -36,7 +36,7 @@
 #' }
 
 convert_prc <- function(d, code = "prc_code", code_type = "prc_code_type",  codes_to_find = NULL,
-                        collapse = NULL, code_time = "time_prc", time_type = "earliest", nThread = 4) {
+                        collapse = NULL, code_time = "time_prc", time_type = "earliest", nThread = parallel::detectCores()-1) {
 
   .SD=.N=.I=.GRP=.BY=.EACHI=..=..cols=.SDcols=i=j=time_to_db=..which_ids_to=..which_ids_from=combined=..collapse=. <- NULL
 
