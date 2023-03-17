@@ -11,7 +11,6 @@
 #' If \emph{id_length = standard} then in case of \emph{MGH, BWH, MCL, EMPI and PMRN} the length of the MRNs are corrected accordingly by adding zeros, or removing numeral from the beginning.
 #' In other cases the lengths are unchanged. Defaults to \emph{standard}.
 #' @param nThread integer, number of threads to use by \emph{dopar} for parallelization. If it is set to 1, then no parallel backends are created and the function is executed sequentially.
-#' On windows machines sockets are used, while on other operating systems fork parallelization is used.
 #'
 #' @return vector, with characters formatted to specified lengths. If length of the ID does not match the required length, then leading zeros are added to the ID.
 #' If the ID is longer then the required length, then numerals from the beginning of the ID are cut off until it is the required length.
@@ -42,11 +41,7 @@ pretty_mrn <- function(v, prefix = "MGH", sep = ":", id_length = "standard", nTh
   if(nThread == 1) {
     `%exec%` <- foreach::`%do%`
   } else {
-    if(.Platform$OS.type == "windows") {
-      cl <- parallel::makeCluster(nThread, outfile = "", type = "PSOCK", methods = FALSE, useXDR = FALSE)
-    } else{
-      cl <- parallel::makeCluster(nThread, outfile = "", type = "FORK", methods = FALSE, useXDR = FALSE)
-    }
+    cl <- parallel::makeCluster(nThread, methods = FALSE, useXDR = FALSE, )
     doParallel::registerDoParallel(cl)
     `%exec%` <- foreach::`%dopar%`
   }

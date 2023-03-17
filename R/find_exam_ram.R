@@ -21,7 +21,6 @@
 #' @param add_column string, a column name in d_to to add to the output. Defaults to \emph{NULL}.
 #' @param keep_data boolean, whether to include empty rows with only the \emph{d_from_ID} column filed out for cases that have data in the \emph{d_from}, but not within the time range. Defaults to \emph{FALSE}.
 #' @param nThread integer, number of threads to use by \emph{dopar} for parallelization. If it is set to 1, then no parallel backends are created and the function is executed sequentially.
-#' On windows machines sockets are used, while on other operating systems fork parallelization is used.
 #'
 #' @return data table, with \emph{d_from} filtered to ones only within the timeframe. The columns of \emph{d_from} are returned with the corresponding time column in \emph{data_to}
 #' where the rows are instances which comply with the time constraints specified by the function. An additional column specified in \emph{time_diff_name} is also returned,
@@ -43,11 +42,7 @@ find_exam_ram <- function(d_from, d_to,
   if(nThread == 1) {
     `%exec%` <- foreach::`%do%`
   } else {
-    if(.Platform$OS.type == "windows") {
-      cl <- parallel::makeCluster(nThread, outfile = "", type = "PSOCK", methods = FALSE, useXDR = FALSE)
-    } else{
-      cl <- parallel::makeCluster(nThread, outfile = "", type = "FORK", methods = FALSE, useXDR = FALSE)
-    }
+    cl <- parallel::makeCluster(nThread, methods = FALSE, useXDR = FALSE)
     doParallel::registerDoParallel(cl)
     `%exec%` <- foreach::`%dopar%`
   }

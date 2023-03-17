@@ -12,7 +12,7 @@ convert_phy(
   codes_to_find = NULL,
   collapse = NULL,
   code_time = "time_phy",
-  time_type = "earliest",
+  aggr_type = "earliest",
   nThread = parallel::detectCores() - 1
 )
 }
@@ -28,14 +28,13 @@ The function searches for the given health history code type and code pair and a
 These columns are indicators whether any of the health history code type and code pair occurs in the set of codes.}
 
 \item{collapse}{string, a column name on which to collapse the data.table.
-Used in case we wish to assess whether given health history codes are present within all the same instances of \emph{collapse}. See vignette for details.}
+Used in case we wish to assess whether multiple health history codes are present within all the same instances of \emph{collapse}. See vignette for details.}
 
 \item{code_time}{string, column name of the time column. Defaults to \emph{time_phy}. Used in case collapse is present to provide the earliest or latest instance of health history information.}
 
-\item{time_type}{string, if multiple health histories are present within the same case of \emph{collapse}, which timepoint to return. Supported are: "earliest" or "latest". Defaults to \emph{earliest}.}
+\item{aggr_type}{string, if multiple health histories are present within the same case of \emph{collapse}, which timepoint to return. Supported are: "earliest" or "latest". Defaults to \emph{earliest}.}
 
-\item{nThread}{integer, number of threads to use by \emph{dopar} for parallelization. If it is set to 1, then no parallel backends are created and the function is executed sequentially.
-On windows machines sockets are used, while on other operating systems fork parallelization is used.}
+\item{nThread}{integer, number of threads to use for parallelization. If it is set to 1, then no parallel backends are created and the function is executed sequentially.}
 }
 \value{
 data.table, with indicator columns whether the any of the given health histories are reported.
@@ -43,7 +42,7 @@ If \emph{collapse} is present, then only unique ID and the summary columns are r
 }
 \description{
 Analyzes health history data loaded using \emph{load_phy}. Searches health history columns for a specified set of codes.
-By default, the data.table is returned with new columns corresponding to boolean values, whether given group of diagnoses are present in the given diagnosis.
+By default, the data.table is returned with new columns corresponding to boolean values, whether given group of health history data are present within the respective columns.
 If \emph{collapse} is given, then the information is aggregated based-on the \emph{collapse} column and the earliest of latest time of the given diagnosis is provided.
 }
 \examples{
@@ -55,6 +54,6 @@ data_phy_parse <- convert_phy(d = data_phy, codes_to_find = anthropometrics, nTh
 #Search for for Height and Weight codes and summarize per patient providing earliest time
 anthropometrics <- list(Weight = c("LMR:3688", "EPIC:WGT"), Height = c("LMR:3771", "EPIC:HGT"))
 data_phy_parse <- convert_phy(d = data_phy, codes_to_find = anthropometrics, nThread = 2,
-collapse = "ID_MERGE", time_type = "earliest")
+collapse = "ID_MERGE", aggr_type = "earliest")
 }
 }

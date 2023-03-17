@@ -3,7 +3,7 @@
 \encoding{UTF-8}
 \name{all_ids_mi2b2}
 \alias{all_ids_mi2b2}
-\title{Creates a vector of all possible IDs for mi2b2 workbench}
+\title{Legacy function to create a vector of all possible IDs for mi2b2 workbench}
 \usage{
 all_ids_mi2b2(type = "MGH", d_mrn, d_con)
 }
@@ -15,13 +15,11 @@ all_ids_mi2b2(type = "MGH", d_mrn, d_con)
 \item{d_con}{data.table, parsed con dataset using the \emph{load_con} function.}
 }
 \value{
-vector, with all MGH or BWH IDs that occur in the con and mrn datasources for all patients. This is required to request mi2b2 workbench allowing access to
+vector, with all MGH or BWH IDs that occur in the con and mrn datasources for all patients. Previously this was required to for mi2b2 workbenches allowing access to
 all possible images of the patients, even if the MGH or BWH changed over time.
 }
 \description{
-Gathers all possible IDs from different input sources to provide a vector of all possible MGH or BWH IDs to be used as a data request for mi2b2 workbench.
-mi2b2 workbench only works with MGH or BWH IDs, therefore curated IDs, such as PMRN cannot be used. However, as MGH and BWH IDs may change over time,
-to access all possible images for given patients, a full list of all IDs over time for each patient is needed. For this all possible IDs need to gathered and returned.
+Legacy function to gather all possible MGH and BWH IDs from mrn.txt and con.txt input sources to provide a vector of all possible MGH or BWH IDs to be used as a data request for mi2b2 workbench.
 }
 \examples{
 \dontrun{

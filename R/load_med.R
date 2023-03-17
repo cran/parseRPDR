@@ -1,9 +1,9 @@
 #' @title Loads medication order detail into R.
 #' @export
 #'
-#' @description Loads medication order detail information into the R environment.
+#' @description Loads medication order detail information into the R environment, both Med and Mee files.
 #'
-#' @param file string, full file path to Enc.txt or Exc.txt
+#' @param file string, full file path to Med.txt or Mee.txt
 #' @param merge_id string, column name to use to create \emph{ID_MERGE} column used to merge different datasets. Defaults to \emph{EPIC_PMRN},
 #' as it is the preferred MRN in the RPDR system.
 #' @param sep string, divider between hospital ID and MRN. Defaults to \emph{:}.
@@ -33,10 +33,10 @@
 #'  \item{med_code}{string, Medication code associated with the "Code_type" value, corresponds to Code in RPDR.}
 #'  \item{med_code_type}{string, Standardized classification system or custom source value used to identify the medication, corresponds to Code_Type in RPDR.}
 #'  \item{med_quant}{string, Number of units of the medication ordered, corresponds to Quantity in RPDR.}
-#'  \item{med_prov}{string, Ordering provider for the medication, corresponds to Provider in RPDR. Punctuation marks are removed.}
+#'  \item{med_prov}{string, Ordering provider for the medication, corresponds to Provider in RPDR.}
 #'  \item{med_clinic}{string, Specific department/location where the medication was ordered or administered, corresponds to Clinic in RPDR.}
 #'  \item{med_hosp}{string, Facility where the medication was ordered or administered, corresponds to Hospital in RPDR.}
-#'  \item{med_inpatient}{string, Identifies whether the medication was ordered with an Inpatient or Outpatient indication, corresponds to Inpatient_Outpatient in RPDR. Punctuation marks are removed.}
+#'  \item{med_inpatient}{string, Identifies whether the medication was ordered with an Inpatient or Outpatient indication, corresponds to Inpatient_Outpatient in RPDR.}
 #'  \item{med_add_info}{string, Additional administration information about the medication, corresponds to Additional_Info in RPDR.}
 #'  }
 #' @encoding UTF-8
@@ -49,7 +49,7 @@
 #' d_med <- load_med(file = "test_Med.txt", nThread = 1)
 #'
 #' #Use parallel processing and parse data in MRN_Type and MRN columns and keep all IDs
-#' d_med <- load_med(file = "test_Med.txt", nThread = 20, mrn_type = TRUE, perc = 1)
+#' d_mee <- load_med(file = "test_Mee.txt", nThread = 20, mrn_type = TRUE, perc = 1)
 #' }
 
 load_med <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard", perc = 0.6, na = TRUE, identical = TRUE, nThread = parallel::detectCores()-1, mrn_type = FALSE) {
@@ -61,17 +61,17 @@ load_med <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard",
 
   #Add additional information
   DATA$time_med        <- as.POSIXct(data_raw$Medication_Date, format = "%m/%d/%Y")
-  DATA$time_med_detail <- pretty_text(data_raw$Medication_Date_Detail, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$med             <- pretty_text(data_raw$Medication, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$med_code        <- pretty_text(data_raw$Code, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$med_code_type   <- pretty_text(data_raw$Code_Type, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$med_quant       <- pretty_text(data_raw$Quantity, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$med_prov        <- pretty_text(data_raw$Provider, remove_after = FALSE, remove_white = FALSE)
-  DATA$med_clinic      <- pretty_text(data_raw$Clinic, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$med_hosp        <- pretty_text(data_raw$Hospital, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$med_inpatient   <- pretty_text(data_raw$Inpatient_Outpatient, remove_after = FALSE, remove_white = FALSE)
-  DATA$med_add_info    <- pretty_text(data_raw$Additional_Info, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$med_enc_numb    <- pretty_text(data_raw$Encounter_number, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
+  DATA$time_med_detail <- pretty_text(data_raw$Medication_Date_Detail)
+  DATA$med             <- pretty_text(data_raw$Medication)
+  DATA$med_code        <- pretty_text(data_raw$Code)
+  DATA$med_code_type   <- pretty_text(data_raw$Code_Type)
+  DATA$med_quant       <- pretty_text(data_raw$Quantity)
+  DATA$med_prov        <- pretty_text(data_raw$Provider)
+  DATA$med_clinic      <- pretty_text(data_raw$Clinic)
+  DATA$med_hosp        <- pretty_text(data_raw$Hospital)
+  DATA$med_inpatient   <- pretty_text(data_raw$Inpatient_Outpatient)
+  DATA$med_add_info    <- pretty_text(data_raw$Additional_Info)
+  DATA$med_enc_numb    <- pretty_text(data_raw$Encounter_number)
 
   if(dim(DATA)[1] != 1) {DATA <- remove_column(dt = DATA, na = na, identical = identical)}
   return(DATA)

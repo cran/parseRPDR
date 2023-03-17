@@ -18,7 +18,7 @@ load_med(
 )
 }
 \arguments{
-\item{file}{string, full file path to Enc.txt or Exc.txt}
+\item{file}{string, full file path to Med.txt or Mee.txt}
 
 \item{merge_id}{string, column name to use to create \emph{ID_MERGE} column used to merge different datasets. Defaults to \emph{EPIC_PMRN},
 as it is the preferred MRN in the RPDR system.}
@@ -57,15 +57,15 @@ data table, with medication order information.
  \item{med_code}{string, Medication code associated with the "Code_type" value, corresponds to Code in RPDR.}
  \item{med_code_type}{string, Standardized classification system or custom source value used to identify the medication, corresponds to Code_Type in RPDR.}
  \item{med_quant}{string, Number of units of the medication ordered, corresponds to Quantity in RPDR.}
- \item{med_prov}{string, Ordering provider for the medication, corresponds to Provider in RPDR. Punctuation marks are removed.}
+ \item{med_prov}{string, Ordering provider for the medication, corresponds to Provider in RPDR.}
  \item{med_clinic}{string, Specific department/location where the medication was ordered or administered, corresponds to Clinic in RPDR.}
  \item{med_hosp}{string, Facility where the medication was ordered or administered, corresponds to Hospital in RPDR.}
- \item{med_inpatient}{string, Identifies whether the medication was ordered with an Inpatient or Outpatient indication, corresponds to Inpatient_Outpatient in RPDR. Punctuation marks are removed.}
+ \item{med_inpatient}{string, Identifies whether the medication was ordered with an Inpatient or Outpatient indication, corresponds to Inpatient_Outpatient in RPDR.}
  \item{med_add_info}{string, Additional administration information about the medication, corresponds to Additional_Info in RPDR.}
  }
 }
 \description{
-Loads medication order detail information into the R environment.
+Loads medication order detail information into the R environment, both Med and Mee files.
 }
 \examples{
 \dontrun{
@@ -76,6 +76,6 @@ d_med <- load_med(file = "test_Med.txt")
 d_med <- load_med(file = "test_Med.txt", nThread = 1)
 
 #Use parallel processing and parse data in MRN_Type and MRN columns and keep all IDs
-d_med <- load_med(file = "test_Med.txt", nThread = 20, mrn_type = TRUE, perc = 1)
+d_mee <- load_med(file = "test_Mee.txt", nThread = 20, mrn_type = TRUE, perc = 1)
 }
 }

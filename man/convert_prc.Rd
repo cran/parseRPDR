@@ -3,7 +3,7 @@
 \encoding{UTF-8}
 \name{convert_prc}
 \alias{convert_prc}
-\title{Searches procedures columns for given procedures}
+\title{Searches procedures columns for given procedures.}
 \usage{
 convert_prc(
   d,
@@ -12,7 +12,7 @@ convert_prc(
   codes_to_find = NULL,
   collapse = NULL,
   code_time = "time_prc",
-  time_type = "earliest",
+  aggr_type = "earliest",
   nThread = parallel::detectCores() - 1
 )
 }
@@ -28,14 +28,13 @@ The function searches for the given procedure code type and code pair and adds n
 These columns are indicators whether any of the procedure code type and code pair occurs in the set of codes.}
 
 \item{collapse}{string, a column name on which to collapse the data.table.
-Used in case we wish to assess whether given disease codes are present within all the same instances of \emph{collapse}. See vignette for details.}
+Used in case we wish to assess multiple procedure codes are present within all the same instances of \emph{collapse}. See vignette for details.}
 
-\item{code_time}{string, column name of the time column. Defaults to \emph{time_prc}. Used in case collapse is present to provide the earliest or latest instance of diagnosing the given disease.}
+\item{code_time}{string, column name of the time column. Defaults to \emph{time_prc}. Used in case collapse is present to provide the earliest or latest instance of the given procedure.}
 
-\item{time_type}{string, if multiple diagnoses are present within the same case of \emph{collapse}, which timepoint to return. Supported are: "earliest" or "latest". Defaults to \emph{earliest}.}
+\item{aggr_type}{string, if multiple procedures are present within the same case of \emph{collapse}, which timepoint to return. Supported are: "earliest" or "latest". Defaults to \emph{earliest}.}
 
-\item{nThread}{integer, number of threads to use by \emph{dopar} for parallelization. If it is set to 1, then no parallel backends are created and the function is executed sequentially.
-On windows machines sockets are used, while on other operating systems fork parallelization is used.}
+\item{nThread}{integer, number of threads to use for parallelization. If it is set to 1, then no parallel backends are created and the function is executed sequentially.}
 }
 \value{
 data.table, with indicator columns whether the any of the given procedures are reported.
@@ -55,6 +54,6 @@ data_prc_parse <- convert_prc(d = data_prc, codes_to_find = procedures, nThread 
 #Search for Anesthesia CPT codes
 procedures <- list(Anesthesia = c("CTP:00410", "CPT:00104"))
 data_prc_procedures <- convert_prc(d = data_prc, codes_to_find = procedures,
-nThread = 2, collapse = "ID_MERGE", time_type = "earliest")
+nThread = 2, collapse = "ID_MERGE", aggr_type = "earliest")
 }
 }

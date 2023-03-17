@@ -1,5 +1,5 @@
 #' @title Converts numerical codes to universal format specified by length.
-#' @keywords internal
+#' @export
 #'
 #' @description Creates numerical strings with given lengths by removing additional characters from the back and adding leading zeros if necessary.
 #'

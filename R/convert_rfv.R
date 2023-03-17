@@ -3,18 +3,17 @@
 #'
 #' @description Analyzes reason for visit data loaded using \emph{load_rfv}.
 #' If requested, the data.table is returned with new columns corresponding to boolean values, whether given group of ERFV are present in the given columns.
-#' If \emph{collapse} is given, then the information is aggregated based-on the \emph{collapse} column and the earliest of latest time of the given diagnosis is provided.
+#' If \emph{collapse} is given, then the information is aggregated based-on the \emph{collapse} column and the earliest of latest time of the given reason for visit is provided.
 #'
 #' @param d data.table, database containing reason for visit information data loaded using the \emph{load_rfv} function.
 #' @param code string vector, an array of column names to search.
 #' @param codes_to_find list, a list of arrays corresponding to sets of ERFV codes. The function searches the columns in code and the name of each list element will be created.
 #' These columns are indicators whether the given disease is present in the set of ERFV codes or not.
 #' @param collapse string, a column name on which to collapse the data.table.
-#' Used in case we wish to assess whether given ERFV are present within all the same instances of \emph{collapse}. See vignette for details.
-#' @param code_time string, column name of the time column. Defaults to \emph{time_rfv_start}. Used in case collapse is present to provide the earliest or latest instance of diagnosing the given disease.
-#' @param time_type string, if multiple diagnoses are present within the same case of \emph{collapse}, which timepoint to return. Supported are: "earliest" or "latest". Defaults to \emph{earliest}.
-#' @param nThread integer, number of threads to use by \emph{dopar} for parallelization. If it is set to 1, then no parallel backends are created and the function is executed sequentially.
-#' On windows machines sockets are used, while on other operating systems fork parallelization is used.
+#' Used in case we wish to assess whether multiple ERFV are present within  the same instances of \emph{collapse}. See vignette for details.
+#' @param code_time string, column name of the time column. Defaults to \emph{time_rfv_start}. Used in case collapse is present to provide the earliest or latest instance of reason for visit.
+#' @param aggr_type string, if multiple reason for visits are present within the same case of \emph{collapse}, which timepoint to return. Supported are: "earliest" or "latest". Defaults to \emph{earliest}.
+#' @param nThread integer, number of threads to use for parallelization. If it is set to 1, then no parallel backends are created and the function is executed sequentially.
 #'
 #' @return data.table, with indicator columns if provided.
 #' If \emph{collapse} is present, then only unique ID and the summary columns are returned.
@@ -31,7 +30,7 @@
 #' }
 
 convert_rfv <- function(d, code = "rfv_concept_id", codes_to_find = NULL,
-                        collapse = NULL, code_time = "time_rfv_start", time_type = "earliest", nThread = parallel::detectCores()-1) {
+                        collapse = NULL, code_time = "time_rfv_start", aggr_type = "earliest", nThread = parallel::detectCores()-1) {
 
   .SD=.N=.I=.GRP=.BY=.EACHI=..=..code=.SDcols=i=j=time_to_db=..which_ids_to=..which_ids_from=..collapse=. <- NULL
 
@@ -40,11 +39,7 @@ convert_rfv <- function(d, code = "rfv_concept_id", codes_to_find = NULL,
     `%exec%` <- foreach::`%do%`
   } else {
     if(length(codes_to_find) > 0 & length(codes_to_find) < nThread) {nThread <- length(codes_to_find)}
-    if(.Platform$OS.type == "windows") {
-      cl <- parallel::makeCluster(nThread, outfile = "", type = "PSOCK", methods = FALSE, useXDR = FALSE)
-    } else{
-      cl <- parallel::makeCluster(nThread, outfile = "", type = "FORK", methods = FALSE, useXDR = FALSE)
-    }
+    cl <- parallel::makeCluster(nThread, methods = FALSE, useXDR = FALSE)
     doParallel::registerDoParallel(cl)
     `%exec%` <- foreach::`%dopar%`
   }
@@ -67,7 +62,7 @@ convert_rfv <- function(d, code = "rfv_concept_id", codes_to_find = NULL,
           d[, names(codes_to_find[i]) := any(.SD %in% unlist(codes_to_find[i])), .SDcols = code, by=1:nrow(d)]
           ID_dt <- unique(d[, collapse, with = FALSE]) #Get IDs
 
-          if(time_type == "earliest") { #Find time
+          if(aggr_type == "earliest") { #Find time
             diag_coll <- d[, .(var_time = min(get(code_time))), by=c(collapse, names(codes_to_find[i]))]
           } else {
             diag_coll <- d[, .(var_time = max(get(code_time))), by=c(collapse, names(codes_to_find[i]))]

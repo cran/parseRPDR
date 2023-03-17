@@ -50,7 +50,7 @@ data table, with reason for visit information.
  \item{ID_rfv_loc}{string, if mrn_type == TRUE, then the data in \emph{MRN_Type} and \emph{MRN} are parsed into IDs corresponding to locations \emph{(loc)}. Data is formatted using pretty_mrn().}
  \item{time_rfv_start}{POSIXct, Start date of the encounter, corresponds to Start_Date in RPDR. Converted to POSIXct format.}
  \item{time_rfv_end}{POSIXct, End date of the encounter, corresponds to End_Date in RPDR. Converted to POSIXct format.}
- \item{rfv_provider}{string, Primary provider for the encounter, corresponds to Provider in RPDR. Punctuation marks are removed.}
+ \item{rfv_provider}{string, Primary provider for the encounter, corresponds to Provider in RPDR.}
  \item{rfv_hosp}{string, Facility where the encounter occurred, corresponds to Hospital in RPDR.}
  \item{rfv_clinic}{string, Specific department/location where the patient encounter took place, corresponds to Clinic in RPDR.}
  \item{rfv_chief_complaint}{string, Description of the chief complaint/reason for visit, corresponds to Chief_Complaint in RPDR.}

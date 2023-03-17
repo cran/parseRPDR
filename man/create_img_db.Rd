@@ -7,7 +7,7 @@
 \usage{
 create_img_db(
   path,
-  ext = c(".dcm", ".dicom", ".ima"),
+  ext = c(".dcm", ".dicom", ".ima", ".tmp", ""),
   all = TRUE,
   keywords = c("StudyDate", "StudyTime", "SeriesDate", "SeriesTime", "AcquisitionDate",
     "AcquisitionTime", "ConversionType", "Manufacturer", "InstitutionName",

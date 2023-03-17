@@ -18,7 +18,7 @@ load_prc(
 )
 }
 \arguments{
-\item{file}{string, full file path to Prc.txt.}
+\item{file}{string, full file path to Prc.txt or Pec.txt.}
 
 \item{merge_id}{string, column name to use to create \emph{ID_MERGE} column used to merge different datasets. Defaults to \emph{EPIC_PMRN},
 as it is the preferred MRN in the RPDR system.}
@@ -54,15 +54,15 @@ data table, with procedural information.
  \item{prc_code_type}{string, Standardized classification system or custom source value associated with the procedure code, corresponds to Code_type in RPDR.}
  \item{prc_flag}{string, Qualifier for the diagnosis, corresponds to Procedure_Flag in RPDR.}
  \item{prc_quantity}{string, Number of the procedures that were ordered for this record, corresponds to Quantity in RPDR.}
- \item{prc_provider}{string, Provider identifies the health care clinician performing the procedure, corresponds to Provider in RPDR. Punctuation marks are removed.}
+ \item{prc_provider}{string, Provider identifies the health care clinician performing the procedure, corresponds to Provider in RPDR.}
  \item{prc_clinic}{string, Specific department/location where the procedure was ordered or performed, corresponds to Clinic in RPDR.}
  \item{prc_hosp}{string, Facility where the procedure was ordered or performed, corresponds to Hospital in RPDR.}
- \item{prc_inpatient}{string, classifies the type of encounter where the procedure was performed or ordered, Punctuation marks are removed.}
+ \item{prc_inpatient}{string, classifies the type of encounter where the procedure was performed or ordered.}
  \item{prc_enc_num}{string, Unique identifier of the record/visit, displayed in the following format: Source System - Institution Number, corresponds to Encounter_number in RPDR.}
  }
 }
 \description{
-Loads Clinical procedure information into the R environment.
+Loads Clinical procedure information into the R environment, both Prc and Pec files.
 }
 \examples{
 \dontrun{
@@ -73,6 +73,6 @@ d_prc <- load_prc(file = "test_Prc.txt")
 d_prc <- load_prc(file = "test_Prc.txt", nThread = 1)
 
 #Use parallel processing and parse data in MRN_Type and MRN columns and keep all IDs
-d_prc <- load_prc(file = "test_Prc.txt", nThread = 20, mrn_type = TRUE, perc = 1)
+d_pec <- load_prc(file = "test_Pec.txt", nThread = 20, mrn_type = TRUE, perc = 1)
 }
 }

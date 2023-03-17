@@ -55,8 +55,7 @@ In case of ties for \emph{closest} or \emph{earliest}, all are returned. Default
 
 \item{keep_data}{boolean, whether to include empty rows with only the \emph{d_from_ID} column filed out for cases that have data in the \emph{d_from}, but not within the time range. Defaults to \emph{FALSE}.}
 
-\item{nThread}{integer, number of threads to use by \emph{dopar} for parallelization. If it is set to 1, then no parallel backends are created and the function is executed sequentially.
-On windows machines sockets are used, while on other operating systems fork parallelization is used.}
+\item{nThread}{integer, number of threads to use by \emph{dopar} for parallelization. If it is set to 1, then no parallel backends are created and the function is executed sequentially.}
 }
 \value{
 data table, with \emph{d_from} filtered to ones only within the timeframe. The columns of \emph{d_from} are returned with the corresponding time column in \emph{data_to}

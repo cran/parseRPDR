@@ -28,12 +28,12 @@
 #'  \item{phy_name}{string, Type of clinical value/observation recorded, corresponds to Concept_Name in RPDR.}
 #'  \item{phy_code}{string, Source-specific identifier for the specific type of clinical observation, corresponds to Code in RPDR.}
 #'  \item{phy_code_type}{string, Source system for the value, corresponds to Code_type in RPDR.}
-#'  \item{phy_result}{string, Value associated with the clinical observation. Note: BMI results are calculated internally in the RPDR, corresponds to Results in RPDR. Punctuation marks and white spaces are removed.}
-#'  \item{phy_unit}{string, Units associated with the clinical observation, corresponds to Units in RPDR. Punctuation marks and white spaces are removed.}
-#'  \item{phy_provider}{string, Provider of record for the encounter where the observation was recorded, corresponds to Providers in RPDR. Punctuation marks are removed.}
+#'  \item{phy_result}{string, Value associated with the clinical observation. Note: BMI results are calculated internally in the RPDR, corresponds to Results in RPDR.}
+#'  \item{phy_unit}{string, Units associated with the clinical observation, corresponds to Units in RPDR.}
+#'  \item{phy_provider}{string, Provider of record for the encounter where the observation was recorded, corresponds to Providers in RPDR.}
 #'  \item{phy_clinic}{string, Specific department/location where the patient observation was recorded, corresponds to Clinic in RPDR.}
 #'  \item{phy_hosp}{string, Facility where the observation was recorded, corresponds to Hospital in RPDR.}
-#'  \item{phy_inpatient}{string, Classifies the type of encounter where the observation was entered, corresponds to Inpatient_Outpatient in RPDR. Punctuation marks are removed.}
+#'  \item{phy_inpatient}{string, Classifies the type of encounter where the observation was entered, corresponds to Inpatient_Outpatient in RPDR.}
 #'  \item{phy_enc_num}{string, Unique identifier of the record/visit. This values includes the source system and a unique identifier within the source system, corresponds to Encounter_number in RPDR.}
 #'  }
 #'
@@ -59,16 +59,16 @@ load_phy <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard",
 
   #Add additional information
   DATA$time_phy       <- as.POSIXct(data_raw$Date, format = "%m/%d/%Y")
-  DATA$phy_name       <- pretty_text(data_raw$Concept_Name, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$phy_code       <- pretty_text(data_raw$Code, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$phy_code_type  <- pretty_text(data_raw$Code_Type, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$phy_result     <- pretty_text(data_raw$Result, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$phy_unit       <- pretty_text(data_raw$Units, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$phy_provider   <- pretty_text(data_raw$Provider, remove_after = FALSE, remove_white = FALSE)
-  DATA$phy_clinic     <- pretty_text(data_raw$Clinic, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$phy_hosp       <- pretty_text(data_raw$Hospital, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$phy_inpatient  <- pretty_text(data_raw$Inpatient_Outpatient, remove_after = FALSE, remove_white = FALSE)
-  DATA$phy_enc_num    <- pretty_text(data_raw$Encounter_number, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
+  DATA$phy_name       <- pretty_text(data_raw$Concept_Name)
+  DATA$phy_code       <- pretty_text(data_raw$Code)
+  DATA$phy_code_type  <- pretty_text(data_raw$Code_Type)
+  DATA$phy_result     <- pretty_text(data_raw$Result)
+  DATA$phy_unit       <- pretty_text(data_raw$Units)
+  DATA$phy_provider   <- pretty_text(data_raw$Provider)
+  DATA$phy_clinic     <- pretty_text(data_raw$Clinic)
+  DATA$phy_hosp       <- pretty_text(data_raw$Hospital)
+  DATA$phy_inpatient  <- pretty_text(data_raw$Inpatient_Outpatient)
+  DATA$phy_enc_num    <- pretty_text(data_raw$Encounter_number)
 
   if(dim(DATA)[1] != 1) {DATA <- remove_column(dt = DATA, na = na, identical = identical)}
   return(DATA)

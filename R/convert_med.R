@@ -2,8 +2,8 @@
 #' @export
 #'
 #' @description Analyzes medication data loaded using \emph{load_med}.
-#' By default, the data.table is returned with new columns corresponding to boolean values, whether given group of diagnoses are present in the given diagnosis.
-#' If \emph{collapse} is given, then the information is aggregated based-on the \emph{collapse} column and the earliest of latest time of the given diagnosis is provided.
+#' By default, the data.table is returned with new columns corresponding to boolean values, whether given group of medications are present.
+#' If \emph{collapse} is given, then the information is aggregated based-on the \emph{collapse} column and the earliest of latest time of the given medication is provided.
 #'
 #' @param d data.table, database containing medication data loaded using the \emph{load_med} function.
 #' @param code string, column name of the medication column. Defaults to \emph{med}.
@@ -12,9 +12,8 @@
 #' @param collapse string, a column name on which to collapse the data.table.
 #' Used in case we wish to assess whether given medications are present within all the same instances of \emph{collapse}. See vignette for details.
 #' @param code_time string, column name of the time column. Defaults to \emph{time_med}. Used in case collapse is present to provide the earliest or latest instance of diagnosing the given disease.
-#' @param time_type string, if multiple diagnoses are present within the same case of \emph{collapse}, which timepoint to return. Supported are: "earliest" or "latest". Defaults to \emph{earliest}.
-#' @param nThread integer, number of threads to use by \emph{dopar} for parallelization. If it is set to 1, then no parallel backends are created and the function is executed sequentially.
-#' On windows machines sockets are used, while on other operating systems fork parallelization is used.
+#' @param aggr_type string, if multiple occurences of the medications are present within the same case of \emph{collapse}, which timepoint to return. Supported are: "earliest" or "latest". Defaults to \emph{earliest}.
+#' @param nThread integer, number of threads to use for parallelization. If it is set to 1, then no parallel backends are created and the function is executed sequentially.
 #'
 #' @return data.table, with indicator columns whether given group of codes_to_find is present or not.
 #' If \emph{collapse} is present, then only unique ID and the summary columns are returned.
@@ -35,7 +34,7 @@
 #' }
 
 convert_med <- function(d, code = "med", codes_to_find = NULL, collapse = NULL,
-                        code_time = "time_med", time_type = "earliest", nThread = parallel::detectCores()-1) {
+                        code_time = "time_med", aggr_type = "earliest", nThread = parallel::detectCores()-1) {
 
   .SD=.N=.I=.GRP=.BY=.EACHI=..=..cols=.SDcols=i=j=time_to_db=..which_ids_to=..which_ids_from=..collapse=. <- NULL
 
@@ -44,11 +43,7 @@ convert_med <- function(d, code = "med", codes_to_find = NULL, collapse = NULL,
     `%exec%` <- foreach::`%do%`
   } else {
     if(length(codes_to_find) > 0 & length(codes_to_find) < nThread) {nThread <- length(codes_to_find)}
-    if(.Platform$OS.type == "windows") {
-      cl <- parallel::makeCluster(nThread, outfile = "", type = "PSOCK", methods = FALSE, useXDR = FALSE)
-    } else{
-      cl <- parallel::makeCluster(nThread, outfile = "", type = "FORK", methods = FALSE, useXDR = FALSE)
-    }
+    cl <- parallel::makeCluster(nThread, methods = FALSE, useXDR = FALSE)
     doParallel::registerDoParallel(cl)
     `%exec%` <- foreach::`%dopar%`
   }
@@ -77,7 +72,7 @@ convert_med <- function(d, code = "med", codes_to_find = NULL, collapse = NULL,
         comb <- cbind(comb, med_boo)
         ID_dt <- unique(comb[, collapse, with = FALSE]) #Get IDs
 
-        if(time_type == "earliest") { #Find time
+        if(aggr_type == "earliest") { #Find time
           diag_coll <- comb[, .(var_time = min(get(code_time))), by=c(collapse, names(codes_to_find[i]))]
         } else {
           diag_coll <- comb[, .(var_time = max(get(code_time))), by=c(collapse, names(codes_to_find[i]))]

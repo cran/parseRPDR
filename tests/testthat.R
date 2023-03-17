@@ -1,4 +1,4 @@
 library(testthat)
 library(parseRPDR)
 
-test_check("parseRPDR")
+testthat::test_check("parseRPDR")

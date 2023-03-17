@@ -2,7 +2,7 @@
 #' @export
 #'
 #' @description Analyzes diagnosis data loaded using \emph{load_dia}. Searches diagnosis columns for a specified set of diseases.
-#' By default, the data.table is returned with new columns corresponding to boolean values, whether given group of diagnoses are present in the given diagnosis.
+#' By default, the data.table is returned with new columns corresponding to boolean values, whether given group of diagnoses are present among the diagnoses.
 #' If \emph{collapse} is given, then the information is aggregated based-on the \emph{collapse} column and the earliest of latest time of the given diagnosis is provided.
 #'
 #'
@@ -15,9 +15,8 @@
 #' @param collapse string, a column name on which to collapse the data.table.
 #' Used in case we wish to assess whether given disease codes are present within all the same instances of \emph{collapse}. See vignette for details.
 #' @param code_time string, column name of the time column. Defaults to \emph{time_dia}. Used in case collapse is present to provide the earliest or latest instance of diagnosing the given disease.
-#' @param time_type string, if multiple diagnoses are present within the same case of \emph{collapse}, which timepoint to return. Supported are: "earliest" or "latest". Defaults to \emph{earliest}.
-#' @param nThread integer, number of threads to use by \emph{dopar} for parallelization. If it is set to 1, then no parallel backends are created and the function is executed sequentially.
-#' On windows machines sockets are used, while on other operating systems fork parallelization is used.
+#' @param aggr_type string, if multiple diagnoses are present within the same case of \emph{collapse}, which timepoint to return. Supported are: "earliest" or "latest". Defaults to \emph{earliest}.
+#' @param nThread integer, number of threads to use for parallelization. If it is set to 1, then no parallel backends are created and the function is executed sequentially.
 #'
 #' @return data.table, with indicator columns whether the any of the given diagnoses are reported.
 #' If \emph{collapse} is present, then only unique ID and the summary columns are returned.
@@ -32,11 +31,11 @@
 #' #Search for Hypertension and Stroke ICD codes and summarize per patient providing earliest time
 #' diseases <- list(HT = c("ICD10:I10"), Stroke = c("ICD9:434.91", "ICD9:I63.50"))
 #' data_dia_disease <-  convert_dia(d = data_dia, codes_to_find = diseases, nThread = 2,
-#' collapse = "ID_MERGE", time_type = "earliest")
+#' collapse = "ID_MERGE", aggr_type = "earliest")
 #' }
 
 convert_dia <- function(d, code = "dia_code", code_type = "dia_code_type",  codes_to_find = NULL,
-                        collapse = NULL, code_time = "time_dia", time_type = "earliest", nThread = parallel::detectCores()-1) {
+                        collapse = NULL, code_time = "time_dia", aggr_type = "earliest", nThread = parallel::detectCores()-1) {
 
   .SD=.N=.I=.GRP=.BY=.EACHI=..=..cols=.SDcols=i=j=time_to_db=..which_ids_to=..which_ids_from=combined=..collapse=. <- NULL
 
@@ -45,11 +44,7 @@ convert_dia <- function(d, code = "dia_code", code_type = "dia_code_type",  code
     `%exec%` <- foreach::`%do%`
   } else {
     if(length(codes_to_find) > 0 & length(codes_to_find) < nThread) {nThread <- length(codes_to_find)}
-    if(.Platform$OS.type == "windows") {
-      cl <- parallel::makeCluster(nThread, outfile = "", type = "PSOCK", methods = FALSE, useXDR = FALSE)
-    } else{
-      cl <- parallel::makeCluster(nThread, outfile = "", type = "FORK", methods = FALSE, useXDR = FALSE)
-    }
+    cl <- parallel::makeCluster(nThread, methods = FALSE, useXDR = FALSE)
     doParallel::registerDoParallel(cl)
     `%exec%` <- foreach::`%dopar%`
   }
@@ -76,7 +71,7 @@ convert_dia <- function(d, code = "dia_code", code_type = "dia_code_type",  code
         comb[, names(codes_to_find[i]) := any(.SD %in% unlist(codes_to_find[i])), .SDcols = "combined", by=1:nrow(comb)]
         ID_dt <- unique(comb[, collapse, with = FALSE]) #Get IDs
 
-        if(time_type == "earliest") { #Find time
+        if(aggr_type == "earliest") { #Find time
           diag_coll <- comb[, .(var_time = min(get(code_time))), by=c(collapse, names(codes_to_find[i]))]
         } else {
           diag_coll <- comb[, .(var_time = max(get(code_time))), by=c(collapse, names(codes_to_find[i]))]

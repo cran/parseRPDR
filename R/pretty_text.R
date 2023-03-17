@@ -1,19 +1,19 @@
 #' @title Removes spaces, special characters and capitals from string vector.
-#' @keywords internal
+#' @export
 #'
 #' @description Removes paces, special characters and capitals from string vector and converts unknowns to NA.
 #'
-#' @param v vector, integer or sting vector with numerical values. Defaults to \emph{TRUE}.
-#' @param remove_after boolean whether to remove text after \emph{-}. Defaults to \emph{TRUE}.
-#' @param remove_punc boolean, whether to remove punctuation marks. Defaults to \emph{TRUE}.
-#' @param remove_white boolean, whether to remove white spaces. Defaults to \emph{TRUE}.
+#' @param v vector, integer or sting vector with numerical values.
+#' @param remove_after boolean whether to remove text after \emph{-}. Defaults to \emph{FALSE}.
+#' @param remove_punc boolean, whether to remove punctuation marks. Defaults to \emph{FALSE}.
+#' @param remove_white boolean, whether to remove white spaces. Defaults to \emph{FALSE}.
 #' @param add_na boolean, whether to change text indicating NA to NA values in R. Defaults to \emph{TRUE}.
 #'
 #' @return vector, with characters formatted accordingly.
 #'
 #' @encoding UTF-8
 
-pretty_text <- function(v, remove_after = TRUE, remove_punc = TRUE, remove_white = TRUE, add_na = TRUE) {
+pretty_text <- function(v, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE, add_na = TRUE) {
 
   #Set NA values
   if(add_na) {

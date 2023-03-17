@@ -19,8 +19,7 @@ convert_notes(
 
 \item{anchors}{string array, elements to search for in the text report.}
 
-\item{nThread}{integer, number of threads to use by \emph{dopar} for parallelization. If it is set to 1, then no parallel backends are created and the function is executed sequentially.
-On windows machines sockets are used, while on other operating systems fork parallelization is used.}
+\item{nThread}{integer, number of threads to use for parallelization. If it is set to 1, then no parallel backends are created and the function is executed sequentially.}
 }
 \value{
 data.table, with new columns corresponding to elements in \emph{anchors}.

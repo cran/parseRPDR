@@ -11,7 +11,7 @@ convert_med(
   codes_to_find = NULL,
   collapse = NULL,
   code_time = "time_med",
-  time_type = "earliest",
+  aggr_type = "earliest",
   nThread = parallel::detectCores() - 1
 )
 }
@@ -28,10 +28,9 @@ Used in case we wish to assess whether given medications are present within all 
 
 \item{code_time}{string, column name of the time column. Defaults to \emph{time_med}. Used in case collapse is present to provide the earliest or latest instance of diagnosing the given disease.}
 
-\item{time_type}{string, if multiple diagnoses are present within the same case of \emph{collapse}, which timepoint to return. Supported are: "earliest" or "latest". Defaults to \emph{earliest}.}
+\item{aggr_type}{string, if multiple occurences of the medications are present within the same case of \emph{collapse}, which timepoint to return. Supported are: "earliest" or "latest". Defaults to \emph{earliest}.}
 
-\item{nThread}{integer, number of threads to use by \emph{dopar} for parallelization. If it is set to 1, then no parallel backends are created and the function is executed sequentially.
-On windows machines sockets are used, while on other operating systems fork parallelization is used.}
+\item{nThread}{integer, number of threads to use for parallelization. If it is set to 1, then no parallel backends are created and the function is executed sequentially.}
 }
 \value{
 data.table, with indicator columns whether given group of codes_to_find is present or not.
@@ -39,8 +38,8 @@ If \emph{collapse} is present, then only unique ID and the summary columns are r
 }
 \description{
 Analyzes medication data loaded using \emph{load_med}.
-By default, the data.table is returned with new columns corresponding to boolean values, whether given group of diagnoses are present in the given diagnosis.
-If \emph{collapse} is given, then the information is aggregated based-on the \emph{collapse} column and the earliest of latest time of the given diagnosis is provided.
+By default, the data.table is returned with new columns corresponding to boolean values, whether given group of medications are present.
+If \emph{collapse} is given, then the information is aggregated based-on the \emph{collapse} column and the earliest of latest time of the given medication is provided.
 }
 \examples{
 \dontrun{

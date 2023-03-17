@@ -50,7 +50,7 @@
 #' keywords = c("PatientID", "AccessionNumber"))
 #' }
 
-create_img_db <- function(path, ext = c(".dcm", ".dicom", ".ima"), all = TRUE, keywords = c("StudyDate", "StudyTime", "SeriesDate", "SeriesTime", "AcquisitionDate", "AcquisitionTime",
+create_img_db <- function(path, ext = c(".dcm", ".dicom", ".ima", ".tmp", ""), all = TRUE, keywords = c("StudyDate", "StudyTime", "SeriesDate", "SeriesTime", "AcquisitionDate", "AcquisitionTime",
                                                                       "ConversionType", "Manufacturer", "InstitutionName", "InstitutionalDepartmentName",
                                                                       "ReferringPhysicianName", "Modality", "ManufacturerModelName",
                                                                       "StudyDescription", "SeriesDescription", "StudyComments", "ProtocolName", "RequestedProcedureID", "ViewPosition",

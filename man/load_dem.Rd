@@ -48,21 +48,21 @@ data table, with demographic information data.
  \item{ID_dem_PMRN}{string, Epic medical record number. This value is unique across Epic instances within the Partners network.
  from \emph{dem} datasource, corresponds to EPIC_PMRN in RPDR. Data is formatted using pretty_mrn().}
  \item{ID_dem_loc}{string, if mrn_type == TRUE, then the data in \emph{MRN_Type} and \emph{MRN} are parsed into IDs corresponding to locations \emph{(loc)}. Data is formatted using pretty_mrn().}
- \item{gender_legal_sex}{string, Patient's legal sex, corresponds to Gender_Legal_Sex in RPDR. Punctuation marks and white spaces are removed.}
- \item{sex_at_birth}{string, Patient’s sex at time of birth, corresponds to Sex_at_Birth in RPDR. Punctuation marks and white spaces are removed.}
- \item{gender_identity}{string, Patient's personal conception of their gender, corresponds to Gender_Identity in RPDR. Punctuation marks and white spaces are removed.}
+ \item{gender_legal_sex}{string, Patient's legal sex, corresponds to Gender_Legal_Sex in RPDR.}
+ \item{sex_at_birth}{string, Patient’s sex at time of birth, corresponds to Sex_at_Birth in RPDR.}
+ \item{gender_identity}{string, Patient's personal conception of their gender, corresponds to Gender_Identity in RPDR.}
  \item{time_date_of_birth}{POSIXct, Patient's date of birth, corresponds to Date_of_Birth. Converted to POSIXct format.}
  \item{age}{string, Patient's current age (or age at death), corresponds to Age in RPDR.}
- \item{language}{string, Patient's preferred spoken language, corresponds to Language in RPDR. Punctuation marks and white spaces are removed.}
- \item{language_group}{string, Patient's preferred language: English or Non-English, corresponds to Language_Group in RPDR. Punctuation marks and white spaces are removed.}
- \item{race_1}{string, Patient's primary race, corresponds to Race1 in RPDR. Punctuation marks and white spaces are removed.}
- \item{race_2}{string, Patient's primary race if more than one race, corresponds to Race2 in RPDR. Punctuation marks and white spaces are removed.}
- \item{race_group}{string, Patient's Race Group as determined by Race1 and Race2, corresponds to Race_Group in RPDR. Punctuation marks and white spaces are removed.}
- \item{ethnic_group}{string, Patient's Ethnicity: Hispanic or Non Hispanic, corresponds to Ethnic_Group in RPDR. Punctuation marks and white spaces are removed.}
- \item{marital}{string, Patient's current marital status, corresponds to Marital_Status in RPDR. Punctuation marks and white spaces are removed.}
- \item{religion}{string, Patient-identified religious preference, corresponds to Religion in RPDR. Punctuation marks and white spaces are removed.}
- \item{veteran}{string, Patient's current military veteran status, corresponds to Is_a_veteran in RPDR. Punctuation marks and white spaces are removed.}
- \item{country_dem}{string, Patient's current country of residence from dem datasource, corresponds to Country in RPDR. Punctuation marks and white spaces are removed.}
+ \item{language}{string, Patient's preferred spoken language, corresponds to Language in RPDR.}
+ \item{language_group}{string, Patient's preferred language: English or Non-English, corresponds to Language_Group in RPDR.}
+ \item{race_1}{string, Patient's primary race, corresponds to Race1 in RPDR.}
+ \item{race_2}{string, Patient's primary race if more than one race, corresponds to Race2 in RPDR.}
+ \item{race_group}{string, Patient's Race Group as determined by Race1 and Race2, corresponds to Race_Group in RPDR.}
+ \item{ethnic_group}{string, Patient's Ethnicity: Hispanic or Non Hispanic, corresponds to Ethnic_Group in RPDR.}
+ \item{marital}{string, Patient's current marital status, corresponds to Marital_Status in RPDR.}
+ \item{religion}{string, Patient-identified religious preference, corresponds to Religion in RPDR.}
+ \item{veteran}{string, Patient's current military veteran status, corresponds to Is_a_veteran in RPDR.}
+ \item{country_dem}{string, Patient's current country of residence from dem datasource, corresponds to Country in RPDR.}
  \item{zip_dem}{string, Mailing zip code of patient's primary residence from dem datasource, corresponds to Zip_code in RPDR.Formatted to 5 character zip codes.}
  \item{vital_status}{string, Identifies if the patient is living or deceased.
  This data is updated monthly from the Partners registration system and the Social Security Death Master Index, corresponds to Vital_Status in RPDR. Punctuation marks are removed.}

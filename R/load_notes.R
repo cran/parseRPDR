@@ -73,7 +73,7 @@ load_notes <- function(file, type, merge_id = "EMPI", sep = ":", id_length = "st
   if(!format_orig) {
     message("Removing unnecessary carriage returns")
     record <- gsub("[\r\n]", " ", record) #remove carriage returns and new lines
-    message("Removing multuiple spaces")
+    message("Removing multiple spaces")
     record <- gsub("^ *|(?<= ) | *$", "", record, perl = TRUE) #remove multiple spaces
   }
 
@@ -118,10 +118,10 @@ load_notes <- function(file, type, merge_id = "EMPI", sep = ":", id_length = "st
 
   #Add additional information
   DATA[[paste0("time_", type)]]        <- as.POSIXct(data_raw$Report_Date_Time, format = "%m/%d/%Y %I:%M:%S %p")
-  DATA[[paste0(type, "_rep_num")]]     <- pretty_text(data_raw$Report_Number, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA[[paste0(type, "_rep_desc")]]    <- pretty_text(data_raw$Report_Description, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA[[paste0(type, "_rep_status")]]  <- pretty_text(data_raw$Report_Status, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA[[paste0(type, "_rep_type")]]    <- pretty_text(data_raw$Report_Type, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
+  DATA[[paste0(type, "_rep_num")]]     <- pretty_text(data_raw$Report_Number)
+  DATA[[paste0(type, "_rep_desc")]]    <- pretty_text(data_raw$Report_Description)
+  DATA[[paste0(type, "_rep_status")]]  <- pretty_text(data_raw$Report_Status)
+  DATA[[paste0(type, "_rep_type")]]    <- pretty_text(data_raw$Report_Type)
   if(load_report) {
     DATA[[paste0(type, "_rep_txt")]] <- data_raw$Report_Text
     if(format_orig) {

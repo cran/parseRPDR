@@ -27,8 +27,7 @@ In other cases the lengths are unchanged. Defaults to \emph{standard}.}
 
 \item{perc}{numeric, a number between 0-1 indicating which parsed ID columns to keep. Columns present in \emph{perc x 100\%} of patients have are kept.}
 
-\item{nThread}{integer, number of threads to use by \emph{dopar} for parallelization. If it is set to 1, then no parallel backends are created and the function is executed sequentially.
-On windows machines sockets are used, while on other operating systems fork parallelization is used.}
+\item{nThread}{integer, number of threads to use by \emph{dopar} for parallelization. If it is set to 1, then no parallel backends are created and the function is executed sequentially.}
 }
 \value{
 data table, with columns corresponding to MRNs in the string of delimited list of values.

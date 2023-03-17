@@ -25,15 +25,15 @@
 #'  \item{ID_dem_PMRN}{string, Epic medical record number. This value is unique across Epic instances within the Partners network.
 #'  from \emph{dem} datasource, corresponds to EPIC_PMRN in RPDR. Data is formatted using pretty_mrn().}
 #'  \item{ID_dem_loc}{string, if mrn_type == TRUE, then the data in \emph{MRN_Type} and \emph{MRN} are parsed into IDs corresponding to locations \emph{(loc)}. Data is formatted using pretty_mrn().}
-#'  \item{gender}{string, Patient's legal sex, corresponds to Gender in RPDR. Punctuation marks and white spaces are removed.}
+#'  \item{gender}{string, Patient's legal sex, corresponds to Gender in RPDR.}
 #'  \item{time_date_of_birth}{POSIXct, Patient's date of birth, corresponds to Date_of_Birth in RPDR. Converted to POSIXct format.}
 #'  \item{age}{string, Patient's current age (or age at death), corresponds to Age in RPDR.}
-#'  \item{language}{string, Patient's preferred spoken language, corresponds to Language in RPDR. Punctuation marks and white spaces are removed.}
-#'  \item{race}{string, Patient's primary race, corresponds to Race in RPDR. Punctuation marks and white spaces are removed.}
-#'  \item{marital}{string, Patient's current marital status, corresponds to Marital_Status in RPDR. Punctuation marks and white spaces are removed.}
-#'  \item{religion}{string, Patient-identified religious preference, corresponds to Religion in RPDR. Punctuation marks and white spaces are removed.}
-#'  \item{veteran}{string, Patient's current military veteran status, corresponds to Is_a_veteran in RPDR. Punctuation marks and white spaces are removed.}
-#'  \item{country_dem}{string, Patient's current country of residence from dem datasource, corresponds to Country in RPDR. Punctuation marks and white spaces are removed.}
+#'  \item{language}{string, Patient's preferred spoken language, corresponds to Language in RPDR.}
+#'  \item{race}{string, Patient's primary race, corresponds to Race in RPDR.}
+#'  \item{marital}{string, Patient's current marital status, corresponds to Marital_Status in RPDR.}
+#'  \item{religion}{string, Patient-identified religious preference, corresponds to Religion in RPDR.}
+#'  \item{veteran}{string, Patient's current military veteran status, corresponds to Is_a_veteran in RPDR.}
+#'  \item{country_dem}{string, Patient's current country of residence from dem datasource, corresponds to Country in RPDR.}
 #'  \item{zip_dem}{string, Mailing zip code of patient's primary residence from dem datasource, corresponds to Zip_code in RPDR.Formatted to 5 character zip codes.}
 #'  \item{vital_status}{string, Identifies if the patient is living or deceased.
 #'  This data is updated monthly from the Partners registration system and the Social Security Death Master Index, corresponds to Vital_Status in RPDR. Punctuation marks are removed.}
@@ -63,17 +63,17 @@ load_dem_old <- function(file, merge_id = "EMPI", sep = ":", id_length = "standa
   DATA     <- DATA[, 1:(raw_id-1)]
 
   #Add additional information
-  DATA$gender             <- pretty_text(data_raw$Gender, remove_after = FALSE)
+  DATA$gender             <- pretty_text(data_raw$Gender)
   DATA$time_date_of_birth <- as.POSIXct(data_raw$Date_of_Birth, format = "%m/%d/%Y")
-  DATA$age                <- pretty_text(data_raw$Age, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$language <- pretty_text(data_raw$Language, remove_white = FALSE)
-  DATA$race     <- pretty_text(data_raw$Race, remove_white = FALSE)
-  DATA$marital  <- pretty_text(data_raw$Marital_status, remove_white = FALSE)
-  DATA$religion <- pretty_text(data_raw$Religion, remove_white = FALSE)
-  DATA$veteran  <- pretty_text(data_raw$Is_a_veteran, remove_white = FALSE)
-  DATA$country_dem  <- pretty_text(data_raw$Country, remove_white = FALSE)
+  DATA$age                <- pretty_text(data_raw$Age)
+  DATA$language <- pretty_text(data_raw$Language)
+  DATA$race     <- pretty_text(data_raw$RaceE)
+  DATA$marital  <- pretty_text(data_raw$Marital_status,)
+  DATA$religion <- pretty_text(data_raw$Religion)
+  DATA$veteran  <- pretty_text(data_raw$Is_a_veteran)
+  DATA$country_dem  <- pretty_text(data_raw$Country)
   DATA$zip_dem      <- pretty_numbers(data_raw$Zip_code)
-  DATA$vital_status       <- pretty_text(data_raw$Vital_status, remove_after = FALSE, remove_white = FALSE)
+  DATA$vital_status       <- pretty_text(data_raw$Vital_status)
   DATA$time_date_of_death <- as.POSIXct(data_raw$Date_Of_Death, format = "%m/%d/%Y")
 
   if(dim(DATA)[1] != 1) {DATA <- remove_column(dt = DATA, na = na, identical = identical)}

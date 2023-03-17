@@ -18,7 +18,7 @@ load_dia(
 )
 }
 \arguments{
-\item{file}{string, full file path to Dia.txt.}
+\item{file}{string, full file path to Dia.txt or Dea.txt.}
 
 \item{merge_id}{string, column name to use to create \emph{ID_MERGE} column used to merge different datasets. Defaults to \emph{EPIC_PMRN},
 as it is the preferred MRN in the RPDR system.}
@@ -55,14 +55,14 @@ data table, with diagnoses information.
  \item{dia_code_type}{string, Standardized classification system or custom grouping associated with the diagnosis code, corresponds to Code_type in RPDR.}
  \item{dia_flag}{string, Qualifier for the diagnosis, if any, corresponds to Diagnosis_flag in RPDR.}
  \item{dia_enc_num}{string, Unique identifier of the record/visit. This values includes the source system, hospital, and a unique identifier within the source system, corresponds to Encounter_number in RPDR.}
- \item{dia_provider}{string, Provider of record for the encounter where the diagnosis was entered, corresponds to Provider in RPDR. Punctuation marks are removed.}
+ \item{dia_provider}{string, Provider of record for the encounter where the diagnosis was entered, corresponds to Provider in RPDR.}
  \item{dia_clinic}{string, Specific department/location where the patient encounter took place, corresponds to Clinic in RPDR.}
  \item{dia_hosp}{string, Facility where the encounter occurred, corresponds to Hospital in RPDR.}
  \item{dia_inpatient}{string, Identifies whether the diagnosis was noted during an inpatient or outpatient encounter, corresponds to Inpatient_Outpatient in RPDR. Punctuation marks removed.}
  }
 }
 \description{
-Loads diagnoses information into the R environment.
+Loads diagnoses information into the R environment, both Dia and Dea files.
 }
 \examples{
 \dontrun{
@@ -73,6 +73,6 @@ d_dia <- load_dia(file = "test_Dia.txt")
 d_dia <- load_dia(file = "test_Dia.txt", nThread = 1)
 
 #Use parallel processing and parse data in MRN_Type and MRN columns and keep all IDs
-d_dia <- load_dia(file = "test_Dia.txt", nThread = 20, mrn_type = TRUE, perc = 1)
+d_dea <- load_dia(file = "test_Dea.txt", nThread = 20, mrn_type = TRUE, perc = 1)
 }
 }

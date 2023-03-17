@@ -1,4 +1,4 @@
-#' @title Searches procedures columns for given procedures
+#' @title Searches procedures columns for given procedures.
 #' @export
 #'
 #' @description Analyzes procedure data loaded using \emph{load_prc}. Searches procedures columns for a specified set of procedures.
@@ -13,11 +13,10 @@
 #' The function searches for the given procedure code type and code pair and adds new boolean columns with the name of each list element.
 #' These columns are indicators whether any of the procedure code type and code pair occurs in the set of codes.
 #' @param collapse string, a column name on which to collapse the data.table.
-#' Used in case we wish to assess whether given disease codes are present within all the same instances of \emph{collapse}. See vignette for details.
-#' @param code_time string, column name of the time column. Defaults to \emph{time_prc}. Used in case collapse is present to provide the earliest or latest instance of diagnosing the given disease.
-#' @param time_type string, if multiple diagnoses are present within the same case of \emph{collapse}, which timepoint to return. Supported are: "earliest" or "latest". Defaults to \emph{earliest}.
-#' @param nThread integer, number of threads to use by \emph{dopar} for parallelization. If it is set to 1, then no parallel backends are created and the function is executed sequentially.
-#' On windows machines sockets are used, while on other operating systems fork parallelization is used.
+#' Used in case we wish to assess multiple procedure codes are present within all the same instances of \emph{collapse}. See vignette for details.
+#' @param code_time string, column name of the time column. Defaults to \emph{time_prc}. Used in case collapse is present to provide the earliest or latest instance of the given procedure.
+#' @param aggr_type string, if multiple procedures are present within the same case of \emph{collapse}, which timepoint to return. Supported are: "earliest" or "latest". Defaults to \emph{earliest}.
+#' @param nThread integer, number of threads to use for parallelization. If it is set to 1, then no parallel backends are created and the function is executed sequentially.
 #'
 #' @return data.table, with indicator columns whether the any of the given procedures are reported.
 #' If \emph{collapse} is present, then only unique ID and the summary columns are returned.
@@ -32,11 +31,11 @@
 #' #Search for Anesthesia CPT codes
 #' procedures <- list(Anesthesia = c("CTP:00410", "CPT:00104"))
 #' data_prc_procedures <- convert_prc(d = data_prc, codes_to_find = procedures,
-#' nThread = 2, collapse = "ID_MERGE", time_type = "earliest")
+#' nThread = 2, collapse = "ID_MERGE", aggr_type = "earliest")
 #' }
 
 convert_prc <- function(d, code = "prc_code", code_type = "prc_code_type",  codes_to_find = NULL,
-                        collapse = NULL, code_time = "time_prc", time_type = "earliest", nThread = parallel::detectCores()-1) {
+                        collapse = NULL, code_time = "time_prc", aggr_type = "earliest", nThread = parallel::detectCores()-1) {
 
   .SD=.N=.I=.GRP=.BY=.EACHI=..=..cols=.SDcols=i=j=time_to_db=..which_ids_to=..which_ids_from=combined=..collapse=. <- NULL
 
@@ -45,11 +44,7 @@ convert_prc <- function(d, code = "prc_code", code_type = "prc_code_type",  code
     `%exec%` <- foreach::`%do%`
   } else {
     if(length(codes_to_find) > 0 & length(codes_to_find) < nThread) {nThread <- length(codes_to_find)}
-    if(.Platform$OS.type == "windows") {
-      cl <- parallel::makeCluster(nThread, outfile = "", type = "PSOCK", methods = FALSE, useXDR = FALSE)
-    } else{
-      cl <- parallel::makeCluster(nThread, outfile = "", type = "FORK", methods = FALSE, useXDR = FALSE)
-    }
+    cl <- parallel::makeCluster(nThread, methods = FALSE, useXDR = FALSE)
     doParallel::registerDoParallel(cl)
     `%exec%` <- foreach::`%dopar%`
   }
@@ -76,7 +71,7 @@ convert_prc <- function(d, code = "prc_code", code_type = "prc_code_type",  code
         comb[, names(codes_to_find[i]) := any(.SD %in% unlist(codes_to_find[i])), .SDcols = "combined", by=1:nrow(comb)]
         ID_dt <- unique(comb[, collapse, with = FALSE]) #Get IDs
 
-        if(time_type == "earliest") { #Find time
+        if(aggr_type == "earliest") { #Find time
           diag_coll <- comb[, .(var_time = min(get(code_time))), by=c(collapse, names(codes_to_find[i]))]
         } else {
           diag_coll <- comb[, .(var_time = max(get(code_time))), by=c(collapse, names(codes_to_find[i]))]

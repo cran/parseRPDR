@@ -44,11 +44,7 @@ dcm_db <- function(path, ext, all, keywords, nThread, pydicom) {
     file_short <- list.files(path, full.names = FALSE)
     file_used  <- list.files(path, full.names = TRUE)
 
-    if("" %in% ext) {
-      ok <- intersect(grep(paste0(tolower(ext), collapse = "|"), tolower(file_short)), grep("\\.", tolower(file_short), invert = TRUE))
-    } else {
-      ok <- grep(paste0(tolower(ext), collapse = "|"), tolower(file_short))
-    }
+    ok <- grep(paste0(tolower(ext), collapse = "|"), tolower(file_short))
 
     file_short <- file_short[ok]
     file_used  <- file_used[ok]

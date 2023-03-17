@@ -21,4 +21,3 @@ vector, with characters formatted accordingly.
 \description{
 Creates numerical strings with given lengths by removing additional characters from the back and adding leading zeros if necessary.
 }
-\keyword{internal}

@@ -1,5 +1,32 @@
 # Change log
 
+## parseRPDR 1.0.0 - 2023/03/17
+-   Now support all data formats!
+
+-   Simplified parallelization to only PSOCK
+
+-   All functions now have unit test. Test coverage
+    of code is 100%
+    
+-   create_img_db extensions now include: ".tmp", ""
+
+-   Suppressed start up messages in parallel loops
+
+-   Added research_invitations variable to Con tables
+
+-   Corrected Diagnosis_Flag to Procedure_Flag for Prc data
+
+-   All columns are returned as is, no punctuation etc.
+    is removed as previously
+    
+-   Changed load_all function to load_all_data, as now
+    RPDR supports Allergy tables with the load_all
+    function
+
+-   In convert functions "time_type" arrgument is changed
+    to "aggr_type" to support other aggregations methods
+    in the future.
+
 ## parseRPDR 0.2.4 - 2023/01/29
 
 -   Removed all example datafiles.

@@ -1,9 +1,9 @@
 #' @title Loads diagnoses into R.
 #' @export
 #'
-#' @description Loads diagnoses information into the R environment.
+#' @description Loads diagnoses information into the R environment, both Dia and Dea files.
 #'
-#' @param file string, full file path to Dia.txt.
+#' @param file string, full file path to Dia.txt or Dea.txt.
 #' @param merge_id string, column name to use to create \emph{ID_MERGE} column used to merge different datasets. Defaults to \emph{EPIC_PMRN},
 #' as it is the preferred MRN in the RPDR system.
 #' @param sep string, divider between hospital ID and MRN. Defaults to \emph{:}.
@@ -31,7 +31,7 @@
 #'  \item{dia_code_type}{string, Standardized classification system or custom grouping associated with the diagnosis code, corresponds to Code_type in RPDR.}
 #'  \item{dia_flag}{string, Qualifier for the diagnosis, if any, corresponds to Diagnosis_flag in RPDR.}
 #'  \item{dia_enc_num}{string, Unique identifier of the record/visit. This values includes the source system, hospital, and a unique identifier within the source system, corresponds to Encounter_number in RPDR.}
-#'  \item{dia_provider}{string, Provider of record for the encounter where the diagnosis was entered, corresponds to Provider in RPDR. Punctuation marks are removed.}
+#'  \item{dia_provider}{string, Provider of record for the encounter where the diagnosis was entered, corresponds to Provider in RPDR.}
 #'  \item{dia_clinic}{string, Specific department/location where the patient encounter took place, corresponds to Clinic in RPDR.}
 #'  \item{dia_hosp}{string, Facility where the encounter occurred, corresponds to Hospital in RPDR.}
 #'  \item{dia_inpatient}{string, Identifies whether the diagnosis was noted during an inpatient or outpatient encounter, corresponds to Inpatient_Outpatient in RPDR. Punctuation marks removed.}
@@ -47,7 +47,7 @@
 #' d_dia <- load_dia(file = "test_Dia.txt", nThread = 1)
 #'
 #' #Use parallel processing and parse data in MRN_Type and MRN columns and keep all IDs
-#' d_dia <- load_dia(file = "test_Dia.txt", nThread = 20, mrn_type = TRUE, perc = 1)
+#' d_dea <- load_dia(file = "test_Dea.txt", nThread = 20, mrn_type = TRUE, perc = 1)
 #' }
 
 load_dia <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard", perc = 0.6, na = TRUE, identical = TRUE, nThread = parallel::detectCores()-1, mrn_type = FALSE) {
@@ -59,15 +59,15 @@ load_dia <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard",
 
   #Add additional information
   DATA$time_dia    <- as.POSIXct(data_raw$Date, format = "%m/%d/%Y")
-  DATA$dia_name       <- pretty_text(data_raw$Diagnosis_Name, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$dia_code       <- pretty_text(data_raw$Code, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$dia_code_type  <- pretty_text(data_raw$Code_Type, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$dia_flag       <- pretty_text(data_raw$Diagnosis_Flag, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$dia_provider   <- pretty_text(data_raw$Provider, remove_after = FALSE, remove_white = FALSE)
-  DATA$dia_clinic     <- pretty_text(data_raw$Clinic, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$dia_hosp       <- pretty_text(data_raw$Hospital, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$dia_inpatient  <- pretty_text(data_raw$Inpatient_Outpatient, remove_after = FALSE, remove_white = FALSE)
-  DATA$dia_enc_num    <- pretty_text(data_raw$Encounter_number, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
+  DATA$dia_name       <- pretty_text(data_raw$Diagnosis_Name)
+  DATA$dia_code       <- pretty_text(data_raw$Code)
+  DATA$dia_code_type  <- pretty_text(data_raw$Code_Type)
+  DATA$dia_flag       <- pretty_text(data_raw$Diagnosis_Flag)
+  DATA$dia_provider   <- pretty_text(data_raw$Provider)
+  DATA$dia_clinic     <- pretty_text(data_raw$Clinic)
+  DATA$dia_hosp       <- pretty_text(data_raw$Hospital)
+  DATA$dia_inpatient  <- pretty_text(data_raw$Inpatient_Outpatient)
+  DATA$dia_enc_num    <- pretty_text(data_raw$Encounter_number)
 
   if(dim(DATA)[1] != 1) {DATA <- remove_column(dt = DATA, na = na, identical = identical)}
   return(DATA)

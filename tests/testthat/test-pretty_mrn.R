@@ -1,4 +1,15 @@
-library(parseRPDR)
+###############################################################################
+## Title: Test pretty_mrn() function
+## Project: parseRPDR
+## Description: Test pretty_mrn() function
+## Copyright: Márton Kolossváry, MD, PhD
+## Date: 2023-02-24
+###############################################################################
+
+testthat::skip_on_cran()
+# Check equality ====================
+
+suppressPackageStartupMessages(library(parseRPDR))
 
 test_that("pretty_mrn if numbers less than needed", {
   expect_equal(pretty_mrn(1, prefix = "MGH", nThread = 1), "MGH:0000001")
@@ -26,7 +37,6 @@ test_that("pretty_mrn if numbers more than needed", {
   expect_equal(pretty_mrn(1234567890123, prefix = "PMRN", nThread = 1), "PMRN:34567890123")
   expect_equal(pretty_mrn(1234567890123, prefix = "ABC", nThread = 1), "ABC:1234567890123")
 })
-
 
 test_that("pretty_mrn if numbers more than needed, but unchanged", {
   expect_equal(pretty_mrn(1234567890123, prefix = "MGH", id_length = "asis", nThread = 1), "MGH:1234567890123")
@@ -63,7 +73,6 @@ test_that("pretty_mrn if numbers more than needed, different sep character", {
   expect_equal(pretty_mrn(1234567890123, prefix = "PMRN", sep = "__", nThread = 1), "PMRN__34567890123")
   expect_equal(pretty_mrn(1234567890123, prefix = "ABC", sep = "__", nThread = 1), "ABC__1234567890123")
 })
-
 
 test_that("pretty_mrn if numbers more than needed, but unchanged, different sep character", {
   expect_equal(pretty_mrn(1234567890123, prefix = "MGH", sep = "__", id_length = "asis", nThread = 1), "MGH__1234567890123")

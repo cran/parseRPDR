@@ -9,6 +9,13 @@
 [![](https://cranlogs.r-pkg.org/badges/last-week/parseRPDR?color=E28413)](https://CRAN.R-project.org/package=parseRPDR)
 [![](https://cranlogs.r-pkg.org/badges/last-month/parseRPDR?color=CC76A1)](https://CRAN.R-project.org/package=parseRPDR)
 [![](https://cranlogs.r-pkg.org/badges/grand-total/parseRPDR?color=ABE188)](https://CRAN.R-project.org/package=parseRPDR)
+[![R-CMD-check](https://github.com/martonkolossvary/parseRPDR/workflows/R-CMD-check/badge.svg)](https://github.com/martonkolossvary/parseRPDR/actions)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/parseRPDR)](https://CRAN.R-project.org/package=parseRPDR)
+[![Lifecycle:
+stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+[![Codecov test
+coverage](https://codecov.io/gh/martonkolossvary/parseRPDR/branch/master/graph/badge.svg)](https://app.codecov.io/gh/martonkolossvary/parseRPDR?branch=master)
 <!-- badges: end -->
 
 The Research Patient Data Registry is a centralized clinical data
@@ -37,28 +44,32 @@ outputs provided by RPDR. All functions of **parseRPDR** are
 parallelized to assist large data queries (please see section on
 parallelization for details). Data is loaded into the R environment
 using the *load_abc* functions, where *abc* is the three letter
-abbreviation of the given datasource. Currently “mrn”, “con”, “dem”,
-“enc”, “rdt”, “lab”, “med”, “dia”, “rfv”, “prc”, “phy”, “lno”, “car”,
-“dis”, “end”, “hnp”, “opn”, “pat”, “prg”, “pul”, “rad” and “vis”
-datasources are supported. Data is loaded into data.table objects to
-provide fast and efficient manipulations on even large datasets. Besides
-importing the data, the load functions also modify the variables names
-in a standardized fashion to help later analyses:
+abbreviation of the given datasource. Data is loaded into data.table
+objects to provide fast and efficient manipulations on even large
+datasets. Besides importing the data, the load functions also modify the
+variables names in a standardized fashion to help later analyses:
 
 -   All variables are snake case: names are lowercase (except for
-    abbreviations),words within the names are separated by: “\_”.
+    abbreviations), words within the names are separated by: “\_”.
 -   All ID variables start with “ID” and then are followed by the source
     (con, dem etc.) from which they are created from.
 -   All time variable names start with “time”.
 -   Procedural data start with the data source name (lab, rdt etc.).
+-   Names are created in a hierarchical manner, for example information
+    corresponding to the results of the specific lab test all start
+    with: “lab_result\_”.
+-   All location and personnel attributes are names in the same
+    convention in the different data tables (e.g.: Hospital and Clinical
+    variable types).
+-   Variables are ordered in a logical fashion with the IDs always being
+    the first columns and the encounter/accession identifiers the last
+    column.
 
 The functions also do minimal data cleaning to help later analyses:
 
 -   “ID_MERGE” column is added to all datasources to help later merging.
--   “ID” data columns are formatted according to RPDR requirements.
+-   “ID” data columns are formatted according to RPDR ID requirements.
 -   Time variables are converted to POSIXct data formats.
--   String variables are cleaned-up (specified in each function’s
-    documentation in detail).
 -   Unknown values are converted to NA.
 
 Besides providing an interface to import text outputs from RPDR into the
@@ -68,20 +79,20 @@ functions: *convert_abc*, where *abc* is the three letter abbreviation
 of the given datasource, which does common manipulations on a given
 datasource. Brief description of these can be found below:
 
--   **convert_enc**: Converts columns with ICD data to simple ICD codes
-    and adds boolean columns corresponding to diseases if requested.
 -   **convert_dia**: Search for given diagnosis code type and code pairs
     among registered diagnoses.
+-   **convert_enc**: Converts columns with ICD data to simple ICD codes
+    and adds boolean columns corresponding to diseases if requested.
 -   **convert_lab**: Converts lab results to normal/abnormal based-on
     reference values.
 -   **convert_med**: Adds boolean columns corresponding to a group of
     medications if they are present.
 -   **convert_rfv**: Search for given reason for visit codes among
     registered encounters.
--   **convert_prc**: Search for given procedure codes among registered
-    encounters.
 -   **convert_phy**: Search for given health history codes among
     registered encounters.
+-   **convert_prc**: Search for given procedure codes among registered
+    encounters.
 -   **convert_notes**: Parses information from the free text notes and
     provides the text in additional columns for all types of notes:
     *car, dis, end, hnp, opn, pat, prg, pul, rad, vis and lno*.
@@ -92,21 +103,26 @@ provided folder. Be aware that the function requires
 [python](https://www.python.org) and
 [pydicom](https://pydicom.github.io) to be installed! The function
 cycles through all folders present in the provided path and recursively
-goes through them, every subfolder, and extracts the DICOM header
-information from the files.
+goes through every subfolder, and extracts the DICOM header information
+from the files.
 
 Besides these functions, there are ones that are not connected to
 specific datasources and provide other commonly used functionalities.
 Brief description of these can be found below:
 
--   **load_all**: Load all supported RPDR datasources into a single
-    list.
+-   **load_all_data**: Load all RPDR datasources into a single list.
 -   **pretty_mrn**: Convert a string vector to RPDR compatible MRN
     format according to different institutional requirements.
--   **all_ids_mi2b2**: Provides a list of all MGH or BWH IDs that the
-    patients had at any time of their visits to Partners hospitals. This
-    may be used for radiological image downloads using mi2b2 as
-    described later in the text.
+-   **pretty_numbers**: Creates numerical strings with given lengths by
+    removing additional characters from the back and adding leading
+    zeros if necessary. Can be used to format zip codes and phone
+    numbers (done automatically by the load functions).
+-   **pretty_text**: Removes spaces, special characters and capitals
+    from string vector and converts unknowns to NA.
+-   **all_ids_mi2b2**: Legacy function, provides a list of all MGH or
+    BWH IDs that the patients had at any time of their visits to
+    Partners hospitals. This may be used for radiological image
+    downloads using mi2b2 as described later in the text.
 -   **find_exam**: Find all, earliest or closest examination (i.e. lab)
     to a given timepoint.
 
@@ -115,16 +131,12 @@ Brief description of these can be found below:
 All functionalities of **parseRPDR** are parallelized to assist the
 analysis of large datasets. The user does not need to know anything of
 what is being done in the background, simply setting the *nThread*
-parameter in the function calls sets everything up. In detail, on
-unix-based systems forking is used, while on windows machines socket
-clusters are initiated. Please be aware that the optimal number of
-threads depends on the system running the application. By default
-nThread is set to parallel::detectCores()-1, which means that all except
-one of the threads on the given machine will be used. Be aware that
-parallelization also requires additional memory to run the functions.
-This also depends on the operating system (generally unix-based system
-require less) and therefore the optimal number of threads needs to be
-empirically determined. Setting *nThread=1* results in sequential
+parameter in the function calls sets everything up. Please be aware that
+the optimal number of threads depends on the system running the
+application. By default nThread is set to parallel::detectCores()-1,
+which means that all except one of the threads on the given machine will
+be used. Be aware that parallelization also requires additional memory
+to run the functions. Setting *nThread=1* results in sequential
 analysis, which might be beneficial for small datasets.
 
 In case of the *find_exam* function, there is an opportunity to use
@@ -139,7 +151,7 @@ beneficial.
 *NOTE!!!*
 
 *On macOS, data.table may return a warning message similar to:
-“data.table 1.13.6 using 1 threads (see ?getDTthreads)…” Disregard the
+“data.table X.X.X using 1 threads (see ?getDTthreads)…” Disregard the
 warning message as the package does not use functionalities affected by
 this limitation of macOS.*
 
@@ -211,24 +223,24 @@ been retrieved.*
 
 As stated above, hospital provided IDs may change over time. While using
 EMPIs as IDs to merge different data sources solves this issue, in case
-of radiological images the supplied mi2b2 may only work with MGH or BHW
+of radiological images, previously mi2b2 only worked with MGH or BHW
 IDs, therefore a complete list of all MRNs the patients had at any time
-may be needed.
+may be needed. Requesting images using Enterprise Master Patient Index
+solves this issue and is the preferred method now.
 
-*NOTE!!!*
-
-*Since mi2b2 may only work with MGH and BWH IDs, if a predefined set of
-MRNs are used to request data from RPDR (not the query tool), then it is
-advised to parse out all IDs present in con and mrn datasources using
+Previously, mi2b2 only worked with MGH and BWH IDs. If a predefined set
+of MRNs are used to request data from RPDR (not the query tool), then it
+is advised to parse out all IDs present in con and mrn datasources using
 all_ids_mi2b2 function of parseRPDR as specified under load_con function
 in the document. This may be needed as the mi2b2 workbench may only work
 for requested MRNs, therefore if the MGH MRN changes for a given
 patient, and we wish to access an image that was saved using the
 previous MRN, then the most recent MRN won’t grant us access to that
-image. Therefore, in case we work with a predefined set of MRNs, then
-after requesting data for all datasources that we need, the user should
-parse out a complete list of MRNs and request the mi2b2 using this
-list.*
+image. Therefore, in case we work with a predefined set of MRNs, after
+requesting data for all datasources that we need, the user should parse
+out a complete list of MRNs and request the mi2b2 using this list.
+Requesting images using Enterprise Master Patient Index solves this
+issue and is the preferred method now.
 
 ## Loading data using parseRPDR
 
@@ -264,44 +276,6 @@ needed.
     (default is using the con.txt) as it unnecessarily increases
     computational time.
 
-The package provides sample datasets for all supported datasources.
-Currently “mrn”, “con”, “dem”, “enc”, “rdt”, “lab”, “med”, “dia”, “rfv”,
-“prc”, “phy”, “lno”, “car”, “dis”, “end”, “hnp”, “opn”, “pat”, “prg”,
-“pul”, “rad” and “vis” are supported. *data_abc_raw* are the unprocessed
-datasets, while *data_abc* are the processed example datasets where
-*abc* is the three letter abbreviation of the supported datasource. Due
-to potential issues with PHI and PPI, the example datasets can be
-downloaded from the Partners Gitlab repository under
-*parserpdr-sample-data*. Examples corresponding to the mrn datasource
-can be found below.
-
-``` r
-#Print raw data
-head(data_mrn_raw)
-
-#Print processed data loaded using load_mrn
-head(data_mrn)
-```
-
-As it can be appreciated, **parseRPDR** does several modifications to
-the data.
-
--   All variables are snake case: names are lowercase (except for
-    abbreviations),words within the names are separated by: “\_”.
--   All ID variables start with “ID” and then are followed by the source
-    from which they are created from.
--   All time variables start with “time” and then are followed by the
-    variable name.
--   ID variables are formatted according to RPDR rules using the
-    pretty_mrn function. sep and id_length arguments allow modifications
-    as to how to parse the IDS.
--   ID_MERGE column is created which uses EMPI as default to provide IDs
-    for merging different data sources.
-
-In the example datasets na and identical arguments are set to FALSE to
-provide all columns, however by default they are set to TRUE to minimize
-data sizes and only provide columns with meaningful information.
-
 ### *load_con* function
 
 The con.txt dataset is a unique datasource as it has a Patient_ID_List
@@ -319,43 +293,13 @@ information from these columns are also provided. This should only be
 one for one datasource, as all datasources contain the same information
 in these columns.
 
-``` r
-#Print raw data containing columns which are processed using the load_con function
-data_con_raw[, c("MRN_Type", "MRN", "Patient_ID_List")]
-
-#Print processed ID data
-data_con[, grep("ID_.*", colnames(data_con), value = TRUE)]
-```
-
-*NOTE!!!*
-
-*As mentioned previously, if a predefined set of MRNs are used to
-acquire data and radiological images are also required, then a full set
-of MGH or BWH IDs may be needed to cover all possible IDs that the
-patients had during their encounters at Partners hospitals. For this the
-IDs should be gathered from all sources and combined into one list that
-can be used to request the mi2b2 workbench if it is not requested using
-EMPIs. For this we can use the all_ids_mi2b2 function. It requires the
-parsed con and mrn data.tables to provide a complete list of MRNs that
-the patients had during their visits to Partners hospitals. This list
-can then be used as a new data query for radiological images.*
-
-``` r
-#Initially requested IDs
-data_con$ID_con_MGH
-
-#All MGH MRNs that the patients had anytime during their visits to Partners hospitals
-#Due to fake sample data it is the same as above
-all_MGH_mrn <- all_ids_mi2b2(type = "MGH", d_mrn = data_mrn, d_con = data_con)
-```
-
 ### *load_notes* function
 
 There are several types of different note files provided by RPDR: *car,
 dis, end, hnp, opn, pat, prg, pul, rad and vis*. For these the
 *load_notes* function provides a single interface to load these files.
 Simply the type of note must be provided and a standard output is
-provided for each type of note. The report text is return if
+provided for each type of note. The report text is returned if
 *load_report* is TRUE, which is the default. By default all formatting
 is removed from the text to save space and make later manipulations
 easier. However, setting the *format_orig* to *TRUE* returns the
@@ -370,32 +314,30 @@ d_hnp <- load_notes(file = "test_Hnp.txt", type = "hnp", nThread = 1)
 d_hnp <- load_notes(file = "test_Hnp.txt", type = "hnp", nThread = 20, mrn_type = TRUE, perc = 1, load_report = TRUE, format_orig = TRUE)
 ```
 
-### *load_all* function
+### *load_all_data* function
 
 **parseRPDR** provides a convenient function to load all RPDR data using
-a single line of code. The *load_all* function can be use for loading
-different datasources at once and/or to load multiple files of the same
-datasource, which occurs if our query results in more than 25,000
-patients. The function requires a folder path instead of a file path.
-Also, we can use the *which_data* argument to specify which datasources
-we wish to load into the list. Currently “mrn”, “con”, “dem”, “enc”,
-“rdt”, “lab”, “med”, “dia”, “rfv”, “prc”, “phy”, “lno”, “car”, “dis”,
-“end”, “hnp”, “opn”, “pat”, “prg”, “pul”, “rad” and “vis” are supported.
+a single line of code. The *load_all_data* function can be use for
+loading different datasources at once and/or to load multiple files of
+the same datasource, which occurs if our query results in more than
+25,000 patients. The function requires a folder path instead of a file
+path. Also, we can use the *which_data* argument to specify which
+datasources we wish to load into the list. All datasets are supported.
 In case there are multiple files for a given datasource, then add a “\_”
 and a number to merge the same data sources into a single output in the
 order of the provided number.
 
 The Demographics table data definitions have changes in 2022. Currently,
-the software supports the latest version. However, the *load_all*
+the software supports the latest version. However, the *load_all_data*
 function can also process data prior to these changes by setting the
 *old_dem* argument to TRUE, in which case the *load_dem_old* function is
 used, which corresponds to the *load_dem* function prior to version
 0.2.2.
 
-The *load_all* function is parallelized for efficiency. It allows two
-different forms of parallelization. Either it is done on the level of
-different datasources (i.e. mrn, con, dem are loaded parallel) or within
-the datasources (if multiple files are present per datasource
+The *load_all_data* function is parallelized for efficiency. It allows
+two different forms of parallelization. Either it is done on the level
+of different datasources (i.e. mrn, con, dem are loaded parallel) or
+within the datasources (if multiple files are present per datasource
 i.e. con_1, con_2 etc.). Using the *many_sources* arguments we can
 specify which to use. If set to TRUE, then parallelization will be done
 on the level of different datasources, if FALSE then parallelization is
@@ -423,10 +365,10 @@ together from each 25,000 patients’ data to receive the final database.*
 
 ``` r
 #Load all Con, Dem and Mrn datasets processing all files within given datasource in parallel
-load_all(folder = folder_rpdr, which_data = c("con", "dem", "mrn"), nThread = 2, many_sources = FALSE)
+load_all_data(folder = folder_rpdr, which_data = c("con", "dem", "mrn"), nThread = 2, many_sources = FALSE)
 
 #Load all supported file types parallelizing on the level of datasources
-load_all(folder = folder_rpdr, nThread = 2, many_sources = TRUE, load_report = TRUE, format_orig = TRUE)
+load_all_data(folder = folder_rpdr, nThread = 2, many_sources = TRUE, load_report = TRUE, format_orig = TRUE)
 ```
 
 ## Manipulating data using parseRPDR
@@ -446,7 +388,7 @@ standard among the functions:
     provide summary columns.
 -   *code_time*: Used in case collapse is present, the column name of
     the time column.
--   *time_type*: If multiple diagnoses/medications are present within
+-   *aggr_type*: If multiple diagnoses/medications are present within
     the same case of *collapse*, which timepoint to return. Supported
     are: “earliest” or “latest”.
 
@@ -479,7 +421,7 @@ data.table based-on the column specified in collapse. For example, if
 the ID_MERGE column is given, then a data.table is returned where each
 unique value in the column collapse is returned and the indicator
 columns, whether that ID had at any time the given ICD coded.
-Furthermore, *time_type* defines whether the earliest or latest time is
+Furthermore, *aggr_type* defines whether the earliest or latest time is
 returned defined by *code_time* if multiple occurrences are present.
 Also, if for example a complex ID is created prior to the function call
 based-on the ID and the encounter timepoint, then the function can
@@ -500,7 +442,7 @@ data_enc_disease <-  convert_enc(d = data_enc, keep = FALSE, codes_to_find = dis
 #whether there are any encounters where the given diseases were registered
 diseases <- list(HT = c("I10"), Stroke = c("434.91", "I63.50"))
 data_enc_disease <-  convert_enc(d = data_enc, keep = FALSE, codes_to_find = diseases, nThread = 2,
-                                 collapse = "ID_MERGE", time_type = "earliest")
+                                 collapse = "ID_MERGE", aggr_type = "earliest")
 ```
 
 ### *convert_dia* - Searching for given diagnosis codes
@@ -521,7 +463,36 @@ data_dia_parse <- convert_dia(d = data_dia, codes_to_find = diseases, nThread = 
 #Search for Hypertension and Stroke ICD codes and summarize per patient providing earliest time
 diseases <- list(HT = c("ICD10:I10"), Stroke = c("ICD9:434.91", "ICD9:I63.50"))
 data_dia_disease <-  convert_dia(d = data_dia, codes_to_find = diseases, nThread = 2,
-                                 collapse = "ID_MERGE", time_type = "earliest")
+                                 collapse = "ID_MERGE", aggr_type = "earliest")
+```
+
+### *convert_phy* - Searching for given health hisotry codes
+
+Similar to convert_enc, the *convert_phy* function is used to search for
+given health history codes withing the health history data.table. The
+difference is that the health history do not need to be parsed as they
+are stored separately.
+
+``` r
+#Search for for Height and Weight codes and summarize per patient providing earliest time
+anthropometrics <- list(Weight = c("LMR:3688", "EPIC:WGT"), Height = c("LMR:3771", "EPIC:HGT"))
+data_phy_parse <- convert_phy(d = data_phy, codes_to_find = anthropometrics, nThread = 2,
+                              collapse = "ID_MERGE", aggr_type = "earliest")
+```
+
+### *convert_prc* - Searching for given procedures
+
+Similar to convert_enc, the *convert_prc* function is used to search for
+given procedures within the procedures data.table. The difference is
+that the procedures do not need to be parsed as they are stored
+separately.
+
+``` r
+#Parse procedure columns and create indicator variables for the following procedures
+#and summarize per patient, whether there are any procedures registered
+procedures <- list(Anesthesia = c("CTP:00410", "CPT:00104"))
+data_prc_procedures <- convert_prc(d = data_prc, codes_to_find = procedures, nThread = 2,
+                                   collapse = "ID_MERGE", aggr_type = "earliest")
 ```
 
 ### *convert_rfv* - Searching for given reason for visit codes
@@ -537,35 +508,6 @@ are stored separately.
 reasons <- list(Pain = c("ERFV:160357", "ERFV:140012"), Visit = c("ERFV:501"))
 data_rfv_disease <-  convert_rfv(d = data_rfv, keep = FALSE, codes_to_find = reasons, nThread = 2,
                                  collapse = "ID_MERGE")
-```
-
-### *convert_prc* - Searching for given procedures
-
-Similar to convert_enc, the *convert_prc* function is used to search for
-given procedures within the procedures data.table. The difference is
-that the procedures do not need to be parsed as they are stored
-separately.
-
-``` r
-#Parse procedure columns and create indicator variables for the following procedures
-#and summarize per patient, whether there are any procedures registered
-procedures <- list(Anesthesia = c("CTP:00410", "CPT:00104"))
-data_prc_procedures <- convert_prc(d = data_prc, codes_to_find = procedures, nThread = 2,
-                                   collapse = "ID_MERGE", time_type = "earliest")
-```
-
-### *convert_phy* - Searching for given health hisotry codes
-
-Similar to convert_enc, the *convert_phy* function is used to search for
-given health history codes withing the health history data.table. The
-difference is that the health history do not need to be parsed as they
-are stored separately.
-
-``` r
-#Search for for Height and Weight codes and summarize per patient providing earliest time
-anthropometrics <- list(Weight = c("LMR:3688", "EPIC:WGT"), Height = c("LMR:3771", "EPIC:HGT"))
-data_phy_parse <- convert_phy(d = data_phy, codes_to_find = anthropometrics, nThread = 2,
-                              collapse = "ID_MERGE", time_type = "earliest")
 ```
 
 ### *convert_lab* - Parsing lab results and identifying abnormal values
@@ -625,7 +567,7 @@ data_med_indic[, c("statin", "NSAID")]
 
 #Summarize per patient if they ever had the given medication groups registered
 data_med_indic_any <- convert_med(d = data_med, codes_to_find = meds, nThread = 2,
-                                  collapse = "ID_MERGE", time_type = "earliest")
+                                  collapse = "ID_MERGE", aggr_type = "earliest")
 ```
 
 ### *convert_notes* - Extracting information from note free text
@@ -705,9 +647,7 @@ arguments:
 -   *keep_data*: Whether to include empty rows with only the ID column
     filed out for cases that have data in the d_from, but not within the
     time range.
--   *nThread*: The number of threads to use for parallel computing. On
-    windows machines sockets are used, while on other operating systems
-    fork parallelization is used.
+-   *nThread*: The number of threads to use for parallel computing.
 -   *shared_RAM*: Whether shared RAM management should be used during
     parallelization. Default is FALSE. In case of large datasets (>1M
     rows) and running on server machines, it might be beneficial to have

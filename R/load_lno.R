@@ -29,7 +29,7 @@
 #'  \item{lno_status}{string, Completion status of the note, corresponds to Status in RPDR.}
 #'  \item{lno_author}{string, Name of user who created the note, corresponds to Author in RPDR.}
 #'  \item{lno_author_mrn}{string, Author's user identifier within the LMR system, corresponds to Author_MRN in RPDR.}
-#'  \item{lno_COD}{string, Hospital-specific user code of the note author. The first character is a hospital-specific prefix, corresponds to COD in RPDR. Punctuation marks are removed.}
+#'  \item{lno_COD}{string, Hospital-specific user code of the note author. The first character is a hospital-specific prefix, corresponds to COD in RPDR.}
 #'  \item{lno_hosp}{string, Facility where the encounter occurred, corresponds to Institution in RPDR.}
 #'  \item{lno_subject}{string, Type of note. This value is derived from the "Subject" line of the narrative text, corresponds to Subject in RPDR.}
 #'  \item{lno_rep_txt}{string, Full narrative text of the note, corresponds to Comments in RPDR.}
@@ -89,13 +89,13 @@ load_lno <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard",
 
   #Add additional information
   DATA$time_lno <- as.POSIXct(data_raw$LMRNote_Date, format = "%m/%d/%Y %I:%M:%S %p")
-  DATA$lno_rec_id <- pretty_text(data_raw$Record_Id, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$lno_status <- pretty_text(data_raw$Status, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$lno_author <- pretty_text(data_raw$Author, remove_after = FALSE, remove_white = FALSE)
-  DATA$lno_author_mrn <- pretty_text(data_raw$Author_MRN, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$lno_COD  <- pretty_text(data_raw$COD, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$lno_hosp <- pretty_text(data_raw$Institution, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$lno_subject <- pretty_text(data_raw$Subject, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
+  DATA$lno_rec_id <- pretty_text(data_raw$Record_Id)
+  DATA$lno_status <- pretty_text(data_raw$Status)
+  DATA$lno_author <- pretty_text(data_raw$Author)
+  DATA$lno_author_mrn <- pretty_text(data_raw$Author_MRN)
+  DATA$lno_COD  <- pretty_text(data_raw$COD)
+  DATA$lno_hosp <- pretty_text(data_raw$Institution)
+  DATA$lno_subject <- pretty_text(data_raw$Subject)
   DATA$lno_rep_txt <- data_raw$Comments
 
   if(dim(DATA)[1] != 1) {DATA <- remove_column(dt = DATA, na = na, identical = identical)}

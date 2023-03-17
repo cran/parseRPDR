@@ -35,18 +35,19 @@
 #'  \item{address2}{string, Additional address information, corresponds to address2 in RPDR.}
 #'  \item{city}{string, City of residence, corresponds to City in RPDR.}
 #'  \item{state}{string, State of residence, corresponds to State in RPDR.}
-#'  \item{country_con}{string, Country of residence from con datasource, corresponds to Country in RPDR. Punctuation marks are removed.}
+#'  \item{country_con}{string, Country of residence from con datasource, corresponds to Country in RPDR.}
 #'  \item{zip_con}{numeric, Mailing zip code of primary residence from con datasource, corresponds to Zip in RPDR. Formatted to 5 character zip codes using \emph{pretty_numbers()}.}
-#'  \item{direct_contact_consent}{boolean, Indicates whether the patient has given permission to contact them directly through the RODY program, corresponds to Direct_Contact_Consent in RPDR.}
+#'  \item{direct_contact_consent}{boolean, Indicates whether the patient has given permission to contact them directly through the RODY program, corresponds to Direct_Contact_Consent in RPDR. Legacy variable.}
+#'  \item{research_invitations}{boolean, Indicates if a patient can be invited to participate in research, corresponds to Research_Invitations in RPDR.}
 #'  \item{phone_home}{number, Patient's home phone number, corresponds to Home_Phone in RPDR. Formatted to 10 digit phone numbers using \emph{pretty_numbers()}.}
 #'  \item{phone_day}{number, Phone number where the patient can be reached during the day, corresponds to Day_Phone in RPDR. Formatted to 10 digit phone numbers using \emph{pretty_numbers()}.}
-#'  \item{insurance1}{string, Patient's primary health insurance carrier and subscriber ID information, corresponds to Insurance_1 in RPDR. Punctuation marks are removed.}
-#'  \item{insurance2}{string, Patient's secondary health insurance carrier and subscriber ID information, if any, corresponds to Insurance_2 in RPDR. Punctuation marks are removed.}
-#'  \item{insurance3}{string, Patient's tertiary health insurance carrier and subscriber ID information, if any, corresponds to Insurance_3 in RPDR. Punctuation marks are removed.}
+#'  \item{insurance1}{string, Patient's primary health insurance carrier and subscriber ID information, corresponds to Insurance_1 in RPDR.}
+#'  \item{insurance2}{string, Patient's secondary health insurance carrier and subscriber ID information, if any, corresponds to Insurance_2 in RPDR.}
+#'  \item{insurance3}{string, Patient's tertiary health insurance carrier and subscriber ID information, if any, corresponds to Insurance_3 in RPDR.}
 #'  \item{primary_care_physician}{string, Comma-delimited list of all primary care providers on record for this patient per institution, along with contact information (if available),
-#'  corresponds to Primary_Care_Physician in RPDR. Punctuation marks are removed.}
+#'  corresponds to Primary_Care_Physician in RPDR.}
 #'  \item{primary_care_physician_resident}{string, Comma-delimited list of any Resident primary care providers on record for this patient per institution, along with contact information (if available),
-#'  corresponds to Resident _Primary_Care_Physician in RPDR. Punctuation marks are removed.}
+#'  corresponds to Resident _Primary_Care_Physician in RPDR.}
 #'  }
 #'
 #' @encoding UTF-8
@@ -78,26 +79,27 @@ load_con <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard",
   DATA <- cbind(DATA, ids_l)
 
   #Add additional information
-  DATA$name_last      <- pretty_text(data_raw$Last_Name, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$name_first     <- pretty_text(data_raw$First_Name, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$name_middle    <- pretty_text(data_raw$Middle_Name, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$name_previous  <- pretty_text(data_raw$Previous_Name, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$SSN          <- pretty_text(data_raw$SSN, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$VIP          <- pretty_text(data_raw$VIP, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$address1     <- pretty_text(data_raw$Address1, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$address2     <- pretty_text(data_raw$Address2, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$city         <- pretty_text(data_raw$City, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$state        <- pretty_text(data_raw$State, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$country_con  <- pretty_text(data_raw$Country, remove_after = FALSE, remove_white = FALSE)
+  DATA$name_last      <- pretty_text(data_raw$Last_Name)
+  DATA$name_first     <- pretty_text(data_raw$First_Name)
+  DATA$name_middle    <- pretty_text(data_raw$Middle_Name)
+  DATA$name_previous  <- pretty_text(data_raw$Previous_Name)
+  DATA$SSN          <- pretty_text(data_raw$SSN)
+  DATA$VIP          <- pretty_text(data_raw$VIP)
+  DATA$address1     <- pretty_text(data_raw$Address1)
+  DATA$address2     <- pretty_text(data_raw$Address2)
+  DATA$city         <- pretty_text(data_raw$City)
+  DATA$state        <- pretty_text(data_raw$State)
+  DATA$country_con  <- pretty_text(data_raw$Country)
   DATA$zip_con      <- pretty_numbers(data_raw$Zip)
-  DATA$direct_contact_consent <- pretty_text(data_raw$Direct_Contact_Consent, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
+  DATA$direct_contact_consent <- pretty_text(data_raw$Direct_Contact_Consent)
+  DATA$research_invitations   <- pretty_text(data_raw$Research_Invitations)
   DATA$phone_home <- pretty_numbers(data_raw$Home_Phone, length_final = 10, remove_from_back = NULL)
   DATA$phone_day  <- pretty_numbers(data_raw$Day_Phone, length_final = 10, remove_from_back = NULL)
-  DATA$insurance1 <- pretty_text(data_raw$Insurance_1, remove_after = FALSE, remove_white = FALSE)
-  DATA$insurance2 <- pretty_text(data_raw$Insurance_2, remove_after = FALSE, remove_white = FALSE)
-  DATA$insurance3 <- pretty_text(data_raw$Insurance_3, remove_after = FALSE, remove_white = FALSE)
-  DATA$primary_care_physician <- pretty_text(data_raw$Primary_Care_Physician, remove_after = FALSE, remove_white = FALSE)
-  DATA$primary_care_physician_resident <- pretty_text(data_raw$Resident_Primary_Care_Physician, remove_after = FALSE, remove_white = FALSE)
+  DATA$insurance1 <- pretty_text(data_raw$Insurance_1)
+  DATA$insurance2 <- pretty_text(data_raw$Insurance_2)
+  DATA$insurance3 <- pretty_text(data_raw$Insurance_3)
+  DATA$primary_care_physician <- pretty_text(data_raw$Primary_Care_Physician)
+  DATA$primary_care_physician_resident <- pretty_text(data_raw$Resident_Primary_Care_Physician)
 
   if(dim(DATA)[1] != 1) {DATA <- remove_column(dt = DATA, na = na, identical = identical)}
   return(DATA)

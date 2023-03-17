@@ -30,10 +30,10 @@
 #'  \item{rdt_test_code}{string, Internal identifier for the procedure used by the source system, corresponds to Test_Code in RPDR.}
 #'  \item{rdt_test_desc}{string, Full name of the exam/study performed, corresponds to Test_Description in RPDR.}
 #'  \item{rdt_accession}{string, Identifier assigned to the report or procedure for Radiology tracking purposes, corresponds to Accession_Number in RPDR.}
-#'  \item{rdt_provider}{string, Ordering or authorizing provider for the study, corresponds to Provider in RPDR. Punctuation marks are removed.}
+#'  \item{rdt_provider}{string, Ordering or authorizing provider for the study, corresponds to Provider in RPDR.}
 #'  \item{rdt_clinic}{string, Specific department/location where the procedure was ordered or performed, corresponds to Clinic in RPDR.}
 #'  \item{rdt_hosp}{string, Facility where the order was entered, corresponds to Hospital in RPDR.}
-#'  \item{rdt_inpatient}{string, Classifies the type of encounter where the procedure was performed, corresponds to Inpatient_Outpatient in RPDR. Punctuation marks are removed.}
+#'  \item{rdt_inpatient}{string, Classifies the type of encounter where the procedure was performed, corresponds to Inpatient_Outpatient in RPDR.}
 #'  }
 #'
 #' @encoding UTF-8
@@ -58,15 +58,15 @@ load_rdt <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard",
 
   #Add additional information
   DATA$time_rdt       <- as.POSIXct(data_raw$Date, format = "%m/%d/%Y")
-  DATA$rdt_mode       <- pretty_text(data_raw$Mode, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$rdt_group      <- pretty_text(data_raw$Group, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$rdt_test_code  <- pretty_text(data_raw$Test_Code, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$rdt_test_desc  <- pretty_text(data_raw$Test_Description, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$rdt_provider   <- pretty_text(data_raw$Provider, remove_after = FALSE, remove_white = FALSE)
-  DATA$rdt_clinic     <- pretty_text(data_raw$Clinic, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$rdt_hosp       <- pretty_text(data_raw$Hospital, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$rdt_inpatient  <- pretty_text(data_raw$Inpatient_Outpatient, remove_after = FALSE, remove_white = FALSE)
-  DATA$rdt_accession  <- pretty_text(data_raw$Accession_Number, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
+  DATA$rdt_mode       <- pretty_text(data_raw$Mode)
+  DATA$rdt_group      <- pretty_text(data_raw$Group)
+  DATA$rdt_test_code  <- pretty_text(data_raw$Test_Code)
+  DATA$rdt_test_desc  <- pretty_text(data_raw$Test_Description)
+  DATA$rdt_provider   <- pretty_text(data_raw$Provider)
+  DATA$rdt_clinic     <- pretty_text(data_raw$Clinic)
+  DATA$rdt_hosp       <- pretty_text(data_raw$Hospital)
+  DATA$rdt_inpatient  <- pretty_text(data_raw$Inpatient_Outpatient)
+  DATA$rdt_accession  <- pretty_text(data_raw$Accession_Number)
 
   if(dim(DATA)[1] != 1) {DATA <- remove_column(dt = DATA, na = na, identical = identical)}
   return(DATA)

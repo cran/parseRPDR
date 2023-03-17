@@ -7,20 +7,20 @@
 \usage{
 pretty_text(
   v,
-  remove_after = TRUE,
-  remove_punc = TRUE,
-  remove_white = TRUE,
+  remove_after = FALSE,
+  remove_punc = FALSE,
+  remove_white = FALSE,
   add_na = TRUE
 )
 }
 \arguments{
-\item{v}{vector, integer or sting vector with numerical values. Defaults to \emph{TRUE}.}
+\item{v}{vector, integer or sting vector with numerical values.}
 
-\item{remove_after}{boolean whether to remove text after \emph{-}. Defaults to \emph{TRUE}.}
+\item{remove_after}{boolean whether to remove text after \emph{-}. Defaults to \emph{FALSE}.}
 
-\item{remove_punc}{boolean, whether to remove punctuation marks. Defaults to \emph{TRUE}.}
+\item{remove_punc}{boolean, whether to remove punctuation marks. Defaults to \emph{FALSE}.}
 
-\item{remove_white}{boolean, whether to remove white spaces. Defaults to \emph{TRUE}.}
+\item{remove_white}{boolean, whether to remove white spaces. Defaults to \emph{FALSE}.}
 
 \item{add_na}{boolean, whether to change text indicating NA to NA values in R. Defaults to \emph{TRUE}.}
 }
@@ -30,4 +30,3 @@ vector, with characters formatted accordingly.
 \description{
 Removes paces, special characters and capitals from string vector and converts unknowns to NA.
 }
-\keyword{internal}

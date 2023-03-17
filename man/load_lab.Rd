@@ -18,7 +18,7 @@ load_lab(
 )
 }
 \arguments{
-\item{file}{string, full file path to Enc.txt or Exc.txt}
+\item{file}{string, full file path to Lab.txt or Clb.txt.}
 
 \item{merge_id}{string, column name to use to create \emph{ID_MERGE} column used to merge different datasets. Defaults to \emph{EPIC_PMRN},
 as it is the preferred MRN in the RPDR system.}
@@ -63,13 +63,13 @@ data table, with laboratory exam information.
  \item{lab_spec_txt}{string, Free-text information about the specimen, its collection or its integrity, corresponds to Specimen_Text in RPDR.}
  \item{lab_correction}{string, Free-text information about any changes made to the results, corresponds to Correction_Flag in RPDR.}
  \item{lab_status}{string, Flag which indicates whether the procedure is pending or complete, corresponds to Test_Status in RPDR.}
- \item{lab_ord_pys}{string, Name of the ordering physician, corresponds to Ordering_Doc in RPDR. Punctuation marks are removed.}
+ \item{lab_ord_pys}{string, Name of the ordering physician, corresponds to Ordering_Doc in RPDR.}
  \item{lab_accession}{string, Internal tracking number assigned to the specimen for identification in the lab, corresponds to Accession in RPDR.}
  \item{lab_source}{string, Database source, either CDR (Clinical Data Repository) or RPDR (internal RPDR database), corresponds to Source in RPDR.}
  }
 }
 \description{
-Loads laboratory results into the R environment.
+Loads laboratory results into the R environment, both Lab and Clb files.
 }
 \examples{
 \dontrun{
@@ -80,6 +80,6 @@ d_lab <- load_lab(file = "test_Lab.txt")
 d_lab <- load_lab(file = "test_Lab.txt", nThread = 1)
 
 #Use parallel processing and parse data in MRN_Type and MRN columns and keep all IDs
-d_lab <- load_lab(file = "test_Lab.txt", nThread = 20, mrn_type = TRUE, perc = 1)
+d_clb <- load_lab(file = "test_Clb.txt", nThread = 20, mrn_type = TRUE, perc = 1)
 }
 }

@@ -52,12 +52,12 @@ data table, with health history information.
  \item{phy_name}{string, Type of clinical value/observation recorded, corresponds to Concept_Name in RPDR.}
  \item{phy_code}{string, Source-specific identifier for the specific type of clinical observation, corresponds to Code in RPDR.}
  \item{phy_code_type}{string, Source system for the value, corresponds to Code_type in RPDR.}
- \item{phy_result}{string, Value associated with the clinical observation. Note: BMI results are calculated internally in the RPDR, corresponds to Results in RPDR. Punctuation marks and white spaces are removed.}
- \item{phy_unit}{string, Units associated with the clinical observation, corresponds to Units in RPDR. Punctuation marks and white spaces are removed.}
- \item{phy_provider}{string, Provider of record for the encounter where the observation was recorded, corresponds to Providers in RPDR. Punctuation marks are removed.}
+ \item{phy_result}{string, Value associated with the clinical observation. Note: BMI results are calculated internally in the RPDR, corresponds to Results in RPDR.}
+ \item{phy_unit}{string, Units associated with the clinical observation, corresponds to Units in RPDR.}
+ \item{phy_provider}{string, Provider of record for the encounter where the observation was recorded, corresponds to Providers in RPDR.}
  \item{phy_clinic}{string, Specific department/location where the patient observation was recorded, corresponds to Clinic in RPDR.}
  \item{phy_hosp}{string, Facility where the observation was recorded, corresponds to Hospital in RPDR.}
- \item{phy_inpatient}{string, Classifies the type of encounter where the observation was entered, corresponds to Inpatient_Outpatient in RPDR. Punctuation marks are removed.}
+ \item{phy_inpatient}{string, Classifies the type of encounter where the observation was entered, corresponds to Inpatient_Outpatient in RPDR.}
  \item{phy_enc_num}{string, Unique identifier of the record/visit. This values includes the source system and a unique identifier within the source system, corresponds to Encounter_number in RPDR.}
  }
 }

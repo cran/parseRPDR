@@ -13,9 +13,8 @@
 #' @param collapse string, a column name on which to collapse the data.table.
 #' Used in case we wish to assess whether given diagnoses are present within all the same instances of \emph{collapse}. See vignette for details.
 #' @param code_time string, column name of the time column. Defaults to \emph{time_enc_admit}. Used in case collapse is present to provide the earliest or latest instance of diagnosing the given disease.
-#' @param time_type string, if multiple diagnoses are present within the same case of \emph{collapse}, which timepoint to return. Supported are: "earliest" or "latest". Defaults to \emph{earliest}.
-#' @param nThread integer, number of threads to use by \emph{dopar} for parallelization. If it is set to 1, then no parallel backends are created and the function is executed sequentially.
-#' On windows machines sockets are used, while on other operating systems fork parallelization is used.
+#' @param aggr_type string, if multiple diagnoses are present within the same case of \emph{collapse}, which timepoint to return. Supported are: "earliest" or "latest". Defaults to \emph{earliest}.
+#' @param nThread integer, number of threads to use for parallelization. If it is set to 1, then no parallel backends are created and the function is executed sequentially.
 #'
 #' @return data.table, with formatted ICD code columns and possibly indicator columns if provided.
 #' If \emph{collapse} is present, then only unique ID and the summary columns are returned.
@@ -42,7 +41,7 @@
 
 convert_enc <- function(d, code = c("enc_diag_admit", "enc_diag_princ", paste0("enc_diag_", 1:10)),
                         keep = FALSE, codes_to_find = NULL,
-                        collapse = NULL, code_time = "time_enc_admit", time_type = "earliest", nThread = parallel::detectCores()-1) {
+                        collapse = NULL, code_time = "time_enc_admit", aggr_type = "earliest", nThread = parallel::detectCores()-1) {
 
   .SD=.N=.I=.GRP=.BY=.EACHI=..=..code=.SDcols=i=j=time_to_db=..which_ids_to=..which_ids_from=..collapse=. <- NULL
 
@@ -51,11 +50,7 @@ convert_enc <- function(d, code = c("enc_diag_admit", "enc_diag_princ", paste0("
     `%exec%` <- foreach::`%do%`
   } else {
     if(length(codes_to_find) > 0 & length(codes_to_find) < nThread) {nThread <- length(codes_to_find)}
-    if(.Platform$OS.type == "windows") {
-      cl <- parallel::makeCluster(nThread, outfile = "", type = "PSOCK", methods = FALSE, useXDR = FALSE)
-    } else{
-      cl <- parallel::makeCluster(nThread, outfile = "", type = "FORK", methods = FALSE, useXDR = FALSE)
-    }
+    cl <- parallel::makeCluster(nThread, methods = FALSE, useXDR = FALSE)
     doParallel::registerDoParallel(cl)
     `%exec%` <- foreach::`%dopar%`
   }
@@ -91,7 +86,7 @@ convert_enc <- function(d, code = c("enc_diag_admit", "enc_diag_princ", paste0("
           d[, names(codes_to_find[i]) := any(.SD %in% unlist(codes_to_find[i])), .SDcols = colnames(icd), by=1:nrow(d)]
           ID_dt <- unique(d[, collapse, with = FALSE]) #Get IDs
 
-          if(time_type == "earliest") { #Find time
+          if(aggr_type == "earliest") { #Find time
             diag_coll <- d[, .(var_time = min(get(code_time))), by=c(collapse, names(codes_to_find[i]))]
           } else {
             diag_coll <- d[, .(var_time = max(get(code_time))), by=c(collapse, names(codes_to_find[i]))]

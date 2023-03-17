@@ -1,9 +1,9 @@
 #' @title Loads laboratory results into R.
 #' @export
 #'
-#' @description Loads laboratory results into the R environment.
+#' @description Loads laboratory results into the R environment, both Lab and Clb files.
 #'
-#' @param file string, full file path to Enc.txt or Exc.txt
+#' @param file string, full file path to Lab.txt or Clb.txt.
 #' @param merge_id string, column name to use to create \emph{ID_MERGE} column used to merge different datasets. Defaults to \emph{EPIC_PMRN},
 #' as it is the preferred MRN in the RPDR system.
 #' @param sep string, divider between hospital ID and MRN. Defaults to \emph{:}.
@@ -39,7 +39,7 @@
 #'  \item{lab_spec_txt}{string, Free-text information about the specimen, its collection or its integrity, corresponds to Specimen_Text in RPDR.}
 #'  \item{lab_correction}{string, Free-text information about any changes made to the results, corresponds to Correction_Flag in RPDR.}
 #'  \item{lab_status}{string, Flag which indicates whether the procedure is pending or complete, corresponds to Test_Status in RPDR.}
-#'  \item{lab_ord_pys}{string, Name of the ordering physician, corresponds to Ordering_Doc in RPDR. Punctuation marks are removed.}
+#'  \item{lab_ord_pys}{string, Name of the ordering physician, corresponds to Ordering_Doc in RPDR.}
 #'  \item{lab_accession}{string, Internal tracking number assigned to the specimen for identification in the lab, corresponds to Accession in RPDR.}
 #'  \item{lab_source}{string, Database source, either CDR (Clinical Data Repository) or RPDR (internal RPDR database), corresponds to Source in RPDR.}
 #'  }
@@ -54,7 +54,7 @@
 #' d_lab <- load_lab(file = "test_Lab.txt", nThread = 1)
 #'
 #' #Use parallel processing and parse data in MRN_Type and MRN columns and keep all IDs
-#' d_lab <- load_lab(file = "test_Lab.txt", nThread = 20, mrn_type = TRUE, perc = 1)
+#' d_clb <- load_lab(file = "test_Clb.txt", nThread = 20, mrn_type = TRUE, perc = 1)
 #' }
 
 load_lab <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard", perc = 0.6, na = TRUE, identical = TRUE, nThread = parallel::detectCores()-1, mrn_type = FALSE) {
@@ -66,23 +66,23 @@ load_lab <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard",
 
   #Add additional information
   DATA$time_lab         <- as.POSIXct(data_raw$Seq_Date_Time, format = "%m/%d/%Y %H:%M")
-  DATA$lab_group        <- pretty_text(data_raw$Group_Id, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$lab_loinc        <- pretty_text(data_raw$Loinc_Code, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$lab_testID       <- pretty_text(data_raw$Test_Id, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$lab_descript     <- pretty_text(data_raw$Test_Description, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$lab_result       <- pretty_text(data_raw$Result, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$lab_result_txt   <- pretty_text(data_raw$Result_Text, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$lab_result_abn   <- pretty_text(data_raw$Abnormal_Flag, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$lab_result_unit  <- pretty_text(data_raw$Reference_Units, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$lab_result_range <- pretty_text(data_raw$Reference_Range, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$lab_result_toxic <- pretty_text(data_raw$Toxic_Range, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$lab_spec         <- pretty_text(data_raw$Specimen_Type, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$lab_spec_txt     <- pretty_text(data_raw$Specimen_Text, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$lab_correction   <- pretty_text(data_raw$Correction_Flag, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$lab_status       <- pretty_text(data_raw$Test_Status, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$lab_ord_pys      <- pretty_text(data_raw$Ordering_Doc_Name, remove_after = FALSE, remove_white = FALSE)
-  DATA$lab_source       <- pretty_text(data_raw$Source, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$lab_accession    <- pretty_text(data_raw$Accession, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
+  DATA$lab_group        <- pretty_text(data_raw$Group_Id)
+  DATA$lab_loinc        <- pretty_text(data_raw$Loinc_Code)
+  DATA$lab_testID       <- pretty_text(data_raw$Test_Id)
+  DATA$lab_descript     <- pretty_text(data_raw$Test_Description)
+  DATA$lab_result       <- pretty_text(data_raw$Result)
+  DATA$lab_result_txt   <- pretty_text(data_raw$Result_Text)
+  DATA$lab_result_abn   <- pretty_text(data_raw$Abnormal_Flag)
+  DATA$lab_result_unit  <- pretty_text(data_raw$Reference_Units)
+  DATA$lab_result_range <- pretty_text(data_raw$Reference_Range)
+  DATA$lab_result_toxic <- pretty_text(data_raw$Toxic_Range)
+  DATA$lab_spec         <- pretty_text(data_raw$Specimen_Type)
+  DATA$lab_spec_txt     <- pretty_text(data_raw$Specimen_Text)
+  DATA$lab_correction   <- pretty_text(data_raw$Correction_Flag)
+  DATA$lab_status       <- pretty_text(data_raw$Test_Status)
+  DATA$lab_ord_pys      <- pretty_text(data_raw$Ordering_Doc_Name)
+  DATA$lab_source       <- pretty_text(data_raw$Source)
+  DATA$lab_accession    <- pretty_text(data_raw$Accession)
 
   if(dim(DATA)[1] != 1) {DATA <- remove_column(dt = DATA, na = na, identical = identical)}
   return(DATA)

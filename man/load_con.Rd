@@ -59,18 +59,19 @@ data table, with contact information data.
  \item{address2}{string, Additional address information, corresponds to address2 in RPDR.}
  \item{city}{string, City of residence, corresponds to City in RPDR.}
  \item{state}{string, State of residence, corresponds to State in RPDR.}
- \item{country_con}{string, Country of residence from con datasource, corresponds to Country in RPDR. Punctuation marks are removed.}
+ \item{country_con}{string, Country of residence from con datasource, corresponds to Country in RPDR.}
  \item{zip_con}{numeric, Mailing zip code of primary residence from con datasource, corresponds to Zip in RPDR. Formatted to 5 character zip codes using \emph{pretty_numbers()}.}
- \item{direct_contact_consent}{boolean, Indicates whether the patient has given permission to contact them directly through the RODY program, corresponds to Direct_Contact_Consent in RPDR.}
+ \item{direct_contact_consent}{boolean, Indicates whether the patient has given permission to contact them directly through the RODY program, corresponds to Direct_Contact_Consent in RPDR. Legacy variable.}
+ \item{research_invitations}{boolean, Indicates if a patient can be invited to participate in research, corresponds to Research_Invitations in RPDR.}
  \item{phone_home}{number, Patient's home phone number, corresponds to Home_Phone in RPDR. Formatted to 10 digit phone numbers using \emph{pretty_numbers()}.}
  \item{phone_day}{number, Phone number where the patient can be reached during the day, corresponds to Day_Phone in RPDR. Formatted to 10 digit phone numbers using \emph{pretty_numbers()}.}
- \item{insurance1}{string, Patient's primary health insurance carrier and subscriber ID information, corresponds to Insurance_1 in RPDR. Punctuation marks are removed.}
- \item{insurance2}{string, Patient's secondary health insurance carrier and subscriber ID information, if any, corresponds to Insurance_2 in RPDR. Punctuation marks are removed.}
- \item{insurance3}{string, Patient's tertiary health insurance carrier and subscriber ID information, if any, corresponds to Insurance_3 in RPDR. Punctuation marks are removed.}
+ \item{insurance1}{string, Patient's primary health insurance carrier and subscriber ID information, corresponds to Insurance_1 in RPDR.}
+ \item{insurance2}{string, Patient's secondary health insurance carrier and subscriber ID information, if any, corresponds to Insurance_2 in RPDR.}
+ \item{insurance3}{string, Patient's tertiary health insurance carrier and subscriber ID information, if any, corresponds to Insurance_3 in RPDR.}
  \item{primary_care_physician}{string, Comma-delimited list of all primary care providers on record for this patient per institution, along with contact information (if available),
- corresponds to Primary_Care_Physician in RPDR. Punctuation marks are removed.}
+ corresponds to Primary_Care_Physician in RPDR.}
  \item{primary_care_physician_resident}{string, Comma-delimited list of any Resident primary care providers on record for this patient per institution, along with contact information (if available),
- corresponds to Resident _Primary_Care_Physician in RPDR. Punctuation marks are removed.}
+ corresponds to Resident _Primary_Care_Physician in RPDR.}
  }
 }
 \description{

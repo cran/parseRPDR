@@ -53,7 +53,7 @@ data table, with LMR notes information.
  \item{lno_status}{string, Completion status of the note, corresponds to Status in RPDR.}
  \item{lno_author}{string, Name of user who created the note, corresponds to Author in RPDR.}
  \item{lno_author_mrn}{string, Author's user identifier within the LMR system, corresponds to Author_MRN in RPDR.}
- \item{lno_COD}{string, Hospital-specific user code of the note author. The first character is a hospital-specific prefix, corresponds to COD in RPDR. Punctuation marks are removed.}
+ \item{lno_COD}{string, Hospital-specific user code of the note author. The first character is a hospital-specific prefix, corresponds to COD in RPDR.}
  \item{lno_hosp}{string, Facility where the encounter occurred, corresponds to Institution in RPDR.}
  \item{lno_subject}{string, Type of note. This value is derived from the "Subject" line of the narrative text, corresponds to Subject in RPDR.}
  \item{lno_rep_txt}{string, Full narrative text of the note, corresponds to Comments in RPDR.}

@@ -58,7 +58,7 @@ load_mrn <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard",
 
   #Add additional information
   DATA$ID_mrn_INCOMING      <- pretty_mrn(v = data_raw$IncomingId, prefix = data_raw$IncomingSite, sep = sep, id_length = id_length, nThread = nThread)
-  DATA$ID_mrn_INCOMING_SITE <- pretty_text(data_raw$IncomingSite, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
+  DATA$ID_mrn_INCOMING_SITE <- pretty_text(data_raw$IncomingSite)
 
   DATA$ID_mrn_PMRN <- pretty_mrn(v = data_raw$EPIC_PMRN, prefix = "PMRN", sep = sep, id_length = id_length, nThread = nThread)
   DATA$ID_mrn_EMPI <- pretty_mrn(v = data_raw$Enterprise_Master_Patient_Index, prefix = "EMPI", sep = sep, id_length = id_length, nThread = nThread)
@@ -73,7 +73,7 @@ load_mrn <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard",
   DATA$ID_mrn_DFC  <- pretty_mrn(v = data_raw$DFC_MRN, prefix = "DFC", sep = sep, id_length = id_length, nThread = nThread)
   DATA$ID_mrn_WDH  <- pretty_mrn(v = data_raw$WDH_MRN, prefix = "WDH", sep = sep, id_length = id_length, nThread = nThread)
 
-  DATA$ID_mrn_STATUS <- pretty_text(data_raw$Status, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
+  DATA$ID_mrn_STATUS <- pretty_text(data_raw$Status)
 
   if(dim(DATA)[1] != 1) {DATA <- remove_column(dt = DATA, na = na, identical = identical)}
   return(DATA)

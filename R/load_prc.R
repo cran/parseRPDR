@@ -1,9 +1,9 @@
 #' @title Loads procedures into R.
 #' @export
 #'
-#' @description Loads Clinical procedure information into the R environment.
+#' @description Loads Clinical procedure information into the R environment, both Prc and Pec files.
 #'
-#' @param file string, full file path to Prc.txt.
+#' @param file string, full file path to Prc.txt or Pec.txt.
 #' @param merge_id string, column name to use to create \emph{ID_MERGE} column used to merge different datasets. Defaults to \emph{EPIC_PMRN},
 #' as it is the preferred MRN in the RPDR system.
 #' @param sep string, divider between hospital ID and MRN. Defaults to \emph{:}.
@@ -30,10 +30,10 @@
 #'  \item{prc_code_type}{string, Standardized classification system or custom source value associated with the procedure code, corresponds to Code_type in RPDR.}
 #'  \item{prc_flag}{string, Qualifier for the diagnosis, corresponds to Procedure_Flag in RPDR.}
 #'  \item{prc_quantity}{string, Number of the procedures that were ordered for this record, corresponds to Quantity in RPDR.}
-#'  \item{prc_provider}{string, Provider identifies the health care clinician performing the procedure, corresponds to Provider in RPDR. Punctuation marks are removed.}
+#'  \item{prc_provider}{string, Provider identifies the health care clinician performing the procedure, corresponds to Provider in RPDR.}
 #'  \item{prc_clinic}{string, Specific department/location where the procedure was ordered or performed, corresponds to Clinic in RPDR.}
 #'  \item{prc_hosp}{string, Facility where the procedure was ordered or performed, corresponds to Hospital in RPDR.}
-#'  \item{prc_inpatient}{string, classifies the type of encounter where the procedure was performed or ordered, Punctuation marks are removed.}
+#'  \item{prc_inpatient}{string, classifies the type of encounter where the procedure was performed or ordered.}
 #'  \item{prc_enc_num}{string, Unique identifier of the record/visit, displayed in the following format: Source System - Institution Number, corresponds to Encounter_number in RPDR.}
 #'  }
 #'
@@ -47,7 +47,7 @@
 #' d_prc <- load_prc(file = "test_Prc.txt", nThread = 1)
 #'
 #' #Use parallel processing and parse data in MRN_Type and MRN columns and keep all IDs
-#' d_prc <- load_prc(file = "test_Prc.txt", nThread = 20, mrn_type = TRUE, perc = 1)
+#' d_pec <- load_prc(file = "test_Pec.txt", nThread = 20, mrn_type = TRUE, perc = 1)
 #' }
 
 load_prc <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard", perc = 0.6, na = TRUE, identical = TRUE, nThread = parallel::detectCores()-1, mrn_type = FALSE) {
@@ -62,7 +62,7 @@ load_prc <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard",
 
   record_bad <- record[which_n] #Bad records
   record     <- record[!which_n] #Good records
-  if(length(record_bad) != 0) {
+  if(length(record_bad) != 0) { #If there are new line characters in the text
     n_carr_bad <- n_carr[which_n] #Bad number of characters
     until      <- cumsum(n_carr_bad) %% 14 == 0 #Find where are the end of lines and merge based-on that
     n_times    <- which(until)
@@ -102,16 +102,16 @@ load_prc <- function(file, merge_id = "EMPI", sep = ":", id_length = "standard",
 
   #Add additional information
   DATA$time_prc       <- as.POSIXct(data_raw$Date, format = "%m/%d/%Y")
-  DATA$prc_name       <- pretty_text(data_raw$Procedure_Name, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$prc_code       <- pretty_text(data_raw$Code, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$prc_code_type  <- pretty_text(data_raw$Code_Type, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$prc_flag       <- pretty_text(data_raw$Diagnosis_Flag, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$prc_provider   <- pretty_text(data_raw$Provider, remove_after = FALSE, remove_white = FALSE)
-  DATA$prc_quantity   <- pretty_text(data_raw$Quantity, remove_after = FALSE, remove_white = FALSE)
-  DATA$prc_clinic     <- pretty_text(data_raw$Clinic, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$prc_hosp       <- pretty_text(data_raw$Hospital, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
-  DATA$prc_inpatient  <- pretty_text(data_raw$Inpatient_Outpatient, remove_after = FALSE, remove_white = FALSE)
-  DATA$prc_enc_num    <- pretty_text(data_raw$Encounter_number, remove_after = FALSE, remove_punc = FALSE, remove_white = FALSE)
+  DATA$prc_name       <- pretty_text(data_raw$Procedure_Name)
+  DATA$prc_code       <- pretty_text(data_raw$Code)
+  DATA$prc_code_type  <- pretty_text(data_raw$Code_Type)
+  DATA$prc_flag       <- pretty_text(data_raw$Procedure_Flag)
+  DATA$prc_quantity   <- pretty_text(data_raw$Quantity)
+  DATA$prc_provider   <- pretty_text(data_raw$Provider)
+  DATA$prc_clinic     <- pretty_text(data_raw$Clinic)
+  DATA$prc_hosp       <- pretty_text(data_raw$Hospital)
+  DATA$prc_inpatient  <- pretty_text(data_raw$Inpatient_Outpatient)
+  DATA$prc_enc_num    <- pretty_text(data_raw$Encounter_number)
 
   if(dim(DATA)[1] != 1) {DATA <- remove_column(dt = DATA, na = na, identical = identical)}
   return(DATA)

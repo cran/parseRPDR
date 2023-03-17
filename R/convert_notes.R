@@ -29,8 +29,7 @@
 #' @param d data.table, database containing notes loaded using the \emph{load_notes} function.
 #' @param code string vector, column name containing the results, which should be \emph{"abc_rep_txt"}, where \emph{abc} stands for the three letter abbreviation of the given type of note.
 #' @param anchors string array, elements to search for in the text report.
-#' @param nThread integer, number of threads to use by \emph{dopar} for parallelization. If it is set to 1, then no parallel backends are created and the function is executed sequentially.
-#' On windows machines sockets are used, while on other operating systems fork parallelization is used.
+#' @param nThread integer, number of threads to use for parallelization. If it is set to 1, then no parallel backends are created and the function is executed sequentially.
 #'
 #' @return data.table, with new columns corresponding to elements in \emph{anchors}.
 #'
@@ -53,11 +52,7 @@ convert_notes <- function(d, code = NULL, anchors = NULL, nThread = parallel::de
   if(nThread == 1) {
     `%exec%` <- foreach::`%do%`
   } else {
-    if(.Platform$OS.type == "windows") {
-      cl <- parallel::makeCluster(nThread, outfile = "", type = "PSOCK", methods = FALSE, useXDR = FALSE)
-    } else{
-      cl <- parallel::makeCluster(nThread, outfile = "", type = "FORK", methods = FALSE, useXDR = FALSE)
-    }
+    cl <- parallel::makeCluster(nThread, methods = FALSE, useXDR = FALSE)
     doParallel::registerDoParallel(cl)
     `%exec%` <- foreach::`%dopar%`
   }

@@ -3,13 +3,10 @@
 \encoding{UTF-8}
 \name{load_all}
 \alias{load_all}
-\title{Loads all RPDR text outputs into R.}
+\title{Loads allergy data information into R.}
 \usage{
 load_all(
-  folder,
-  which_data = c("mrn", "con", "dem", "enc", "rdt", "lab", "med", "dia", "rfv", "prc",
-    "lno", "car", "dis", "end", "hnp", "opn", "pat", "prg", "pul", "rad", "vis"),
-  old_dem = FALSE,
+  file,
   merge_id = "EMPI",
   sep = ":",
   id_length = "standard",
@@ -17,21 +14,14 @@ load_all(
   na = TRUE,
   identical = TRUE,
   nThread = parallel::detectCores() - 1,
-  many_sources = TRUE,
-  load_report = TRUE,
-  format_orig = FALSE
+  mrn_type = FALSE
 )
 }
 \arguments{
-\item{folder}{string, full folder path to RPDR text files.}
+\item{file}{string, full file path to All.txt.}
 
-\item{which_data}{string vector, an array of abbreviation corresponding to the datasources wished to load. Currently supported values and the default is: \emph{c("mrn", "con", "dem", "enc", "rdt", "lab", "med", "dia", "rfv", "prc",
-"car", "dis", "end", "hnp", "opn", "pat", "prg", "pul", "rad" and "vis")}}
-
-\item{old_dem}{boolean, should old \emph{load_dem} function be used for loading demographic data. Defaults to \emph{TRUE}, should be set to \emph{FALSE} for Dem.txt datasets prior to 2022.}
-
-\item{merge_id}{string, column name to use to create \emph{ID_MERGE} column used to merge different datasets. Defaults to \emph{EMPI},
-as it is the preferred MRN in the RPDR system. In case of mrn dataset, leave at EMPI, as it is automatically converted to: "Enterprise_Master_Patient_Index".}
+\item{merge_id}{string, column name to use to create \emph{ID_MERGE} column used to merge different datasets. Defaults to \emph{EPIC_PMRN},
+as it is the preferred MRN in the RPDR system.}
 
 \item{sep}{string, divider between hospital ID and MRN. Defaults to \emph{:}.}
 
@@ -45,34 +35,44 @@ In other cases the lengths are unchanged. Defaults to \emph{standard}.}
 
 \item{identical}{boolean, whether to remove columns with identical values. Defaults to \emph{TRUE}.}
 
-\item{nThread}{integer, number of threads to use for parallelization.}
+\item{nThread}{integer, number of threads to use to load data.}
 
-\item{many_sources}{boolean, if \emph{TRUE}, then parallelization is done on the level of the datasources. If \emph{FALSE}, then parallelization is done within the datasources.
-If there are many datasources, then it is advised to set this TRUE, as then each different datasource will be processed in parallel.
-However, if there are only a few datasources selected to load, but many files per datasource (result of large queries), then it may be faster to parallelize within each datasource and therefore should be set to \emph{FALSE}.
-If there are only a few sources each with one file then set to TRUE.}
-
-\item{load_report}{boolean, should the report text be returned for notes.}
-
-\item{format_orig}{boolean, should report be returned in its original formatting or should white spaces used for formatting be removed. Defaults to \emph{FALSE}.}
+\item{mrn_type}{boolean, should data in \emph{MRN_Type} and \emph{MRN} be parsed. Defaults to \emph{FALSE}, as it is not advised to parse these for all data sources as it takes considerable time.}
 }
 \value{
-list of parsed data tables containing the information.
+data table, with allergy information.
+\describe{
+ \item{ID_MERGE}{numeric, defined IDs by \emph{merge_id}, used for merging later.}
+ \item{ID_all_EMPI}{string, Unique Partners-wide identifier assigned to the patient used to consolidate patient information
+ from \emph{all} datasource, corresponds to EMPI in RPDR. Data is formatted using pretty_mrn().}
+ \item{ID_all_PMRN}{string, Epic medical record number. This value is unique across Epic instances within the Partners network
+ from \emph{all} datasource, corresponds to EPIC_PMRN in RPDR. Data is formatted using pretty_mrn().}
+ \item{ID_all_loc}{string, if mrn_type == TRUE, then the data in \emph{MRN_Type} and \emph{MRN} are parsed into IDs corresponding to locations \emph{(loc)}. Data is formatted using pretty_mrn().}
+ \item{time_all}{POSIXct, Date when the allergy was first noted, corresponds to Noted_Date in RPDR. Converted to POSIXct format.}
+ \item{all_all}{string, Name of the allergen, corresponds to Allergen in RPDR.}
+ \item{all_all_code}{string, Epic internal identifier for the specific allergen, corresponds to Allergen_Code in RPDR.}
+ \item{all_all_type}{string, Hierarchy for the type of allergy noted. Denotes known level of specificity of allergen, corresponds to Allergen_Type in RPDR.}
+ \item{all_reac}{string, Noted reactions to the allergen, corresponds to Reactions in RPDR.}
+ \item{all_reac_type}{string, Category of reaction to the allergen, corresponds to Reaction_Type in RPDR.}
+ \item{all_severity}{string, Degree of severity of noted reactions, corresponds to Severity in RPDR.}
+ \item{all_status}{string, Last known status of allergen, either active or deleted from the patient's allergy record, corresponds to Status in RPDR.}
+ \item{all_system}{string, The source system where the data was collected, corresponds to System in RPDR.}
+ \item{all_comment}{string, Free-text information about the allergen, corresponds to Comments in RPDR.}
+ \item{all_del_reason}{string, Free-text information about why the allergen was removed from the patient's allergy list, corresponds to Deleted_Reason in RPDR.}
+ }
 }
 \description{
-Loads all RPDR text outputs into R and returns a list of data tables processed. Currently supported outputs are:
-\emph{Mrn.txt, Con.txt, Dem.txt, Enc.txt, Rdt.txt, Lab.txt, Med.txt, Dia.txt, Rfv.txt, Prc.txt, Car.txt, Dis.txt, End.txt, Hnp.txt,
-Opn.txt, Pat.txt, Prg.txt, Pul.txt, Rad.txt and Vis.txt}. If multiple text files of the same type are available (if the query is larger than 25000 patients),
-then add a \emph{"_"} and a number to merge the same data sources into a single output in the order of the provided number.
+Loads allergy information into the R environment.
 }
 \examples{
 \dontrun{
-#Load all Con, Dem and Mrn datasets processing all files within given datasource in parallel
-load_all(folder = folder_rpdr, which_data = c("con", "dem", "mrn"),
-nThread = 2, many_sources = FALSE)
+#Using defaults
+d_all <- load_all(file = "test_All.txt")
 
-#Load all supported file types parallelizing on the level of datasources
-load_all(folder = folder_rpdr, nThread = 2, many_sources = TRUE,
-format_orig = TRUE)
+#Use sequential processing
+d_all <- load_all(file = "test_All.txt", nThread = 1)
+
+#Use parallel processing and parse data in MRN_Type and MRN columns and keep all IDs
+d_all <- load_all(file = "test_All.txt", nThread = 20, mrn_type = TRUE, perc = 1)
 }
 }
