@@ -35,8 +35,16 @@ test_that("convert_dia run using sequential and parallel loading returns same re
 })
 
 expect_true({
-  c_p_sum <- suppressMessages(convert_dia(d_p, codes_to_find = diseases, collapse = "ID_MERGE", aggr_type = "latest", nThread = 2))
+  c_p_sum <- suppressMessages(convert_dia(d_p, codes_to_find = diseases, collapse = "ID_MERGE", aggr_type = "earliest", nThread = 2))
   TRUE
+})
+
+c_s_sum <- suppressMessages(convert_dia(d_p, codes_to_find = diseases, collapse = "ID_MERGE", aggr_type = "latest", nThread = 1))
+c_p_sum <- suppressMessages(convert_dia(d_p, codes_to_find = diseases, collapse = "ID_MERGE", aggr_type = "latest", nThread = 2))
+
+
+test_that("convert_dia summarizing using sequential and parallel loading returns same results", {
+  expect_equal(c_s_sum, c_p_sum)
 })
 
 c_s_sum <- suppressMessages(convert_dia(d_p, codes_to_find = diseases, collapse = "ID_MERGE", aggr_type = "earliest", nThread = 1))
